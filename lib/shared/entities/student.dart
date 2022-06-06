@@ -5,7 +5,9 @@ class Student extends UserRole {
   late Syllabus syllabus;
   List<Course> courses = [];
 
-  Student({required this.syllabus});
+  Student({required user, required this.syllabus}) : super(user: user);
 }
 
-class Course {}
+class Course {
+  // Un curso tiene varios procesos
+}

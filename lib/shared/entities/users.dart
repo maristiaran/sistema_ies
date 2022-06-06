@@ -1,6 +1,6 @@
 // import 'package:flutter/widgets.dart';
 
-class User {
+class IESUser {
   final int id;
   late String firstname;
   late String surname;
@@ -8,7 +8,7 @@ class User {
   late int uniqueNumber;
   List<UserRole> roles = [];
 
-  User(
+  IESUser(
       {required this.id,
       required this.firstname,
       required this.surname,
@@ -17,4 +17,9 @@ class User {
       required this.roles});
 }
 
-class UserRole {}
+class UserRole {
+  final IESUser user;
+  UserRole({required this.user});
+}
+
+class UserRoleOperation {}
