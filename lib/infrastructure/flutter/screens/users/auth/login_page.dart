@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:sistema_ies/application/users/login.dart';
-import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
-import 'package:sistema_ies/shared/utils/states.dart';
+// import 'package:go_router/go_router.dart';
+import 'package:sistema_ies/application/application_services.dart';
 
 class LoginPage extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
@@ -14,18 +12,12 @@ class LoginPage extends ConsumerWidget {
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
 
-  final LoginUseCase _loginUseCase =
-      LoginUseCase(usersRepository: usersRepository);
-
   LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginProvider =
-        StateNotifierProvider<LoginUseCase, List<UseCaseState>>((ref) {
-      return _loginUseCase;
-    });
-    final _loginResultProvider = ref.watch(loginProvider);
+    final _loginStatesProvider =
+        ref.watch(IESSystem().authUseCase.loginStateProvider);
     return GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
@@ -78,7 +70,7 @@ class LoginPage extends ConsumerWidget {
                           onPressed: () async {
                             _focusEmail.unfocus();
                             _focusPassword.unfocus();
-                            _loginUseCase.signIn(
+                            IESSystem().authUseCase.signIn(
                                 _emailTextController.text.trim(),
                                 _passwordTextController.text.trim());
                           },
@@ -91,7 +83,9 @@ class LoginPage extends ConsumerWidget {
                       const SizedBox(width: 24.0),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => GoRouter.of(context).go('/register'),
+                          onPressed: () => IESSystem()
+                              .authUseCase
+                              .startRegisteringIncomingUser(),
                           child: const Text(
                             'Registrarse',
                             style: TextStyle(color: Colors.white),
@@ -102,7 +96,7 @@ class LoginPage extends ConsumerWidget {
                   ),
                   Consumer(
                     builder: (context, ref, child) {
-                      return Text(_loginResultProvider.last.displayName);
+                      return Text(_loginStatesProvider.stateInfo);
                     },
                   )
                 ],
