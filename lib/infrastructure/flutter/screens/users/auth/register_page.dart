@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/application/application_services.dart';
-import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+import 'package:sistema_ies/application/ies_system.dart';
+import 'package:sistema_ies/application/use_cases/users/registering.dart';
+// import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/utils/value_objects.dart';
 
@@ -28,9 +29,10 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
   // late var _registerStatesProvider;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final _registerStatesProvider =
-    //     ref.watch(IESSystem().authUseCase.registeringStateProvider);
-
+    final _registerStatesProvider = (ref.watch(
+            IESSystem().authUseCase.registeringUseCase.stateNotifierProvider))
+        as RegisteringState;
+    // selectedSyllabus = IESSystem().authUseCase.currentSyllabus;
     return GestureDetector(
       onTap: () {
         _focusUsername.unfocus();
@@ -158,9 +160,10 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                       const SizedBox(height: 32.0),
                       Consumer(builder: (context, ref, child) {
                         return DropdownButton<Syllabus>(
-                            value: IESSystem().authUseCase.currentSyllabus,
+                            value: _registerStatesProvider.selectedSyllabus(),
                             items: IESSystem()
                                 .authUseCase
+                                .registeringUseCase
                                 .syllabuses
                                 .map((e) => DropdownMenuItem(
                                     child: Text(e.name), value: e))
@@ -168,7 +171,11 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                             onChanged: (Syllabus? newValue) {
                               IESSystem()
                                   .authUseCase
-                                  .setCurrentSyllabus(newValue!);
+                                  .registeringUseCase
+                                  .setCurrentSyllabus(newValue);
+                              // IESSystem()
+                              //     .authUseCase
+                              //     .setCurrentSyllabus(newValue!);
                             });
                       }),
                       const SizedBox(height: 32.0),
@@ -180,6 +187,7 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                 if (_registerFormKey.currentState!.validate()) {
                                   IESSystem()
                                       .authUseCase
+                                      .registeringUseCase
                                       .registerAsIncomingUser(
                                           userName:
                                               _emailTextController.text.trim(),
@@ -189,16 +197,10 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                               _dniTextController.text.trim()),
                                           firstname: 'Juan',
                                           surname: 'Perez',
-                                          syllabus: await syllabusesRepository
-                                              .getActiveSyllabuses()
-                                              .then((syllabus) => syllabus.fold(
-                                                  (failure) => Syllabus(
-                                                      id: 'a',
-                                                      name: 'a',
-                                                      administrativeResolution:
-                                                          'a'),
-                                                  (syllabuses) =>
-                                                      syllabuses[0])));
+                                          syllabus: IESSystem()
+                                              .authUseCase
+                                              .registeringUseCase
+                                              .currentSyllabus!);
                                 }
                               },
                               child: const Text(

@@ -8,14 +8,12 @@ import 'package:sistema_ies/shared/utils/responses.dart';
 
 class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   final _firestoreAuth = FirebaseAuth.instance;
-  
 
-@override
-  Future<Either<Failure, Success>> initRepositoryCaches() async {
-    //TODO: Catch repo errors
-    return Right(Success('ok'));
-  }
-
+// @override
+//   Future<Either<Failure, Success>> initRepositoryCaches() async {
+//     //TODO: Catch repo errors
+//     return Right(Success('ok'));
+//   }
 
   @override
   Future<Either<Failure, String>> getUserEmail({required int dni}) async {

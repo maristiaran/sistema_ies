@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:go_router/go_router.dart';
-import 'package:sistema_ies/application/application_services.dart';
+import 'package:sistema_ies/application/ies_system.dart';
 
 class LoginPage extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
@@ -17,7 +16,7 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _loginStatesProvider =
-        ref.watch(IESSystem().authUseCase.loginStateProvider);
+        ref.watch(IESSystem().authUseCase.loginUseCase.stateNotifierProvider);
     return GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
@@ -70,7 +69,7 @@ class LoginPage extends ConsumerWidget {
                           onPressed: () async {
                             _focusEmail.unfocus();
                             _focusPassword.unfocus();
-                            IESSystem().authUseCase.signIn(
+                            IESSystem().authUseCase.loginUseCase.signIn(
                                 _emailTextController.text.trim(),
                                 _passwordTextController.text.trim());
                           },
@@ -96,7 +95,7 @@ class LoginPage extends ConsumerWidget {
                   ),
                   Consumer(
                     builder: (context, ref, child) {
-                      return Text(_loginStatesProvider.stateInfo);
+                      return Text(_loginStatesProvider.toString());
                     },
                   )
                 ],

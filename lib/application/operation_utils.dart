@@ -1,48 +1,39 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// const String useCaseInitStateName = 'useCaseInitStateName';
-// const String useCaseOnFailureStateName = 'useCaseOnFailureStateName';
-
-class UseCaseNotifier<T extends OperationState> extends StateNotifier<T> {
-  UseCaseNotifier(T initialState) : super(initialState);
-
-  void notifyStateChange(T operationState) {
-    state = operationState;
-  }
-
-  OperationState currentState() {
-    return state;
-  }
-}
-
 @immutable
-class OperationState<T> {
-  final T stateName;
-  final String stateInfo;
+class OperationState<N> {
+  final N stateName;
+  final Operation operation;
 
-  const OperationState({required this.stateName, this.stateInfo = ""});
+  const OperationState({required this.stateName, required this.operation});
 }
 
-class OperationStateNotifier<T> extends StateNotifier<OperationState> {
-  OperationStateNotifier({required OperationState initialState})
-      : super(initialState);
-  changeState(OperationState newOperationState) {
+class OperationStateNotifier<S> extends StateNotifier<S> {
+  OperationStateNotifier({required S initialState}) : super(initialState);
+  notifyStateChange(S newOperationState) {
     state = newOperationState;
   }
 }
 
-abstract class Operation {
-  initializeStateNotifiers();
-//   late OperationStateNotifier stateNotifier;
-//   // final Operation parentOperation;
-//   // Operation({required this.parentOperation});
+abstract class Operation<S, N> {
+  late S currentState;
+  late OperationStateNotifier<S> stateNotifier;
+  late StateNotifierProvider<OperationStateNotifier<S>, S>
+      stateNotifierProvider;
 
-//   setInitialState(OperationState initialState) {
-//     stateNotifier = OperationStateNotifier(initialState: initialState);
-//   }
+  changeState(S newOperationState) {
+    currentState = newOperationState;
+    stateNotifier.notifyStateChange(newOperationState);
+  }
 
-//   changeState(OperationState useCaseState) {
-//     stateNotifier.changeState(useCaseState);
-//   }
+  notifyCurrentState() {
+    stateNotifier.notifyStateChange(currentState);
+  }
+}
+
+abstract class UseCase<S, N> extends Operation<S, N> {
+  final Operation parentOperation;
+  UseCase({required this.parentOperation});
+  initializeUseCase();
 }

@@ -1,11 +1,12 @@
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/application/application_services.dart';
-import 'package:sistema_ies/firebase_options.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/users/auth/auth_views.dart';
+import 'package:sistema_ies/application/ies_system.dart';
+// import 'package:sistema_ies/firebase_options.dart';
+import 'package:sistema_ies/infrastructure/flutter/screens/main_view.dart';
 
-void main() {
+main() async {
+  await IESSystem().initializeIESSystem();
   runApp(const ProviderScope(child: AdminIESApp()));
 }
 
@@ -37,47 +38,17 @@ class AdminIESApp extends ConsumerWidget {
             bodyText1: const TextStyle(fontSize: 18.0),
           ),
         ),
-        home: FutureBuilder(
-            future: initializeApp(),
-            builder: ((context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return const AuthView();
-              } else {
-                return const CircularProgressIndicator();
-              }
-            })));
+        home:
+            // const MainView());
+
+            FutureBuilder(
+                future: IESSystem().initializeIESSystem(),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return const MainView();
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                })));
   }
 }
-
-Future initializeApp() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await IESSystem().startLogin();
-}
-// class AdminIESApp extends StatelessWidget {
-//   AdminIESApp({Key? key}) : super(key: key);
-
-
-  // @override
-  // Widget build(BuildContext context) => MaterialApp.router(
-  //       routeInformationParser: _router.routeInformationParser,
-  //       routerDelegate: _router.routerDelegate,
-  //       title: 'IES 9-010',
-  //     );
-
-  // final GoRouter _router = GoRouter(
-  //   routes: <GoRoute>[
-  //     GoRoute(
-  //       path: '/',
-  //       builder: (BuildContext context, GoRouterState state) =>
-  //           const AuthView(),
-  //     ),
-  //     GoRoute(
-  //       path: '/register',
-  //       builder: (BuildContext context, GoRouterState state) =>
-  //           RegisterIncomingStudentPage(),
-  //     ),
-  //   ],
-  // );
-// }
