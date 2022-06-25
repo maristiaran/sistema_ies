@@ -33,7 +33,7 @@ abstract class Operation<S> {
   }
 
   notifyStateChanges({Map<String, dynamic>? changes}) {
-    // stateNotifier.notifyStateChange(currentState.copyWith(changes: changes));
+    stateNotifier.notifyStateChange(currentState.copyWith(changes: changes));
   }
 }
 
