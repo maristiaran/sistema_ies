@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
-import 'package:sistema_ies/application/use_cases/users/registering.dart';
+
 // import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/utils/value_objects.dart';
@@ -29,9 +29,8 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
   // late var _registerStatesProvider;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _registerStatesProvider = (ref.watch(
-            IESSystem().authUseCase.registeringUseCase.stateNotifierProvider))
-        as RegisteringState;
+    final _registerStatesProvider = ref.watch(
+        IESSystem().authUseCase.registeringUseCase.stateNotifierProvider);
     // selectedSyllabus = IESSystem().authUseCase.currentSyllabus;
     return GestureDetector(
       onTap: () {
@@ -160,7 +159,10 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                       const SizedBox(height: 32.0),
                       Consumer(builder: (context, ref, child) {
                         return DropdownButton<Syllabus>(
-                            value: _registerStatesProvider.selectedSyllabus(),
+                            value: IESSystem()
+                                .authUseCase
+                                .registeringUseCase
+                                .currentSyllabus,
                             items: IESSystem()
                                 .authUseCase
                                 .registeringUseCase
@@ -173,9 +175,6 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                   .authUseCase
                                   .registeringUseCase
                                   .setCurrentSyllabus(newValue);
-                              // IESSystem()
-                              //     .authUseCase
-                              //     .setCurrentSyllabus(newValue!);
                             });
                       }),
                       const SizedBox(height: 32.0),

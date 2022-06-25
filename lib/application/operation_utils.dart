@@ -4,36 +4,59 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 @immutable
 class OperationState<N> {
   final N stateName;
-  final Operation operation;
+  final Map<String, dynamic>? changes;
 
-  const OperationState({required this.stateName, required this.operation});
+  const OperationState({required this.stateName, this.changes});
+
+  OperationState<N> copyWith({Map<String, dynamic>? changes}) =>
+      OperationState(stateName: stateName, changes: changes);
 }
 
-class OperationStateNotifier<S> extends StateNotifier<S> {
-  OperationStateNotifier({required S initialState}) : super(initialState);
-  notifyStateChange(S newOperationState) {
+class OperationStateNotifier<S> extends StateNotifier<OperationState<S>> {
+  OperationStateNotifier({required OperationState<S> initialState})
+      : super(initialState);
+
+  notifyStateChange(OperationState<S> newOperationState) {
     state = newOperationState;
   }
 }
 
-abstract class Operation<S, N> {
-  late S currentState;
+abstract class Operation<S> {
+  late OperationState<S> currentState;
   late OperationStateNotifier<S> stateNotifier;
-  late StateNotifierProvider<OperationStateNotifier<S>, S>
+  late StateNotifierProvider<OperationStateNotifier<S>, OperationState<S>>
       stateNotifierProvider;
 
-  changeState(S newOperationState) {
+  changeState(OperationState<S> newOperationState) {
     currentState = newOperationState;
     stateNotifier.notifyStateChange(newOperationState);
   }
 
-  notifyCurrentState() {
-    stateNotifier.notifyStateChange(currentState);
+  notifyStateChanges({Map<String, dynamic>? changes}) {
+    // stateNotifier.notifyStateChange(currentState.copyWith(changes: changes));
   }
 }
 
-abstract class UseCase<S, N> extends Operation<S, N> {
+abstract class UseCase<S> extends Operation<S> {
   final Operation parentOperation;
   UseCase({required this.parentOperation});
-  initializeUseCase();
+
+  Future<void> initializeUseCase() async {
+    await initializeRepositories();
+    initializeStateNotifierProvider(initialState());
+  }
+
+  Future<void> initializeRepositories() async {}
+  OperationState<S> initialState();
+
+  initializeStateNotifierProvider(OperationState<S> initialState) {
+    OperationStateNotifier<S> newStateNotifier =
+        OperationStateNotifier<S>(initialState: initialState);
+    stateNotifierProvider =
+        StateNotifierProvider<OperationStateNotifier<S>, OperationState<S>>(
+            (ref) {
+      return newStateNotifier;
+    });
+    stateNotifier = newStateNotifier;
+  }
 }
