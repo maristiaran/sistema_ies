@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
+import 'package:sistema_ies/application/use_cases/users/registering.dart';
 
 // import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
@@ -11,35 +12,32 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
 
   final _registerFormKey = GlobalKey<FormState>();
 
-  final _usernameTextController = TextEditingController();
   final _firstnameTextController = TextEditingController();
   final _surnameTextController = TextEditingController();
   final _dniTextController = TextEditingController();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  final _confirmPasswordTextController = TextEditingController();
 
-  final _focusUsername = FocusNode();
   final _focusFirstname = FocusNode();
   final _focusSurname = FocusNode();
   final _focusDNI = FocusNode();
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
+  final _focusConfirmPassword = FocusNode();
 
-  // late Syllabus currentSyllabus;
-  // late var _registerStatesProvider;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _registerStatesProvider = ref.watch(
+    final _registeringStatesProvider = ref.watch(
         IESSystem().authUseCase.registeringUseCase.stateNotifierProvider);
-    // selectedSyllabus = IESSystem().authUseCase.currentSyllabus;
     return GestureDetector(
       onTap: () {
-        _focusUsername.unfocus();
         _focusFirstname.unfocus();
         _focusSurname.unfocus();
         _focusDNI.unfocus();
         _focusSurname.unfocus();
         _focusPassword.unfocus();
+        _focusConfirmPassword.unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -56,27 +54,12 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                        controller: _usernameTextController,
-                        focusNode: _focusUsername,
-                        validator: (value) => Validator.validateName(
-                          name: value,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Nombre de usuario",
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                      TextFormField(
                         controller: _firstnameTextController,
                         focusNode: _focusFirstname,
-                        validator: (value) => Validator.validateName(
+                        validator: (value) =>
+                            Validator.validateUserFirtAndSurname(
                           name: value,
-                        ),
+                        ).fold((failure) => failure.message, (right) => null),
                         decoration: InputDecoration(
                           hintText: "Nombre(s)",
                           errorBorder: UnderlineInputBorder(
@@ -90,9 +73,10 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                       TextFormField(
                         controller: _surnameTextController,
                         focusNode: _focusSurname,
-                        validator: (value) => Validator.validateName(
+                        validator: (value) =>
+                            Validator.validateUserFirtAndSurname(
                           name: value,
-                        ),
+                        ).fold((failure) => failure.message, (right) => null),
                         decoration: InputDecoration(
                           hintText: "Apellido(s)",
                           errorBorder: UnderlineInputBorder(
@@ -107,9 +91,9 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                       TextFormField(
                         controller: _dniTextController,
                         focusNode: _focusDNI,
-                        validator: (value) => Validator.validateName(
-                          name: value,
-                        ),
+                        validator: (value) =>
+                            Validator.validateDNIString(dni: value).fold(
+                                (failure) => failure.message, (right) => null),
                         decoration: InputDecoration(
                           hintText: "DNI",
                           errorBorder: UnderlineInputBorder(
@@ -121,13 +105,13 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 16.0),
+                      // const SizedBox(height: 16.0),
                       TextFormField(
                         controller: _emailTextController,
                         focusNode: _focusEmail,
-                        validator: (value) => Validator.validateEmail(
-                          email: value,
-                        ),
+                        validator: (value) =>
+                            Validator.validateEmail(email: value).fold(
+                                (failure) => failure.message, (right) => null),
                         decoration: InputDecoration(
                           hintText: "Correo electrónico",
                           errorBorder: UnderlineInputBorder(
@@ -138,14 +122,14 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16.0),
+                      // const SizedBox(height: 16.0),
                       TextFormField(
                         controller: _passwordTextController,
                         focusNode: _focusPassword,
                         obscureText: true,
-                        validator: (value) => Validator.validatePassword(
-                          password: value,
-                        ),
+                        validator: (value) =>
+                            Validator.validatePassword(password: value).fold(
+                                (failure) => failure.message, (right) => null),
                         decoration: InputDecoration(
                           hintText: "Contraseña",
                           errorBorder: UnderlineInputBorder(
@@ -156,7 +140,27 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32.0),
+                      TextFormField(
+                        controller: _confirmPasswordTextController,
+                        focusNode: _focusConfirmPassword,
+                        obscureText: true,
+                        validator: (value) =>
+                            Validator.validateConfirmedPassword(
+                                    firstPassword: _passwordTextController.text,
+                                    confirmedPassword: value)
+                                .fold((failure) => failure.message,
+                                    (right) => null),
+                        decoration: InputDecoration(
+                          hintText: "Confirma contraseña",
+                          errorBorder: UnderlineInputBorder(
+                            borderRadius: BorderRadius.circular(6.0),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(height: 32.0),
                       Consumer(builder: (context, ref, child) {
                         return DropdownButton<Syllabus>(
                             value: IESSystem()
@@ -177,7 +181,7 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                   .setCurrentSyllabus(newValue);
                             });
                       }),
-                      const SizedBox(height: 32.0),
+                      // const SizedBox(height: 32.0),
                       Row(
                         children: [
                           Expanded(
@@ -188,18 +192,25 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                       .authUseCase
                                       .registeringUseCase
                                       .registerAsIncomingUser(
-                                          userName:
+                                          firstname: _firstnameTextController
+                                              .text
+                                              .trim(),
+                                          surname: _surnameTextController.text
+                                              .trim(),
+                                          dni: int.parse(
+                                              _dniTextController.text.trim()),
+                                          email:
                                               _emailTextController.text.trim(),
                                           password: _passwordTextController.text
                                               .trim(),
-                                          uniqueNumber: int.parse(
-                                              _dniTextController.text.trim()),
-                                          firstname: 'Juan',
-                                          surname: 'Perez',
+                                          confirmPassword:
+                                              _confirmPasswordTextController
+                                                  .text
+                                                  .trim(),
                                           syllabus: IESSystem()
                                               .authUseCase
                                               .registeringUseCase
-                                              .currentSyllabus!);
+                                              .currentSyllabus);
                                 }
                               },
                               child: const Text(
@@ -210,11 +221,47 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      // Consumer(
-                      //   builder: (context, ref, child) {
-                      //     return Text(_registerIncomingStudentUseCase.last.displayName);
-                      //   },
-                      // )
+                      const SizedBox(height: 32.0),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          if (_registeringStatesProvider.stateName ==
+                              RegisteringStateName.failure) {
+                            if (_registeringStatesProvider.changes == null) {
+                              return const Text("Error desconocido");
+                            } else {
+                              return Text(_registeringStatesProvider
+                                  .changes!['failure']);
+                            }
+                          } else if (_registeringStatesProvider.stateName ==
+                              RegisteringStateName.successfullyRegistered) {
+                            return const Text(
+                                "¡Registro exitoso!.¡No olvides verificar tu email para poder ingresar!");
+                          } else {
+                            return const Text("");
+                          }
+                        },
+                      ),
+                      // Consumer(builder: (context, ref, child) {
+                      //   if (_registeringStatesProvider.stateName ==
+                      //       RegisteringStateName.failure) {
+                      //     return const Text("Error al");
+                      //   }
+                      //   return const Text("");
+                      // }),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_registerFormKey.currentState!.validate()) {
+                            IESSystem()
+                                .authUseCase
+                                .registeringUseCase
+                                .returnToLogin();
+                          }
+                        },
+                        child: const Text(
+                          'Regresar a login!',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ],
                   ),
                 )
@@ -225,13 +272,4 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
       ),
     );
   }
-
-  // List<DropdownMenuItem> _getSyllabusItems() {
-  //   List<DropdownMenuItem> newSyllabusItems = [];
-  //   if (usecase)
-  //   (_registerStatesProvider as RegisteringUseCaseState)
-  //       .getActiveSyllabuses()
-  //       .map((e) => DropdownMenuItem(child: Text(e.name), value: e))
-  //       .toList();
-  // }
 }

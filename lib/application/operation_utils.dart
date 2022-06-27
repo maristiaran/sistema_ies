@@ -2,42 +2,43 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @immutable
-class OperationState<N> {
-  final N stateName;
+class OperationState {
+  final Enum stateName;
   final Map<String, dynamic>? changes;
 
   const OperationState({required this.stateName, this.changes});
 
-  OperationState<N> copyWith({Map<String, dynamic>? changes}) =>
-      OperationState(stateName: stateName, changes: changes);
+  OperationState copyWith({Map<String, dynamic>? changesData}) =>
+      OperationState(stateName: stateName, changes: changesData);
 }
 
-class OperationStateNotifier<S> extends StateNotifier<OperationState<S>> {
-  OperationStateNotifier({required OperationState<S> initialState})
+class OperationStateNotifier extends StateNotifier<OperationState> {
+  OperationStateNotifier({required OperationState initialState})
       : super(initialState);
 
-  notifyStateChange(OperationState<S> newOperationState) {
+  notifyStateChange(OperationState newOperationState) {
     state = newOperationState;
   }
 }
 
-abstract class Operation<S> {
-  late OperationState<S> currentState;
-  late OperationStateNotifier<S> stateNotifier;
-  late StateNotifierProvider<OperationStateNotifier<S>, OperationState<S>>
+abstract class Operation {
+  late OperationState currentState;
+  late OperationStateNotifier stateNotifier;
+  late StateNotifierProvider<OperationStateNotifier, OperationState>
       stateNotifierProvider;
 
-  changeState(OperationState<S> newOperationState) {
+  changeState(OperationState newOperationState) {
     currentState = newOperationState;
     stateNotifier.notifyStateChange(newOperationState);
   }
 
   notifyStateChanges({Map<String, dynamic>? changes}) {
-    stateNotifier.notifyStateChange(currentState.copyWith(changes: changes));
+    stateNotifier
+        .notifyStateChange(currentState.copyWith(changesData: changes));
   }
 }
 
-abstract class UseCase<S> extends Operation<S> {
+abstract class UseCase extends Operation {
   final Operation parentOperation;
   UseCase({required this.parentOperation});
 
@@ -47,14 +48,13 @@ abstract class UseCase<S> extends Operation<S> {
   }
 
   Future<void> initializeRepositories() async {}
-  OperationState<S> initialState();
+  OperationState initialState();
 
-  initializeStateNotifierProvider(OperationState<S> initialState) {
-    OperationStateNotifier<S> newStateNotifier =
-        OperationStateNotifier<S>(initialState: initialState);
+  initializeStateNotifierProvider(OperationState initialState) {
+    OperationStateNotifier newStateNotifier =
+        OperationStateNotifier(initialState: initialState);
     stateNotifierProvider =
-        StateNotifierProvider<OperationStateNotifier<S>, OperationState<S>>(
-            (ref) {
+        StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
       return newStateNotifier;
     });
     stateNotifier = newStateNotifier;

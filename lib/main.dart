@@ -38,17 +38,16 @@ class AdminIESApp extends ConsumerWidget {
             bodyText1: const TextStyle(fontSize: 18.0),
           ),
         ),
-        home:
-            // const MainView());
+        home: const MainView());
 
-            FutureBuilder(
-                future: IESSystem().initializeIESSystem(),
-                builder: ((context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return const MainView();
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                })));
+    // FutureBuilder(
+    //     future: IESSystem().initializeIESSystem(),
+    //     builder: ((context, snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.done) {
+    //         return const MainView();
+    //       } else {
+    //         return const CircularProgressIndicator();
+    //       }
+    //     })));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
+import 'package:sistema_ies/application/use_cases/users/login.dart';
 
 class LoginPage extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
@@ -93,9 +94,18 @@ class LoginPage extends ConsumerWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 24.0),
                   Consumer(
                     builder: (context, ref, child) {
-                      return Text(_loginStatesProvider.toString());
+                      if (_loginStatesProvider.stateName ==
+                          LoginStateName.failure) {
+                        return Text(_loginStatesProvider.changes!['failure']);
+                      } else if (_loginStatesProvider.stateName ==
+                          LoginStateName.successfullySignIn) {
+                        return const Text("Ingreso exitoso!!");
+                      } else {
+                        return const Text("");
+                      }
                     },
                   )
                 ],

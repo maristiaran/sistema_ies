@@ -1,8 +1,7 @@
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
+import 'package:sistema_ies/application/use_cases/users/auth.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
-
-//Login states
 
 enum RegisteringStateName {
   init,
@@ -11,7 +10,6 @@ enum RegisteringStateName {
   waitingEmailValidation
 }
 
-// LOGIN USE CASE
 class RegisteringUseCase extends UseCase {
   List<Syllabus> syllabuses = [];
   Syllabus? currentSyllabus;
@@ -21,7 +19,7 @@ class RegisteringUseCase extends UseCase {
       : super(parentOperation: parentOperation);
 
   @override
-  OperationState<RegisteringStateName> initialState() {
+  OperationState initialState() {
     return const OperationState(stateName: RegisteringStateName.init);
   }
 
@@ -36,31 +34,35 @@ class RegisteringUseCase extends UseCase {
     notifyStateChanges(changes: {"currentSyllabus": currentSyllabus});
   }
 
-  void initRegistering() {
-    changeState(const OperationState<RegisteringStateName>(
-        stateName: RegisteringStateName.failure));
-  }
-
   void registerAsIncomingUser(
-      {required String userName,
-      required String password,
-      required int uniqueNumber,
-      required String firstname,
+      {required String firstname,
       required String surname,
-      required Syllabus syllabus}) async {
+      required dni,
+      required String email,
+      required String password,
+      required String confirmPassword,
+      required Syllabus? syllabus}) async {
     IESSystem()
         .getUsersRepository()
         .registerIncomingStudent(
-            email: userName,
+            email: email,
             password: password,
-            uniqueNumber: uniqueNumber,
+            dni: dni!,
             firstname: firstname,
             surname: surname,
-            syllabus: syllabus)
+            syllabus: syllabus!)
         .then((registerResponse) => registerResponse.fold(
-            (failure) => changeState(const OperationState<RegisteringStateName>(
-                stateName: RegisteringStateName.failure)),
-            (user) => changeState(const OperationState<RegisteringStateName>(
+            (failure) => changeState(
+                const OperationState(stateName: RegisteringStateName.failure)),
+            (success) => changeState(const OperationState(
                 stateName: RegisteringStateName.successfullyRegistered))));
+  }
+
+  void initRegistering() {
+    changeState(const OperationState(stateName: RegisteringStateName.init));
+  }
+
+  returnToLogin() {
+    (parentOperation as AuthUseCase).startLogin();
   }
 }

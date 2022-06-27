@@ -37,13 +37,11 @@ class IESSystem extends Operation {
   }
 
   initializeStatesAndStateNotifier() {
-    OperationStateNotifier<IESSystemStateName> newStateNotifier =
-        (OperationStateNotifier<IESSystemStateName>(
-            initialState:
-                const OperationState(stateName: IESSystemStateName.iesAuth)));
-    stateNotifierProvider = StateNotifierProvider<
-        OperationStateNotifier<IESSystemStateName>,
-        OperationState<IESSystemStateName>>((ref) {
+    OperationStateNotifier newStateNotifier = (OperationStateNotifier(
+        initialState:
+            const OperationState(stateName: IESSystemStateName.iesAuth)));
+    stateNotifierProvider =
+        StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
       return newStateNotifier;
     });
     stateNotifier = newStateNotifier;
@@ -60,8 +58,7 @@ class IESSystem extends Operation {
   startAuth() async {
     authUseCase = AuthUseCase(parentOperation: this);
     await authUseCase.initializeUseCase();
-    changeState(const OperationState<IESSystemStateName>(
-        stateName: IESSystemStateName.iesAuth));
+    changeState(const OperationState(stateName: IESSystemStateName.iesAuth));
     authUseCase.startLogin();
   }
 }

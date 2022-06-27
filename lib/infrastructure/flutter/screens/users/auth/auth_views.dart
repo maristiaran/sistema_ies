@@ -16,7 +16,11 @@ class AuthView extends ConsumerWidget {
     if (_authStatesProvider.stateName == AuthState.login) {
       return LoginPage();
     } else {
-      return RegisterIncomingStudentPage();
+      RegisterIncomingStudentPage registeringPage =
+          RegisterIncomingStudentPage();
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => registeringPage));
+      return registeringPage;
     }
   }
 }

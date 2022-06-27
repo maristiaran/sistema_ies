@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sistema_ies/shared/entities/student.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/entities/users.dart';
 import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
@@ -11,7 +10,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
 // @override
 //   Future<Either<Failure, Success>> initRepositoryCaches() async {
-//     //TODO: Catch repo errors
+
 //     return Right(Success('ok'));
 //   }
 
@@ -28,30 +27,35 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
           .signInWithEmailAndPassword(email: email!, password: password!);
 
       if (userCredential.user != null) {
-        return Right(IESUser(
-            id: 1,
-            firstname: userCredential.user!.email!,
-            surname: userCredential.user!.email!,
-            birthdate: DateTime(2000, 1, 1),
-            uniqueNumber: 123456,
-            roles: []));
+        if (userCredential.user!.emailVerified) {
+          return Right(IESUser(
+              id: 1,
+              firstname: userCredential.user!.email!,
+              surname: userCredential.user!.email!,
+              birthdate: DateTime(2000, 1, 1),
+              uniqueNumber: 123456,
+              roles: []));
+        } else {
+          return Left(Failure('Email no verificado'));
+        }
       } else {
-        return Left(Failure(''));
+        return Left(Failure('Usuario y/o contraseña incorrecto'));
       }
-    } on FirebaseAuthException catch (e) {
-      String m = '';
-      if (e.message != null) {
-        m = e.message!;
-      }
-      return Left(Failure(m));
+    } on FirebaseAuthException {
+      // String m = '';
+      // if (e.message != null) {
+      //   m = e.message!;
+      // }
+      // return Left(Failure(m));
+      return Left(Failure('Usuario y/o contraseña incorrecto'));
     }
   }
 
   @override
-  Future<Either<Failure, Student>> registerIncomingStudent(
+  Future<Either<Failure, Success>> registerIncomingStudent(
       {required String email,
       required String password,
-      required int uniqueNumber,
+      required int dni,
       required String firstname,
       required String surname,
       required Syllabus syllabus}) async {
@@ -60,7 +64,8 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       if (userCredential.user != null) {
-        return Right(Student(user: userCredential.user!, syllabus: syllabus));
+        userCredential.user!.sendEmailVerification();
+        return Right(Success('Ok'));
       } else {
         return Left(Failure(''));
       }

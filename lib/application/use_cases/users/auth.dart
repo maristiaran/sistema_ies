@@ -23,13 +23,18 @@ class AuthUseCase extends UseCase {
       : super(parentOperation: parentOperation);
 
   @override
-  OperationState<AuthState> initialState() {
+  OperationState initialState() {
     return const OperationState(stateName: AuthState.login);
   }
 
   void startLogin() async {
     loginUseCase = LoginUseCase(authUseCase: this);
     await loginUseCase.initializeUseCase();
+    changeState(const OperationState(stateName: AuthState.login));
+    // loginUseCase.initLogin();
+  }
+
+  void restartLogin() async {
     changeState(const OperationState(stateName: AuthState.login));
     loginUseCase.initLogin();
   }
