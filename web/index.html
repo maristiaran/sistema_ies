@@ -33,9 +33,41 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script type="module">
+
+    // Import the functions you need from the SDKs you need
+  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
+  
+    // TODO: Add SDKs for Firebase products that you want to use
+    import  { getFirestore , collection, addDoc, getDocs} from 'firebase/firestore'; 
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+
+    // Your web app's Firebase configuration
+  
+    const firebaseConfig = {
+  
+      apiKey: "AIzaSyDP1rLX6ZQosv4_6RDzNvU9F4YA9Z9vUPc",
+  
+      authDomain: "sistema-ies-50b4b.firebaseapp.com",
+  
+      projectId: "sistema-ies-50b4b",
+  
+      storageBucket: "sistema-ies-50b4b.appspot.com",
+  
+      messagingSenderId: "186026249077",
+  
+      appId: "1:186026249077:web:83ae7f12bfad3940ada13c"
+  
+    };
+  
+  
+    // Initialize Firebase
+  
+    const app = initializeApp(firebaseConfig);
+  
+  </script>
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
