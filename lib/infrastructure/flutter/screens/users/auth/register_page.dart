@@ -221,7 +221,7 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 32.0),
+                      const SizedBox(height: 16.0),
                       Consumer(
                         builder: (context, ref, child) {
                           if (_registeringStatesProvider.stateName ==
@@ -248,23 +248,21 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                       //   }
                       //   return const Text("");
                       // }),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_registerFormKey.currentState!.validate()) {
-                            IESSystem()
-                                .authUseCase
-                                .registeringUseCase
-                                .returnToLogin();
-                          }
-                        },
-                        child: const Text(
-                          'Regresar a login!',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
                     ],
                   ),
-                )
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    IESSystem().authUseCase.registeringUseCase.returnToLogin();
+                    // if (_registerFormKey.currentState!.validate()) {
+
+                    // }
+                  },
+                  child: const Text(
+                    'Regresar a login!',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ],
             ),
           ),

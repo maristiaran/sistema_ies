@@ -34,7 +34,7 @@ class AuthUseCase extends UseCase {
     // loginUseCase.initLogin();
   }
 
-  void restartLogin() async {
+  void restartLogin() {
     changeState(const OperationState(stateName: AuthState.login));
     loginUseCase.initLogin();
   }

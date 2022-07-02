@@ -63,6 +63,6 @@ class RegisteringUseCase extends UseCase {
   }
 
   returnToLogin() {
-    (parentOperation as AuthUseCase).startLogin();
+    (parentOperation as AuthUseCase).restartLogin();
   }
 }
