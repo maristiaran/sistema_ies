@@ -233,7 +233,8 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                   .changes!['failure']);
                             }
                           } else if (_registeringStatesProvider.stateName ==
-                              RegisteringStateName.successfullyRegistered) {
+                              RegisteringStateName
+                                  .registeredWaitingEmailValidation) {
                             return const Text(
                                 "¡Registro exitoso!.¡No olvides verificar tu email para poder ingresar!");
                           } else {

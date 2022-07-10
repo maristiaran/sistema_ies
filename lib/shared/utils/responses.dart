@@ -1,6 +1,7 @@
 class Failure {
+  Enum failureName;
   String message;
-  Failure(this.message);
+  Failure({required this.failureName, this.message = ""});
 }
 
 class Success {

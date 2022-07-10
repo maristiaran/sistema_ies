@@ -2,8 +2,10 @@ import "package:firebase_core/firebase_core.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import 'package:sistema_ies/application/use_cases/users/auth.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
+// import 'package:sistema_ies/application/use_cases/users/registering.dart';
 import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+// import 'package:sistema_ies/shared/entities/users.dart';
 import 'package:sistema_ies/shared/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
 
@@ -36,6 +38,10 @@ class IESSystem extends Operation {
     return _syllabusesRepository!;
   }
 
+  // setCurrentUser(IESUser newUser) {
+  //   _currentUser = newUser;
+  // }
+
   initializeStatesAndStateNotifier() {
     OperationStateNotifier newStateNotifier = (OperationStateNotifier(
         initialState:
@@ -52,6 +58,22 @@ class IESSystem extends Operation {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     initializeStatesAndStateNotifier();
+    // FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    //   print("user: $user, currentUser: $_currentUser");
+    //   if (user == null) {
+    //     if (_currentUser != null) {
+    //       onCurrentUserLogout();
+    //     }
+    //     print("m");
+    //   } else {
+    //     if (_currentUser != null) {
+    //       print("S ");
+    //       if ((!_currentUser!.emailVerified) && (user.emailVerified)) {
+    //         onUserVerifiedEmail();
+    //       }
+    //     }
+    //   }
+    // });
     await startAuth();
   }
 
@@ -61,4 +83,15 @@ class IESSystem extends Operation {
     changeState(const OperationState(stateName: IESSystemStateName.iesAuth));
     authUseCase.startLogin();
   }
+
+  onCurrentUserLogout() {}
+  // onUserVerifiedEmail() {
+  //   print("qq");
+  //   if ((currentState.stateName == IESSystemStateName.iesAuth) &&
+  //       (authUseCase.currentState.stateName == AuthState.registering) &&
+  //       (authUseCase.registeringUseCase.currentState.stateName ==
+  //           RegisteringStateName.registeredWaitingEmailValidation)) {
+  //     authUseCase.registeringUseCase.onUserVerifiedEmail();
+  //   }
+  // }
 }

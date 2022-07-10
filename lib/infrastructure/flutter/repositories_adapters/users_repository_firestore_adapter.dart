@@ -16,7 +16,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
   @override
   Future<Either<Failure, String>> getUserEmail({required int dni}) async {
-    return Left(Failure(''));
+    return Left(Failure(failureName: FailureName.unknown));
   }
 
   @override
@@ -34,12 +34,17 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
               surname: userCredential.user!.email!,
               birthdate: DateTime(2000, 1, 1),
               uniqueNumber: 123456,
+              emailVerified: userCredential.user!.emailVerified,
               roles: []));
         } else {
-          return Left(Failure('Email no verificado'));
+          return Left(Failure(
+              failureName: FailureName.notVerifiedEmail,
+              message: 'Email no verificado'));
         }
       } else {
-        return Left(Failure('Usuario y/o contraseña incorrecto'));
+        return Left(Failure(
+            failureName: FailureName.notVerifiedEmail,
+            message: 'Usuario y/o contraseña incorrecto'));
       }
     } on FirebaseAuthException {
       // String m = '';
@@ -47,12 +52,24 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
       //   m = e.message!;
       // }
       // return Left(Failure(m));
-      return Left(Failure('Usuario y/o contraseña incorrecto'));
+      return Left(Failure(
+          failureName: FailureName.notVerifiedEmail,
+          message: 'Usuario y/o contraseña incorrecto'));
     }
   }
 
   @override
-  Future<Either<Failure, Success>> registerIncomingStudent(
+  Either<Failure, Success> reSendEmailVerification() {
+    if (_firestoreAuth.currentUser == null) {
+      return Left(Failure(failureName: FailureName.unknown));
+    } else {
+      _firestoreAuth.currentUser!.sendEmailVerification();
+      return Right(Success(''));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> registerIncomingStudent(
       {required String email,
       required String password,
       required int dni,
@@ -65,27 +82,38 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
       if (userCredential.user != null) {
         userCredential.user!.sendEmailVerification();
-        return Right(Success('Ok'));
+        return Right(userCredential.user!);
       } else {
-        return Left(Failure(''));
+        return Left(Failure(failureName: FailureName.unknown));
       }
     } on FirebaseAuthException catch (e) {
       String m = '';
       if (e.message != null) {
         m = e.message!;
       }
-      return Left(Failure(m));
+      return Left(Failure(failureName: FailureName.unknown, message: m));
+    }
+  }
+
+  @override
+  Future<bool> getCurrentUserIsEMailVerified() async {
+    if ((_firestoreAuth.currentUser != null)) {
+      await _firestoreAuth.currentUser!.reload();
+
+      return _firestoreAuth.currentUser!.emailVerified;
+    } else {
+      return false;
     }
   }
 
   @override
   Future<Either<Failure, List<UserRole>>> getUserRoles({IESUser? user}) async {
-    return Left(Failure(''));
+    return Left(Failure(failureName: FailureName.unknown));
   }
 
   @override
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(
       {UserRole? userRole}) async {
-    return Left(Failure(''));
+    return Left(Failure(failureName: FailureName.unknown));
   }
 }

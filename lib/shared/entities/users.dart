@@ -6,6 +6,7 @@ class IESUser {
   late String surname;
   late DateTime birthdate;
   late int uniqueNumber;
+  late bool emailVerified;
   List<UserRole> roles = [];
 
   IESUser(
@@ -14,6 +15,7 @@ class IESUser {
       required this.surname,
       required this.birthdate,
       required this.uniqueNumber,
+      required this.emailVerified,
       required this.roles});
 }
 

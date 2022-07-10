@@ -29,6 +29,7 @@ class LoginUseCase extends UseCase {
                 (failure) => changeState(OperationState(
                     stateName: LoginStateName.failure,
                     changes: {'failure': failure.message})), (user) {
+              // IESSystem().setCurrentUser(user);
               return changeState(const OperationState(
                   stateName: LoginStateName.successfullySignIn));
             }));

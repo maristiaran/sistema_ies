@@ -12,12 +12,12 @@ class FakeStudentsRepositoryAdapter implements StudentsRepositoryPort {
 
   @override
   Either<Failure, Student> getStudent(int idUser, Syllabus idSyllabus) {
-    return Left(Failure(''));
+    return Left(Failure(failureName: FailureName.unknown));
   }
 
   @override
   Either<Failure, Success> updateStudentEducationalRecord(
       Student student, List<Course> updatedCourses) {
-    return Left(Failure(''));
+    return Left(Failure(failureName: FailureName.unknown));
   }
 }

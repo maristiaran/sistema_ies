@@ -1,18 +1,18 @@
+import 'dart:async';
+
+import 'package:either_dart/either.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
 import 'package:sistema_ies/application/use_cases/users/auth.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
+import 'package:sistema_ies/shared/utils/responses.dart';
 
-enum RegisteringStateName {
-  init,
-  failure,
-  successfullyRegistered,
-  waitingEmailValidation
-}
+enum RegisteringStateName { init, failure, registeredWaitingEmailValidation }
 
 class RegisteringUseCase extends UseCase {
   List<Syllabus> syllabuses = [];
   Syllabus? currentSyllabus;
+  Timer? _timer;
 
 //Auth Use Case initialization
   RegisteringUseCase({required parentOperation})
@@ -52,10 +52,16 @@ class RegisteringUseCase extends UseCase {
             surname: surname,
             syllabus: syllabus!)
         .then((registerResponse) => registerResponse.fold(
-            (failure) => changeState(
-                const OperationState(stateName: RegisteringStateName.failure)),
-            (success) => changeState(const OperationState(
-                stateName: RegisteringStateName.successfullyRegistered))));
+                (failure) => changeState(const OperationState(
+                    stateName: RegisteringStateName.failure)), (user) {
+              print("timer");
+              _timer = Timer.periodic(const Duration(seconds: 3),
+                  (timer) => restartLoginIUserEmailVerified());
+
+              changeState(const OperationState(
+                  stateName:
+                      RegisteringStateName.registeredWaitingEmailValidation));
+            }));
   }
 
   void initRegistering() {
@@ -63,6 +69,27 @@ class RegisteringUseCase extends UseCase {
   }
 
   returnToLogin() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
     (parentOperation as AuthUseCase).restartLogin();
+  }
+
+  reSendEmailVerification() {
+    Either<Failure, Success> response =
+        IESSystem().getUsersRepository().reSendEmailVerification();
+    response.fold(
+        (failure) => changeState(
+            const OperationState(stateName: RegisteringStateName.failure)),
+        (success) => null);
+  }
+
+  restartLoginIUserEmailVerified() async {
+    bool isVerified =
+        await IESSystem().getUsersRepository().getCurrentUserIsEMailVerified();
+    if (isVerified) {
+      _timer!.cancel();
+      (parentOperation as AuthUseCase).restartLogin();
+    }
   }
 }
