@@ -11,13 +11,26 @@ class LoginPage extends ConsumerWidget {
 
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
-
+  // final  _loginStatesProvider;
   LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _loginStatesProvider =
-        ref.watch(IESSystem().authUseCase.loginUseCase.stateNotifierProvider);
+    void _showStatusBarIfNecessary() {
+      final _loginStatesProvider =
+          ref.watch(IESSystem().authUseCase.loginUseCase.stateNotifierProvider);
+      if (_loginStatesProvider.stateName == LoginStateName.failure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(_loginStatesProvider.changes!['failure']),
+          backgroundColor: Colors.red,
+        ));
+      } else if (_loginStatesProvider.stateName ==
+          LoginStateName.successfullySignIn) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Ingreso exitoso')));
+      }
+    }
+
     return GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
@@ -62,52 +75,55 @@ class LoginPage extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 24.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            _focusEmail.unfocus();
-                            _focusPassword.unfocus();
-                            IESSystem().authUseCase.loginUseCase.signIn(
-                                _emailTextController.text.trim(),
-                                _passwordTextController.text.trim());
-                          },
-                          child: const Text(
-                            'Ingresar',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 24.0),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => IESSystem()
-                              .authUseCase
-                              .startRegisteringIncomingUser(),
-                          child: const Text(
-                            'Registrarse',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
+                  ElevatedButton(
+                    onPressed: () async {
+                      _focusEmail.unfocus();
+                      _focusPassword.unfocus();
+                      IESSystem()
+                          .authUseCase
+                          .loginUseCase
+                          .signIn(_emailTextController.text.trim(),
+                              _passwordTextController.text.trim())
+                          .whenComplete(() => _showStatusBarIfNecessary());
+                    },
+                    child: const Text(
+                      'Ingresar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(width: 24.0),
+                  ElevatedButton(
+                    onPressed: () =>
+                        IESSystem().authUseCase.startRegisteringIncomingUser(),
+                    child: const Text(
+                      'Registrarse',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(height: 24.0),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      if (_loginStatesProvider.stateName ==
-                          LoginStateName.failure) {
-                        return Text(_loginStatesProvider.changes!['failure']);
-                      } else if (_loginStatesProvider.stateName ==
-                          LoginStateName.successfullySignIn) {
-                        return const Text("Ingreso exitoso!!");
-                      } else {
-                        return const Text("");
-                      }
-                    },
-                  )
+                  ElevatedButton(
+                    onPressed: () => IESSystem()
+                        .authUseCase
+                        .loginUseCase
+                        .changePassword(_emailTextController.text.trim())
+                        .whenComplete(() => _showStatusBarIfNecessary()),
+                    child: const Text(
+                      '¡Perdí la contraseña!',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
+                  ElevatedButton(
+                    onPressed: () => IESSystem()
+                        .authUseCase
+                        .loginUseCase
+                        .reSendEmailVerification()
+                        .whenComplete(() => _showStatusBarIfNecessary()),
+                    child: const Text(
+                      'Reenviar email de verificación',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
             )));

@@ -264,6 +264,24 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
+                Consumer(builder: (context, ref, child) {
+                  if (_registeringStatesProvider.stateName ==
+                      RegisteringStateName.registeredWaitingEmailValidation) {
+                    return ElevatedButton(
+                        onPressed: () {
+                          IESSystem()
+                              .authUseCase
+                              .registeringUseCase
+                              .reSendEmailVerification();
+                        },
+                        child: const Text(
+                          'Reenviar email de verificación',
+                          style: TextStyle(color: Colors.white),
+                        ));
+                  } else {
+                    return const Text('');
+                  }
+                }),
               ],
             ),
           ),
@@ -271,4 +289,6 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
       ),
     );
   }
+
+  void showStatusBarIfNecessary() {}
 }

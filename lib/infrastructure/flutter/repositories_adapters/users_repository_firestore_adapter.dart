@@ -8,11 +8,18 @@ import 'package:sistema_ies/shared/utils/responses.dart';
 class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   final _firestoreAuth = FirebaseAuth.instance;
 
-// @override
-//   Future<Either<Failure, Success>> initRepositoryCaches() async {
-
-//     return Right(Success('ok'));
-//   }
+  @override
+  Future<Either<Failure, Success>> resetPasswordEmail(
+      {required String email}) async {
+    try {
+      await _firestoreAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException {
+      return Left(Failure(
+          failureName: FailureName.cantResetPassword,
+          message: 'No se pudo restaurar la contraseña'));
+    }
+    return Right(Success(''));
+  }
 
   @override
   Future<Either<Failure, String>> getUserEmail({required int dni}) async {
@@ -61,7 +68,9 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   @override
   Either<Failure, Success> reSendEmailVerification() {
     if (_firestoreAuth.currentUser == null) {
-      return Left(Failure(failureName: FailureName.unknown));
+      return Left(Failure(
+          failureName: FailureName.cantSentVerificationEmail,
+          message: 'No se pudo enviar el email de verificación'));
     } else {
       _firestoreAuth.currentUser!.sendEmailVerification();
       return Right(Success(''));

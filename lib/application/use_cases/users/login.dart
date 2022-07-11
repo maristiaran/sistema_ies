@@ -1,6 +1,8 @@
+import 'package:either_dart/either.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
 import 'package:sistema_ies/application/use_cases/users/auth.dart';
+import 'package:sistema_ies/shared/utils/responses.dart';
 
 //Login states
 
@@ -21,8 +23,8 @@ class LoginUseCase extends UseCase {
     changeState(const OperationState(stateName: LoginStateName.init));
   }
 
-  void signIn(String userName, String password) async {
-    IESSystem()
+  Future signIn(String userName, String password) async {
+    await IESSystem()
         .getUsersRepository()
         .signInUsingEmailAndPassword(email: userName, password: password)
         .then((signInResponse) => signInResponse.fold(
@@ -30,12 +32,32 @@ class LoginUseCase extends UseCase {
                     stateName: LoginStateName.failure,
                     changes: {'failure': failure.message})), (user) {
               // IESSystem().setCurrentUser(user);
-              return changeState(const OperationState(
+              changeState(const OperationState(
                   stateName: LoginStateName.successfullySignIn));
             }));
   }
 
+  Future reSendEmailVerification() async {
+    Either<Failure, Success> response =
+        await IESSystem().getUsersRepository().reSendEmailVerification();
+    response.fold(
+        (failure) => changeState(OperationState(
+            stateName: LoginStateName.failure,
+            changes: {'failure': failure.message})),
+        (success) => null);
+  }
+
   void startRegisteringIncomingUser() async {
     (parentOperation as AuthUseCase).startRegisteringIncomingUser();
+  }
+
+  Future changePassword(String email) async {
+    Either<Failure, Success> response =
+        await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
+    response.fold(
+        (failure) => changeState(OperationState(
+            stateName: LoginStateName.failure,
+            changes: {'failure': failure.message})),
+        (success) => null);
   }
 }

@@ -6,7 +6,7 @@ import 'package:sistema_ies/shared/entities/syllabus.dart';
 //Registering states
 
 //Auth State Names
-enum AuthState { login, registering }
+enum AuthState { login, registering, changingPassword }
 
 // AUTORIZATION
 class AuthUseCase extends UseCase {
@@ -31,12 +31,10 @@ class AuthUseCase extends UseCase {
     loginUseCase = LoginUseCase(authUseCase: this);
     await loginUseCase.initializeUseCase();
     changeState(const OperationState(stateName: AuthState.login));
-    // loginUseCase.initLogin();
   }
 
   void restartLogin() {
     changeState(const OperationState(stateName: AuthState.login));
-    print("aca...");
     loginUseCase.initLogin();
   }
 

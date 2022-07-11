@@ -54,10 +54,8 @@ class RegisteringUseCase extends UseCase {
         .then((registerResponse) => registerResponse.fold(
                 (failure) => changeState(const OperationState(
                     stateName: RegisteringStateName.failure)), (user) {
-              print("timer");
               _timer = Timer.periodic(const Duration(seconds: 3),
                   (timer) => restartLoginIUserEmailVerified());
-
               changeState(const OperationState(
                   stateName:
                       RegisteringStateName.registeredWaitingEmailValidation));

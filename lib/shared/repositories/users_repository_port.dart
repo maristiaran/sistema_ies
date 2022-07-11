@@ -5,10 +5,17 @@ import 'package:sistema_ies/shared/entities/users.dart';
 import 'package:sistema_ies/shared/repositories/repositories.dart';
 import 'package:sistema_ies/shared/utils/responses.dart';
 
-enum FailureName { unknown, wrongUsernameOrPassword, notVerifiedEmail }
+enum FailureName {
+  unknown,
+  wrongUsernameOrPassword,
+  notVerifiedEmail,
+  cantResetPassword,
+  cantSentVerificationEmail
+}
 
 abstract class UsersRepositoryPort extends RepositoryPort {
   Future<bool> getCurrentUserIsEMailVerified();
+  Future<Either<Failure, Success>> resetPasswordEmail({required String email});
   Future<Either<Failure, String>> getUserEmail({required int dni});
   Future<Either<Failure, IESUser>> signInUsingEmailAndPassword(
       {String email, String password});
