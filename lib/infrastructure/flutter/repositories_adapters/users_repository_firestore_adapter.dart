@@ -32,7 +32,6 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     try {
       UserCredential userCredential = await _firestoreAuth
           .signInWithEmailAndPassword(email: email!, password: password!);
-
       if (userCredential.user != null) {
         if (userCredential.user!.emailVerified) {
           return Right(IESUser(

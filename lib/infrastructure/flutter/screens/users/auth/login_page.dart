@@ -26,8 +26,22 @@ class LoginPage extends ConsumerWidget {
         ));
       } else if (_loginStatesProvider.stateName ==
           LoginStateName.successfullySignIn) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Ingreso exitoso')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Ingreso exitoso'),
+          backgroundColor: Colors.green,
+        ));
+      } else if (_loginStatesProvider.stateName ==
+          LoginStateName.passwordResetSent) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Email de recuperación de contraseña enviado'),
+          backgroundColor: Colors.green,
+        ));
+      } else if (_loginStatesProvider.stateName ==
+          LoginStateName.verificationEmailSent) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Email de verificación enviado'),
+          backgroundColor: Colors.green,
+        ));
       }
     }
 

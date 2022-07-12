@@ -6,7 +6,13 @@ import 'package:sistema_ies/shared/utils/responses.dart';
 
 //Login states
 
-enum LoginStateName { init, failure, successfullySignIn }
+enum LoginStateName {
+  init,
+  failure,
+  successfullySignIn,
+  passwordResetSent,
+  verificationEmailSent
+}
 
 // LOGIN USE CASE
 class LoginUseCase extends UseCase {
@@ -43,8 +49,11 @@ class LoginUseCase extends UseCase {
     response.fold(
         (failure) => changeState(OperationState(
             stateName: LoginStateName.failure,
-            changes: {'failure': failure.message})),
-        (success) => null);
+            changes: {'failure': failure.message})), (success) {
+      changeState(const OperationState(
+          stateName: LoginStateName.verificationEmailSent));
+      changeState(const OperationState(stateName: LoginStateName.init));
+    });
   }
 
   void startRegisteringIncomingUser() async {
@@ -54,10 +63,14 @@ class LoginUseCase extends UseCase {
   Future changePassword(String email) async {
     Either<Failure, Success> response =
         await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
-    response.fold(
-        (failure) => changeState(OperationState(
-            stateName: LoginStateName.failure,
-            changes: {'failure': failure.message})),
-        (success) => null);
+    response.fold((failure) {
+      changeState(OperationState(
+          stateName: LoginStateName.failure,
+          changes: {'failure': failure.message}));
+    }, (success) {
+      changeState(
+          const OperationState(stateName: LoginStateName.passwordResetSent));
+      // changeState(const OperationState(stateName: LoginStateName.init));
+    });
   }
 }
