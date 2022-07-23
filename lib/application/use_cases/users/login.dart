@@ -32,14 +32,12 @@ class LoginUseCase extends UseCase {
   }
 
   Future signIn(String userDNIOrEmail, String password) async {
-    print("ok");
     if (userDNIOrEmail == "") {
       changeState(const OperationState(
           stateName: LoginStateName.failure,
           changes: {'failure': 'El dni o email no puede ser un texto vacio'}));
       return null;
     }
-    print("okqqq");
     String userEmail = userDNIOrEmail;
     if (!userDNIOrEmail.contains('@')) {
       await IESSystem()
@@ -100,14 +98,11 @@ class LoginUseCase extends UseCase {
     Either<Failure, Success> response =
         await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
     response.fold((failure) {
-      print("paso mal");
-      print(currentState.stateName);
       changeState(OperationState(
           stateName: LoginStateName.failure,
           changes: {'failure': failure.message}));
       // changeState(const OperationState(stateName: LoginStateName.init));
     }, (success) {
-      print("paso bien");
       changeState(
           const OperationState(stateName: LoginStateName.passwordResetSent));
       // changeState(const OperationState(stateName: LoginStateName.init));

@@ -4,7 +4,6 @@ import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
 import 'package:sistema_ies/application/use_cases/users/auth.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
-import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
 import 'package:sistema_ies/shared/utils/responses.dart';
 
 enum RegisteringStateName {
