@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:sistema_ies/shared/entities/course.dart';
 import 'package:sistema_ies/shared/entities/student.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/repositories/repositories.dart';

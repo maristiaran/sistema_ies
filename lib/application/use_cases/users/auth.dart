@@ -6,7 +6,13 @@ import 'package:sistema_ies/shared/entities/syllabus.dart';
 //Registering states
 
 //Auth State Names
-enum AuthState { login, registering, changingPassword }
+enum AuthState {
+  login,
+  registeringAsNewUser,
+  changingPassword,
+  selectingRole,
+  selectingRoleOperation
+}
 
 // AUTORIZATION
 class AuthUseCase extends UseCase {
@@ -31,6 +37,7 @@ class AuthUseCase extends UseCase {
     loginUseCase = LoginUseCase(authUseCase: this);
     await loginUseCase.initializeUseCase();
     changeState(const OperationState(stateName: AuthState.login));
+    loginUseCase.initLogin();
   }
 
   void restartLogin() {
@@ -41,7 +48,17 @@ class AuthUseCase extends UseCase {
   void startRegisteringIncomingUser() async {
     registeringUseCase = RegisteringUseCase(parentOperation: this);
     await registeringUseCase.initializeUseCase();
-    changeState(const OperationState(stateName: AuthState.registering));
+    changeState(
+        const OperationState(stateName: AuthState.registeringAsNewUser));
     registeringUseCase.initRegistering();
+  }
+
+  void startSelectingUserRole() async {
+    changeState(const OperationState(stateName: AuthState.selectingRole));
+  }
+
+  void startSelectingUserRoleOperation() async {
+    changeState(
+        const OperationState(stateName: AuthState.selectingRoleOperation));
   }
 }

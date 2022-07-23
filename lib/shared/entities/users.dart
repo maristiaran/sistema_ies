@@ -1,27 +1,29 @@
 // import 'package:flutter/widgets.dart';
 
 class IESUser {
-  final int id;
   late String firstname;
   late String surname;
   late DateTime birthdate;
-  late int uniqueNumber;
-  late bool emailVerified;
+  late int dni;
+  late String email;
   List<UserRole> roles = [];
 
   IESUser(
-      {required this.id,
-      required this.firstname,
+      {required this.firstname,
       required this.surname,
+      required this.dni,
       required this.birthdate,
-      required this.uniqueNumber,
-      required this.emailVerified,
-      required this.roles});
+      required this.email});
+
+  addRole(UserRole newRole) {
+    roles.add(newRole);
+  }
 }
 
-class UserRole {
+enum UserRoleNames { student, teacher, systemAdmin, administrative, manager }
+
+abstract class UserRole {
   final IESUser user;
+  Enum userRoleName();
   UserRole({required this.user});
 }
-
-class UserRoleOperation {}

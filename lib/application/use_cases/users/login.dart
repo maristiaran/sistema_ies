@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
 import 'package:sistema_ies/application/use_cases/users/auth.dart';
+import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
 import 'package:sistema_ies/shared/utils/responses.dart';
 
 //Login states
@@ -9,6 +10,7 @@ import 'package:sistema_ies/shared/utils/responses.dart';
 enum LoginStateName {
   init,
   failure,
+  emailNotVerifiedFailure,
   successfullySignIn,
   passwordResetSent,
   verificationEmailSent
@@ -29,17 +31,51 @@ class LoginUseCase extends UseCase {
     changeState(const OperationState(stateName: LoginStateName.init));
   }
 
-  Future signIn(String userName, String password) async {
+  Future signIn(String userDNIOrEmail, String password) async {
+    print("ok");
+    if (userDNIOrEmail == "") {
+      changeState(const OperationState(
+          stateName: LoginStateName.failure,
+          changes: {'failure': 'El dni o email no puede ser un texto vacio'}));
+      return null;
+    }
+    print("okqqq");
+    String userEmail = userDNIOrEmail;
+    if (!userDNIOrEmail.contains('@')) {
+      await IESSystem()
+          .getUsersRepository()
+          .getIESUserByDNI(dni: int.parse(userDNIOrEmail))
+          .then((getIESUserByDNI) => getIESUserByDNI.fold(
+                  (failure) => changeState(OperationState(
+                      stateName: LoginStateName.failure,
+                      changes: {'failure': failure.message})), (iesUser) {
+                userEmail = iesUser.email;
+              }));
+    }
     await IESSystem()
         .getUsersRepository()
-        .signInUsingEmailAndPassword(email: userName, password: password)
-        .then((signInResponse) => signInResponse.fold(
-                (failure) => changeState(OperationState(
+        .signInUsingEmailAndPassword(email: userEmail, password: password)
+        .then((signInResponse) => signInResponse.fold((failure) {
+              if (failure.failureName ==
+                  UsersRepositoryFailureName.notVerifiedEmail) {
+                changeState(OperationState(
+                    stateName: LoginStateName.emailNotVerifiedFailure,
+                    changes: {'failure': failure.message}));
+              } else {
+                changeState(OperationState(
                     stateName: LoginStateName.failure,
-                    changes: {'failure': failure.message})), (user) {
-              // IESSystem().setCurrentUser(user);
+                    changes: {'failure': failure.message}));
+              }
+            }, (iesUser) {
+              IESSystem().setCurrentIESUser(iesUser);
               changeState(const OperationState(
                   stateName: LoginStateName.successfullySignIn));
+              if (IESSystem().getCurrentIESUserRolesCount() > 1) {
+                (parentOperation as AuthUseCase).startSelectingUserRole();
+              } else {
+                (parentOperation as AuthUseCase)
+                    .startSelectingUserRoleOperation();
+              }
             }));
   }
 
@@ -52,7 +88,7 @@ class LoginUseCase extends UseCase {
             changes: {'failure': failure.message})), (success) {
       changeState(const OperationState(
           stateName: LoginStateName.verificationEmailSent));
-      changeState(const OperationState(stateName: LoginStateName.init));
+      // changeState(const OperationState(stateName: LoginStateName.init));
     });
   }
 
@@ -64,10 +100,14 @@ class LoginUseCase extends UseCase {
     Either<Failure, Success> response =
         await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
     response.fold((failure) {
+      print("paso mal");
+      print(currentState.stateName);
       changeState(OperationState(
           stateName: LoginStateName.failure,
           changes: {'failure': failure.message}));
+      // changeState(const OperationState(stateName: LoginStateName.init));
     }, (success) {
+      print("paso bien");
       changeState(
           const OperationState(stateName: LoginStateName.passwordResetSent));
       // changeState(const OperationState(stateName: LoginStateName.init));

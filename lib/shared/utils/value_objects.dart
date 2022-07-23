@@ -29,6 +29,20 @@ class Validator {
     }
   }
 
+  static Either<Failure, String> validateDNIOrEmail(
+      {required String? dniOrEmail}) {
+    if (dniOrEmail == null) {
+      return (Left(Failure(
+          failureName: FailureName.unknown, message: "DNI o email no válido")));
+    } else {
+      if (dniOrEmail.contains('@')) {
+        return validateEmail(email: dniOrEmail);
+      } else {
+        return validateDNIString(dni: dniOrEmail);
+      }
+    }
+  }
+
   static Either<Failure, String> validatePassword({required String? password}) {
     if (password == null) {
       return (Left(Failure(

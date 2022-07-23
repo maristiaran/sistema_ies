@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/use_cases/users/registering.dart';
-
-// import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
-import 'package:sistema_ies/shared/entities/syllabus.dart';
+import 'package:sistema_ies/infrastructure/flutter/screens/views_utils.dart';
+import 'package:sistema_ies/shared/utils/datetime.dart';
 import 'package:sistema_ies/shared/utils/value_objects.dart';
 
 class RegisterIncomingStudentPage extends ConsumerWidget {
@@ -18,6 +17,8 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _confirmPasswordTextController = TextEditingController();
+  final _birthDateTextController =
+      TextEditingController(text: dateToString(DateTime.now()));
 
   final _focusFirstname = FocusNode();
   final _focusSurname = FocusNode();
@@ -25,11 +26,13 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
   final _focusConfirmPassword = FocusNode();
+  final _focusBirthdate = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _registeringStatesProvider = ref.watch(
         IESSystem().authUseCase.registeringUseCase.stateNotifierProvider);
+
     return GestureDetector(
       onTap: () {
         _focusFirstname.unfocus();
@@ -41,7 +44,7 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Registro como nuevo estudiante'),
+          title: const Text('Registro como nuevo usuario'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -104,7 +107,34 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-
+                      TextFormField(
+                        readOnly: true,
+                        controller: _birthDateTextController,
+                        focusNode: _focusBirthdate,
+                        decoration: InputDecoration(
+                            hintText: "Fecha de nacimiento",
+                            errorBorder: UnderlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                              ),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () async {
+                                DateTime? newBirthdate = await showDatePicker(
+                                    context: context,
+                                    initialDate: stringToDate(
+                                        _birthDateTextController.text),
+                                    firstDate: DateTime(1900, 1, 1),
+                                    lastDate: DateTime.now());
+                                if (newBirthdate != null) {
+                                  _birthDateTextController.text =
+                                      dateToString(newBirthdate);
+                                }
+                              },
+                            )),
+                      ),
                       // const SizedBox(height: 16.0),
                       TextFormField(
                         controller: _emailTextController,
@@ -160,28 +190,7 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      // const SizedBox(height: 32.0),
-                      Consumer(builder: (context, ref, child) {
-                        return DropdownButton<Syllabus>(
-                            value: IESSystem()
-                                .authUseCase
-                                .registeringUseCase
-                                .currentSyllabus,
-                            items: IESSystem()
-                                .authUseCase
-                                .registeringUseCase
-                                .syllabuses
-                                .map((e) => DropdownMenuItem(
-                                    child: Text(e.name), value: e))
-                                .toList(),
-                            onChanged: (Syllabus? newValue) {
-                              IESSystem()
-                                  .authUseCase
-                                  .registeringUseCase
-                                  .setCurrentSyllabus(newValue);
-                            });
-                      }),
-                      // const SizedBox(height: 32.0),
+
                       Row(
                         children: [
                           Expanded(
@@ -207,10 +216,8 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                                               _confirmPasswordTextController
                                                   .text
                                                   .trim(),
-                                          syllabus: IESSystem()
-                                              .authUseCase
-                                              .registeringUseCase
-                                              .currentSyllabus);
+                                          birthdate: stringToDate(
+                                              _birthDateTextController.text));
                                 }
                               },
                               child: const Text(
@@ -242,13 +249,6 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                           }
                         },
                       ),
-                      // Consumer(builder: (context, ref, child) {
-                      //   if (_registeringStatesProvider.stateName ==
-                      //       RegisteringStateName.failure) {
-                      //     return const Text("Error al");
-                      //   }
-                      //   return const Text("");
-                      // }),
                     ],
                   ),
                 ),
@@ -282,6 +282,28 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                     return const Text('');
                   }
                 }),
+                Consumer(builder: (context, ref, child) {
+                  if (_registeringStatesProvider.stateName ==
+                      RegisteringStateName.failure) {
+                    return snackbarLike(
+                        text: _registeringStatesProvider.changes!['failure'],
+                        isFailure: true);
+                  } else if (_registeringStatesProvider.stateName ==
+                      RegisteringStateName.registeredWaitingEmailValidation) {
+                    return snackbarLike(
+                        text:
+                            '¡Ya estás registrado! Deberás ingresar en el enlace enviado a tu email para poder ingresar',
+                        isFailure: false);
+                  } else if (_registeringStatesProvider.stateName ==
+                      RegisteringStateName.verificationEmailSent) {
+                    return snackbarLike(
+                        text:
+                            'Email de recuperación de contraseña enviado a: ${_emailTextController.text}',
+                        isFailure: false);
+                  }
+
+                  return const Text('');
+                })
               ],
             ),
           ),
@@ -289,6 +311,4 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
       ),
     );
   }
-
-  void showStatusBarIfNecessary() {}
 }

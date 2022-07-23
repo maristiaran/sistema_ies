@@ -5,6 +5,8 @@ import 'package:sistema_ies/application/operation_utils.dart';
 // import 'package:sistema_ies/application/use_cases/users/registering.dart';
 import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+import 'package:sistema_ies/shared/entities/user_role_operation.dart';
+import 'package:sistema_ies/shared/entities/users.dart';
 // import 'package:sistema_ies/shared/entities/users.dart';
 import 'package:sistema_ies/shared/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
@@ -15,6 +17,10 @@ enum IESSystemStateName { iesAuth }
 class IESSystem extends Operation {
   // IESSystem as a Singleton
   static final IESSystem _singleton = IESSystem._internal();
+// Current User
+  late IESUser? _currentIESUser;
+  late UserRole? _currentIESUserRole;
+
   // Repositories
   UsersRepositoryPort? _usersRepository;
   SyllabusesRepositoryPort? _syllabusesRepository;
@@ -38,9 +44,36 @@ class IESSystem extends Operation {
     return _syllabusesRepository!;
   }
 
-  // setCurrentUser(IESUser newUser) {
-  //   _currentUser = newUser;
-  // }
+  List<UserRole> getCurrentIESUserRoles() {
+    if (_currentIESUser == null) {
+      return [];
+    } else {
+      return _currentIESUser!.roles;
+    }
+  }
+
+  int getCurrentIESUserRolesCount() {
+    if (_currentIESUser == null) {
+      return 0;
+    } else {
+      return _currentIESUser!.roles.length;
+    }
+  }
+
+  List<UserRoleOperation> getCurrentIESUserRoleOperations() {
+    //TODO: Add current role operations
+    List<UserRoleOperation> iesUserRoleOperations = [];
+    iesUserRoleOperations.add(RegisterAsNewStudentOperation());
+    return iesUserRoleOperations;
+  }
+
+  setCurrentIESUser(IESUser newIESUser) {
+    _currentIESUser = newIESUser;
+  }
+
+  IESUser? currentIESUserIfAny() {
+    return _currentIESUser;
+  }
 
   initializeStatesAndStateNotifier() {
     OperationStateNotifier newStateNotifier = (OperationStateNotifier(
