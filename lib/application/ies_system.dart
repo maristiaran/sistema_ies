@@ -5,6 +5,7 @@ import 'package:sistema_ies/application/operation_utils.dart';
 // import 'package:sistema_ies/application/use_cases/users/registering.dart';
 import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/entities/user_role_operation.dart';
 import 'package:sistema_ies/shared/entities/users.dart';
 // import 'package:sistema_ies/shared/entities/users.dart';
@@ -87,26 +88,24 @@ class IESSystem extends Operation {
   }
 
   initializeIESSystem() async {
+    (await getSyllabusesRepository().getActiveSyllabuses()).fold((left) => null,
+        (syllabuses) {
+      for (Syllabus syllabus in syllabuses) {
+        print('---------------------------------------');
+        print(syllabus.name);
+        print('---------------------------------------');
+        for (Subject subject in syllabus.subjects) {
+          print(
+              '${subject.id}-${subject.name} ,para cursar: ${subject.coursesNeededForCoursing}, para rendir: ${subject.examNeededForExamination}');
+        }
+      }
+    });
+
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     initializeStatesAndStateNotifier();
-    // FirebaseAuth.instance.authStateChanges().listen((User? user) {
-    //   print("user: $user, currentUser: $_currentUser");
-    //   if (user == null) {
-    //     if (_currentUser != null) {
-    //       onCurrentUserLogout();
-    //     }
-    //     print("m");
-    //   } else {
-    //     if (_currentUser != null) {
-    //       print("S ");
-    //       if ((!_currentUser!.emailVerified) && (user.emailVerified)) {
-    //         onUserVerifiedEmail();
-    //       }
-    //     }
-    //   }
-    // });
+
     await startAuth();
   }
 
