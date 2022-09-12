@@ -1,39 +1,46 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import 'package:sistema_ies/application/use_cases/users/auth.dart';
+import 'package:sistema_ies/application/use_cases/all_roles/crud_roles.dart';
+import 'package:sistema_ies/application/use_cases/users/home.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
-// import 'package:sistema_ies/application/use_cases/users/registering.dart';
+import 'package:sistema_ies/application/use_cases/users/login.dart';
+import 'package:sistema_ies/application/use_cases/users/registering.dart';
 import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
-import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/entities/user_role_operation.dart';
 import 'package:sistema_ies/shared/entities/users.dart';
-// import 'package:sistema_ies/shared/entities/users.dart';
 import 'package:sistema_ies/shared/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
 
 //Auth State Names
-enum IESSystemStateName { iesAuth }
+enum IESSystemStateName { login, home, registering }
 
 class IESSystem extends Operation {
   // IESSystem as a Singleton
   static final IESSystem _singleton = IESSystem._internal();
 // Current User
-  late IESUser? _currentIESUser;
-  late UserRole? _currentIESUserRole;
+  IESUser? _currentIESUserIfAny;
+  UserRole? _currentIESUserRoleIfAny;
 
   // Repositories
   UsersRepositoryPort? _usersRepository;
   SyllabusesRepositoryPort? _syllabusesRepository;
 
   // Use cases
-  late AuthUseCase authUseCase;
+  late LoginUseCase loginUseCase;
+  late HomeUseCase homeUseCase;
+  late RegisteringUseCase registeringUseCase;
+  late CRUDRoleUseCase crudRolesUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
     return _singleton;
   }
   IESSystem._internal();
+
+  IESUser? getCurrentIESUserIfAny() {
+    return _currentIESUserIfAny;
+  }
 
   UsersRepositoryPort getUsersRepository() {
     _usersRepository ??= usersRepository;
@@ -46,40 +53,53 @@ class IESSystem extends Operation {
   }
 
   List<UserRole> getCurrentIESUserRoles() {
-    if (_currentIESUser == null) {
+    if (_currentIESUserIfAny == null) {
       return [];
     } else {
-      return _currentIESUser!.roles;
+      return _currentIESUserIfAny!.roles;
     }
   }
 
   int getCurrentIESUserRolesCount() {
-    if (_currentIESUser == null) {
+    if (_currentIESUserIfAny == null) {
       return 0;
     } else {
-      return _currentIESUser!.roles.length;
+      return _currentIESUserIfAny!.roles.length;
     }
   }
 
   List<UserRoleOperation> getCurrentIESUserRoleOperations() {
-    //TODO: Add current role operations
     List<UserRoleOperation> iesUserRoleOperations = [];
+
+    switch (_currentIESUserRoleIfAny!.userRoleName()) {
+      case UserRoleNames.student:
+        iesUserRoleOperations.add(RegisterAsNewStudentOperation());
+    }
     iesUserRoleOperations.add(RegisterAsNewStudentOperation());
     return iesUserRoleOperations;
   }
 
-  setCurrentIESUser(IESUser newIESUser) {
-    _currentIESUser = newIESUser;
+  setCurrentIESUserIfAny(IESUser? newIESUser) {
+    _currentIESUserIfAny = newIESUser;
+    if (newIESUser == null) {
+      _currentIESUserRoleIfAny = null;
+    } else {
+      if (newIESUser.roles.length == 1) {
+        _currentIESUserRoleIfAny = newIESUser.roles.first;
+      } else {
+        _currentIESUserRoleIfAny = null;
+      }
+    }
   }
 
   IESUser? currentIESUserIfAny() {
-    return _currentIESUser;
+    return _currentIESUserIfAny;
   }
 
   initializeStatesAndStateNotifier() {
     OperationStateNotifier newStateNotifier = (OperationStateNotifier(
         initialState:
-            const OperationState(stateName: IESSystemStateName.iesAuth)));
+            const OperationState(stateName: IESSystemStateName.login)));
     stateNotifierProvider =
         StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
       return newStateNotifier;
@@ -88,32 +108,51 @@ class IESSystem extends Operation {
   }
 
   initializeIESSystem() async {
-    (await getSyllabusesRepository().getActiveSyllabuses()).fold((left) => null,
-        (syllabuses) {
-      for (Syllabus syllabus in syllabuses) {
-        print('---------------------------------------');
-        print(syllabus.name);
-        print('---------------------------------------');
-        for (Subject subject in syllabus.subjects) {
-          print(
-              '${subject.id}-${subject.name} ,para cursar: ${subject.coursesNeededForCoursing}, para rendir: ${subject.examNeededForExamination}');
-        }
-      }
-    });
+    // (await getSyllabusesRepository().getActiveSyllabuses()).fold((left) => null,
+    //     (syllabuses) {
+    //   for (Syllabus syllabus in syllabuses) {
+    //     print('---------------------------------------');
+    //     print(syllabus.name);
+    //     print('---------------------------------------');
+    //     for (Subject subject in syllabus.subjects) {
+    //       print(
+    //           '${subject.id}-${subject.name} ,para cursar: ${subject.coursesNeededForCoursing}, para rendir: ${subject.examNeededForExamination}');
+    //     }
+    //   }
+    // });
 
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     initializeStatesAndStateNotifier();
-
-    await startAuth();
+    (_currentIESUserIfAny == null) ? await startLogin() : await startHome();
   }
 
-  startAuth() async {
-    authUseCase = AuthUseCase(parentOperation: this);
-    await authUseCase.initializeUseCase();
-    changeState(const OperationState(stateName: IESSystemStateName.iesAuth));
-    authUseCase.startLogin();
+  Future startLogin() async {
+    loginUseCase = LoginUseCase();
+    await loginUseCase.initializeUseCase();
+    changeState(const OperationState(stateName: IESSystemStateName.login));
+    loginUseCase.initLogin();
+  }
+
+  Future startHome() async {
+    homeUseCase = HomeUseCase();
+    await loginUseCase.initializeUseCase();
+    changeState(const OperationState(stateName: IESSystemStateName.home));
+    loginUseCase.initLogin();
+  }
+
+  Future startRegisteringNewUser() async {
+    registeringUseCase = RegisteringUseCase();
+    await registeringUseCase.initializeUseCase();
+    changeState(
+        const OperationState(stateName: IESSystemStateName.registering));
+    registeringUseCase.initRegistering();
+  }
+
+  void restartLogin() {
+    changeState(const OperationState(stateName: IESSystemStateName.login));
+    loginUseCase.initLogin();
   }
 
   onCurrentUserLogout() {}

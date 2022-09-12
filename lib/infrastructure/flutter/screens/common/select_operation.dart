@@ -21,12 +21,13 @@ class SelectUserRoleOperationPage extends StatelessWidget {
                   shrinkWrap: true,
                   children: IESSystem()
                       .getCurrentIESUserRoleOperations()
-                      .map((e) => ElevatedButton(
-                          onPressed: () => {}, child: Text(e.operationName())))
+                      .map((userOperation) => ElevatedButton(
+                          child: Text(userOperation.operationName()),
+                          onPressed: () => {}))
                       .toList()),
               const SizedBox(height: 28.0),
               ElevatedButton(
-                onPressed: () => IESSystem().authUseCase.restartLogin(),
+                onPressed: () => IESSystem().restartLogin(),
                 child: const Text(
                   'Regresar a login!',
                   style: TextStyle(color: Colors.white),

@@ -39,8 +39,7 @@ abstract class Operation {
 }
 
 abstract class UseCase extends Operation {
-  final Operation parentOperation;
-  UseCase({required this.parentOperation});
+  UseCase();
 
   Future<void> initializeUseCase() async {
     await initializeRepositories();

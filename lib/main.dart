@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
+import 'package:sistema_ies/infrastructure/flutter/screens/routes.dart';
+// import 'package:go_router/go_router.dart';
 // import 'package:sistema_ies/firebase_options.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/main_view.dart';
+// import 'package:sistema_ies/infrastructure/flutter/screens/users/main_page.dart';
 
 main() async {
   await IESSystem().initializeIESSystem();
@@ -15,8 +17,13 @@ class AdminIESApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    // final _loginStatesProvider =
+    //     ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
+    return MaterialApp.router(
         title: 'Flutter Authentication',
+        routeInformationParser: systemRouter.routeInformationParser,
+        routerDelegate: systemRouter.routerDelegate,
+        routeInformationProvider: systemRouter.routeInformationProvider,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
@@ -37,17 +44,6 @@ class AdminIESApp extends ConsumerWidget {
             ),
             bodyText1: const TextStyle(fontSize: 18.0),
           ),
-        ),
-        home: const MainView());
-
-    // FutureBuilder(
-    //     future: IESSystem().initializeIESSystem(),
-    //     builder: ((context, snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.done) {
-    //         return const MainView();
-    //       } else {
-    //         return const CircularProgressIndicator();
-    //       }
-    //     })));
+        ));
   }
 }

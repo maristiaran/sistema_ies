@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/administrative.dart';
 import 'package:sistema_ies/shared/entities/manager.dart';
@@ -30,7 +31,6 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   @override
   Future<Either<Failure, IESUser>> getIESUserByID(
       {required String idUser}) async {
-    UserRole newRole;
     List<Map<String, dynamic>> docRoles;
     try {
       final DocumentSnapshot userDoc =
@@ -59,22 +59,39 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
       for (Map<String, dynamic> docRole in docRoles) {
         switch (docRole['userRoleName']) {
           case 'student':
-            newRole = Student(user: iesUser);
+            IESSystem()
+                .getSyllabusesRepository()
+                .getSyllabusByAdministrativeResolution(
+                    administrativeResolution: docRole['syllabus'])
+                .fold((left) {
+              return left;
+            }, (right) {
+              iesUser.addRole(Student(user: iesUser, syllabus: right));
+            });
+
             break;
           case 'teacher':
-            newRole = Teacher(user: iesUser);
+            iesUser.addRole(Teacher(user: iesUser, course: docRole['course']));
             break;
           case 'administrative':
-            newRole = Administrative(user: iesUser);
+            IESSystem()
+                .getSyllabusesRepository()
+                .getSyllabusByAdministrativeResolution(
+                    administrativeResolution: docRole['syllabus'])
+                .fold((left) {
+              return left;
+            }, (right) {
+              iesUser.addRole(Administrative(user: iesUser, syllabus: right));
+            });
+
             break;
           case 'systemadmin':
-            newRole = SystemAdmin(user: iesUser);
+            iesUser.addRole(SystemAdmin(user: iesUser));
             break;
           default:
-            newRole = Manager(user: iesUser);
+            iesUser.addRole(Manager(user: iesUser));
             break;
         }
-        iesUser.addRole(newRole);
       }
       return Right(iesUser);
     } catch (exception) {
@@ -239,6 +256,50 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   @override
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(
       {UserRole? userRole}) async {
+    return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+  }
+
+  @override
+  Future<Either<Failure, Success>> addUserRole(
+      {required IESUser user, required UserRole userRole}) async {
+    List<DocumentSnapshot> documentList;
+    final DocumentReference<Map<String, dynamic>> roleDoc;
+    final Map<String, dynamic> json;
+    documentList = (await firestoreInstance
+            .collection("iesUsers")
+            .where("email", isEqualTo: user.email)
+            .get())
+        .docs;
+    if (documentList.length == 1) {
+      roleDoc =
+          firestoreInstance.collection('iesUsers').doc(documentList.first.id);
+    } else {
+      return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+    }
+
+    try {
+      switch (userRole.userRoleName()) {
+        case UserRoleNames.student:
+          Student studentRole = userRole as Student;
+          json = {'syllabus': studentRole.syllabus};
+          break;
+        default:
+          json = {};
+      }
+      if (json.isEmpty) {
+        return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+      } else {
+        roleDoc.set(json);
+        return Right(Success(''));
+      }
+    } on Failure {
+      return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> removeUserRole(
+      {required IESUser user, required UserRole userRole}) async {
     return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
   }
 }

@@ -6,8 +6,8 @@ import 'package:sistema_ies/infrastructure/flutter/screens/views_utils.dart';
 import 'package:sistema_ies/shared/utils/datetime.dart';
 import 'package:sistema_ies/shared/utils/value_objects.dart';
 
-class RegisterIncomingStudentPage extends ConsumerWidget {
-  RegisterIncomingStudentPage({Key? key}) : super(key: key);
+class RegisterPage extends ConsumerWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
   final _registerFormKey = GlobalKey<FormState>();
 
@@ -30,8 +30,8 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _registeringStatesProvider = ref.watch(
-        IESSystem().authUseCase.registeringUseCase.stateNotifierProvider);
+    final _registeringStatesProvider =
+        ref.watch(IESSystem().registeringUseCase.stateNotifierProvider);
 
     return GestureDetector(
       onTap: () {
@@ -198,11 +198,9 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                               onPressed: () async {
                                 if (_registerFormKey.currentState!.validate()) {
                                   IESSystem()
-                                      .authUseCase
                                       .registeringUseCase
                                       .registerAsIncomingUser(
-                                          firstname: _firstnameTextController
-                                              .text
+                                          firstname: _firstnameTextController.text
                                               .trim(),
                                           surname: _surnameTextController.text
                                               .trim(),
@@ -254,7 +252,7 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    IESSystem().authUseCase.registeringUseCase.returnToLogin();
+                    IESSystem().registeringUseCase.returnToLogin();
                     // if (_registerFormKey.currentState!.validate()) {
 
                     // }
@@ -270,7 +268,6 @@ class RegisterIncomingStudentPage extends ConsumerWidget {
                     return ElevatedButton(
                         onPressed: () {
                           IESSystem()
-                              .authUseCase
                               .registeringUseCase
                               .reSendEmailVerification();
                         },

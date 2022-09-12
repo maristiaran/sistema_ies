@@ -670,4 +670,16 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
 
     return Right(_cachedSyllabuses!);
   }
+
+  @override
+  Future<Either<Failure, Syllabus>> getSyllabusByAdministrativeResolution(
+      {required String administrativeResolution}) async {
+    if (administrativeResolution == '490-DGE-19') {
+      return Right(_cachedSyllabuses![0]);
+    } else if (administrativeResolution == '501-DGE-19') {
+      return Right(_cachedSyllabuses![1]);
+    } else {
+      return Left(Failure(failureName: FailureName.unknown));
+    }
+  }
 }

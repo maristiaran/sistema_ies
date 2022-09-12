@@ -7,4 +7,6 @@ enum FailureName { unknown }
 
 abstract class SyllabusesRepositoryPort extends RepositoryPort {
   Future<Either<Failure, List<Syllabus>>> getActiveSyllabuses();
+  Future<Either<Failure, Syllabus>> getSyllabusByAdministrativeResolution(
+      {required String administrativeResolution});
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
-import 'package:sistema_ies/application/use_cases/users/auth.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/utils/responses.dart';
 
@@ -19,8 +18,7 @@ class RegisteringUseCase extends UseCase {
   Timer? _timer;
 
 //Auth Use Case initialization
-  RegisteringUseCase({required parentOperation})
-      : super(parentOperation: parentOperation);
+  RegisteringUseCase();
 
   @override
   OperationState initialState() {
@@ -75,7 +73,7 @@ class RegisteringUseCase extends UseCase {
     if (_timer != null) {
       _timer!.cancel();
     }
-    (parentOperation as AuthUseCase).restartLogin();
+    IESSystem().restartLogin();
   }
 
   Future reSendEmailVerification() async {
@@ -96,7 +94,7 @@ class RegisteringUseCase extends UseCase {
         await IESSystem().getUsersRepository().getCurrentUserIsEMailVerified();
     if (isVerified) {
       _timer!.cancel();
-      (parentOperation as AuthUseCase).restartLogin();
+      IESSystem().restartLogin();
     }
   }
 }

@@ -20,4 +20,10 @@ class SyllabusesRepositoryFirestoreAdapter implements SyllabusesRepositoryPort {
     }
     return Right(_cachedSyllabuses!);
   }
+
+  @override
+  Future<Either<Failure, Syllabus>> getSyllabusByAdministrativeResolution(
+      {required String administrativeResolution}) async {
+    return Left(Failure(failureName: FailureName.unknown));
+  }
 }

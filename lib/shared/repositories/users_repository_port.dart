@@ -33,4 +33,10 @@ abstract class UsersRepositoryPort extends RepositoryPort {
   Future<Either<Failure, List<UserRole>>> getUserRoles({IESUser user});
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(
       {UserRole userRole});
+
+  Future<Either<Failure, Success>> addUserRole(
+      {required IESUser user, required UserRole userRole});
+
+  Future<Either<Failure, Success>> removeUserRole(
+      {required IESUser user, required UserRole userRole});
 }

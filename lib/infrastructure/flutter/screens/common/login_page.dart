@@ -19,7 +19,7 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _loginStatesProvider =
-        ref.watch(IESSystem().authUseCase.loginUseCase.stateNotifierProvider);
+        ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
     return GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
@@ -72,7 +72,7 @@ class LoginPage extends ConsumerWidget {
                       onPressed: () async {
                         _focusEmail.unfocus();
                         _focusPassword.unfocus();
-                        IESSystem().authUseCase.loginUseCase.signIn(
+                        IESSystem().loginUseCase.signIn(
                             _emailTextController.text.trim(),
                             _passwordTextController.text.trim());
                       },
@@ -86,7 +86,7 @@ class LoginPage extends ConsumerWidget {
                       onPressed: () async {
                         _focusEmail.unfocus();
                         _focusPassword.unfocus();
-                        IESSystem().authUseCase.startRegisteringIncomingUser();
+                        IESSystem().startRegisteringNewUser();
                       },
                       child: const Text(
                         '¡Quiero registrarme!',
@@ -99,7 +99,6 @@ class LoginPage extends ConsumerWidget {
                         _focusEmail.unfocus();
                         _focusPassword.unfocus();
                         IESSystem()
-                            .authUseCase
                             .loginUseCase
                             .changePassword(_emailTextController.text.trim());
                       },
@@ -122,7 +121,6 @@ class LoginPage extends ConsumerWidget {
                                   fontSize: 16),
                             ),
                             onTap: () => IESSystem()
-                                .authUseCase
                                 .loginUseCase
                                 .reSendEmailVerification());
                       } else {

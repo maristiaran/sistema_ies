@@ -1,7 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/operation_utils.dart';
-import 'package:sistema_ies/application/use_cases/users/auth.dart';
 import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
 import 'package:sistema_ies/shared/utils/responses.dart';
 
@@ -19,8 +18,7 @@ enum LoginStateName {
 // LOGIN USE CASE
 class LoginUseCase extends UseCase {
 //Auth Use Case initialization
-  LoginUseCase({required AuthUseCase authUseCase})
-      : super(parentOperation: authUseCase);
+  LoginUseCase() : super();
 
   @override
   OperationState initialState() {
@@ -65,15 +63,16 @@ class LoginUseCase extends UseCase {
                     changes: {'failure': failure.message}));
               }
             }, (iesUser) {
-              IESSystem().setCurrentIESUser(iesUser);
+              IESSystem().setCurrentIESUserIfAny(iesUser);
               changeState(const OperationState(
                   stateName: LoginStateName.successfullySignIn));
-              if (IESSystem().getCurrentIESUserRolesCount() > 1) {
-                (parentOperation as AuthUseCase).startSelectingUserRole();
-              } else {
-                (parentOperation as AuthUseCase)
-                    .startSelectingUserRoleOperation();
-              }
+              // TODO: default role;
+              // if (iesUser.roles.length > 1) {
+              //   (parentOperation as HomeUseCase).startSelectingUserRole();
+              // } else {
+              //   (parentOperation as HomeUseCase)
+              //       .startSelectingUserRoleOperation();
+              // }
             }));
   }
 
@@ -91,7 +90,7 @@ class LoginUseCase extends UseCase {
   }
 
   void startRegisteringIncomingUser() async {
-    (parentOperation as AuthUseCase).startRegisteringIncomingUser();
+    IESSystem().startRegisteringNewUser();
   }
 
   Future changePassword(String email) async {
