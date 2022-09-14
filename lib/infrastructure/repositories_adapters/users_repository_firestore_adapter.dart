@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sistema_ies/application/ies_system.dart';
-import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+import 'package:sistema_ies/infrastructure/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/administrative.dart';
 import 'package:sistema_ies/shared/entities/manager.dart';
 import 'package:sistema_ies/shared/entities/student.dart';

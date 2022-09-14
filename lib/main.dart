@@ -1,11 +1,7 @@
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/routes.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:sistema_ies/firebase_options.dart';
-// import 'package:sistema_ies/infrastructure/flutter/screens/users/main_page.dart';
+import 'package:sistema_ies/infrastructure/screens/routes.dart';
 
 main() async {
   await IESSystem().initializeIESSystem();
@@ -17,8 +13,9 @@ class AdminIESApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final _loginStatesProvider =
-    //     ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
+    final _iesSystemStatesProvider =
+        ref.watch(IESSystem().stateNotifierProvider);
+    systemRouter.goNamed(_iesSystemStatesProvider.stateName.name);
     return MaterialApp.router(
         title: 'Flutter Authentication',
         routeInformationParser: systemRouter.routeInformationParser,

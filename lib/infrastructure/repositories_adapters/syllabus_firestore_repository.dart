@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+import 'package:sistema_ies/infrastructure/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/syllabus.dart';
 import 'package:sistema_ies/shared/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/shared/utils/responses.dart';

@@ -4,13 +4,7 @@ import 'package:sistema_ies/shared/entities/syllabus.dart';
 //Registering states
 
 //Auth State Names
-enum HomeState {
-  login,
-  registeringAsNewUser,
-  changingPassword,
-  selectingRole,
-  selectingRoleOperation
-}
+enum HomeState { init, calendar, selectingRole, selectingRoleOperation }
 
 // AUTORIZATION
 class HomeUseCase extends UseCase {
@@ -23,7 +17,7 @@ class HomeUseCase extends UseCase {
 
   @override
   OperationState initialState() {
-    return const OperationState(stateName: HomeState.login);
+    return const OperationState(stateName: HomeState.init);
   }
 
   void startSelectingUserRole() async {

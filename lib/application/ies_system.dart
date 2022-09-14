@@ -6,11 +6,12 @@ import 'package:sistema_ies/application/operation_utils.dart';
 import 'package:sistema_ies/application/use_cases/users/login.dart';
 import 'package:sistema_ies/application/use_cases/users/registering.dart';
 import 'package:sistema_ies/firebase_options.dart';
-import 'package:sistema_ies/infrastructure/flutter/repositories_adapters/init_repository_adapters.dart';
+import 'package:sistema_ies/infrastructure/repositories_adapters/init_repository_adapters.dart';
 import 'package:sistema_ies/shared/entities/user_role_operation.dart';
 import 'package:sistema_ies/shared/entities/users.dart';
 import 'package:sistema_ies/shared/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/shared/repositories/users_repository_port.dart';
+import 'package:sistema_ies/shared/utils/observable.dart';
 
 //Auth State Names
 enum IESSystemStateName { login, home, registering }
@@ -18,6 +19,7 @@ enum IESSystemStateName { login, home, registering }
 class IESSystem extends Operation {
   // IESSystem as a Singleton
   static final IESSystem _singleton = IESSystem._internal();
+  Observable obsSystemState = Observable();
 // Current User
   IESUser? _currentIESUserIfAny;
   UserRole? _currentIESUserRoleIfAny;
@@ -133,11 +135,12 @@ class IESSystem extends Operation {
     await loginUseCase.initializeUseCase();
     changeState(const OperationState(stateName: IESSystemStateName.login));
     loginUseCase.initLogin();
+    obsSystemState.notifyObservers(IESSystemStateName.login);
   }
 
   Future startHome() async {
     homeUseCase = HomeUseCase();
-    await loginUseCase.initializeUseCase();
+    await homeUseCase.initializeUseCase();
     changeState(const OperationState(stateName: IESSystemStateName.home));
     loginUseCase.initLogin();
   }
@@ -148,6 +151,7 @@ class IESSystem extends Operation {
     changeState(
         const OperationState(stateName: IESSystemStateName.registering));
     registeringUseCase.initRegistering();
+    obsSystemState.notifyObservers(IESSystemStateName.registering);
   }
 
   void restartLogin() {

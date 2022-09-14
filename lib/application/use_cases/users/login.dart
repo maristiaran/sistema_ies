@@ -66,6 +66,7 @@ class LoginUseCase extends UseCase {
               IESSystem().setCurrentIESUserIfAny(iesUser);
               changeState(const OperationState(
                   stateName: LoginStateName.successfullySignIn));
+              IESSystem().startHome();
               // TODO: default role;
               // if (iesUser.roles.length > 1) {
               //   (parentOperation as HomeUseCase).startSelectingUserRole();

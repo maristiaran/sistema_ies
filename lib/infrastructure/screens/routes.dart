@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sistema_ies/application/ies_system.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/common/login_page.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/common/home_page.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/common/register_page.dart';
+import 'package:sistema_ies/infrastructure/screens/common/login_page.dart';
+import 'package:sistema_ies/infrastructure/screens/common/home_page.dart';
+import 'package:sistema_ies/infrastructure/screens/common/register_page.dart';
 
 late final systemRouter = GoRouter(
   debugLogDiagnostics: true,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/application/ies_system.dart';
 import 'package:sistema_ies/application/use_cases/users/login.dart';
-import 'package:sistema_ies/infrastructure/flutter/screens/views_utils.dart';
+import 'package:sistema_ies/infrastructure/screens/views_utils.dart';
 import 'package:sistema_ies/shared/utils/value_objects.dart';
 
 class LoginPage extends ConsumerWidget {
