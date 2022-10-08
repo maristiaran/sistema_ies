@@ -2,17 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
-import 'package:sistema_ies/core/model/entities/administrative.dart';
-import 'package:sistema_ies/core/model/entities/manager.dart';
-import 'package:sistema_ies/core/model/entities/student.dart';
-import 'package:sistema_ies/core/model/entities/system_admin.dart';
-import 'package:sistema_ies/core/model/entities/teacher.dart';
-import 'package:sistema_ies/core/model/entities/user_role_operation.dart';
-import 'package:sistema_ies/core/model/entities/users.dart';
-import 'package:sistema_ies/core/model/ies_system.dart';
-import 'package:sistema_ies/core/model/repositories/users_repository_port.dart';
-import 'package:sistema_ies/core/model/utils/datetime.dart';
-import 'package:sistema_ies/core/model/utils/responses.dart';
+import 'package:sistema_ies/core/domain/entities/administrative.dart';
+import 'package:sistema_ies/core/domain/entities/manager.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
+import 'package:sistema_ies/core/domain/entities/system_admin.dart';
+import 'package:sistema_ies/core/domain/entities/teacher.dart';
+import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
+import 'package:sistema_ies/core/domain/utils/datetime.dart';
+import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   @override

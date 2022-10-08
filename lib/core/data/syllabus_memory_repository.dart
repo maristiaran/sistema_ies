@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:sistema_ies/core/model/entities/syllabus.dart';
-import 'package:sistema_ies/core/model/repositories/syllabus_repository_port.dart';
-import 'package:sistema_ies/core/model/utils/responses.dart';
+import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
+import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
   List<Syllabus>? _cachedSyllabuses;

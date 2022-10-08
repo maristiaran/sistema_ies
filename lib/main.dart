@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/core/model/ies_system.dart';
-import 'package:sistema_ies/core/pages/routes.dart';
+import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/presentation/routes.dart';
 
 main() async {
   await IESSystem().initializeIESSystem();
