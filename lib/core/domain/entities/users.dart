@@ -3,11 +3,11 @@
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 
 class IESUser {
-  late String firstname;
-  late String surname;
-  late DateTime birthdate;
-  late int dni;
-  late String email;
+  final String firstname;
+  final String surname;
+  final DateTime birthdate;
+  final int dni;
+  final String email;
   List<UserRole> roles = [GuestUserRole()];
   UserRole defaultRole = GuestUserRole();
 

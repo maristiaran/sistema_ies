@@ -23,12 +23,7 @@ abstract class UsersRepositoryPort extends RepositoryPort {
   Future<Either<Failure, IESUser>> signInUsingEmailAndPassword(
       {String email, String password});
   Future<Either<Failure, IESUser>> registerNewIESUser(
-      {required String email,
-      required String password,
-      required int dni,
-      required String firstname,
-      required String surname,
-      required DateTime birthdate});
+      {required IESUser iesUser});
   reSendEmailVerification();
   Future<Either<Failure, List<UserRole>>> getUserRoles({IESUser user});
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
@@ -44,15 +45,16 @@ class RegisteringUseCase extends UseCase {
       required String password,
       required String confirmPassword,
       required DateTime birthdate}) async {
+    IESUser newIESUser = IESUser(
+        firstname: firstname,
+        surname: surname,
+        birthdate: birthdate,
+        dni: dni,
+        email: email);
+
     IESSystem()
         .getUsersRepository()
-        .registerNewIESUser(
-            email: email,
-            password: password,
-            dni: dni!,
-            firstname: firstname,
-            surname: surname,
-            birthdate: birthdate)
+        .registerNewIESUser(iesUser: newIESUser)
         .then((registerResponse) => registerResponse.fold(
                 (failure) => changeState(
                     const OperationState(stateName: RegisteringStateName.failure

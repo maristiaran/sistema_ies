@@ -15,7 +15,7 @@ class SyllabusesRepositoryFirestoreAdapter implements SyllabusesRepositoryPort {
           .collection('syllabuses')
           .get()
           .then((snapshot) => snapshot.docs))) {
-        _cachedSyllabuses!.add(Syllabus.fromJson(doc.data()));
+        _cachedSyllabuses!.add(fromJsonToSyllabus(doc.data()));
       }
     }
     return Right(_cachedSyllabuses!);

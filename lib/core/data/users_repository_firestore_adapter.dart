@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
+import 'package:sistema_ies/core/data/utils/iesuser_json_convertion.dart';
 import 'package:sistema_ies/core/domain/entities/administrative.dart';
 import 'package:sistema_ies/core/domain/entities/manager.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
@@ -199,13 +200,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
               dni: dni,
               email: email);
           final iesUserDoc = firestoreInstance.collection('iesUsers').doc();
-          final Map<String, dynamic> json = {
-            'firstname': firstname,
-            'surname': surname,
-            'dni': dni,
-            'email': email,
-            'birthdate': dateToString(birthdate)
-          };
+          final Map<String, dynamic> json = fromIESUserToJson(newIESUser);
           try {
             iesUserDoc.set(json);
             return Right(newIESUser);

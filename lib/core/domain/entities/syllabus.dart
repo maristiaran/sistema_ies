@@ -1,13 +1,9 @@
 class Syllabus {
-  late String name;
-  late String administrativeResolution;
+  final String name;
+  final String administrativeResolution;
   List<Subject> subjects = [];
 
   Syllabus({required this.name, required this.administrativeResolution});
-  Syllabus.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    administrativeResolution = json['administrativeResolution'];
-  }
 
   addSubject(Subject newSubject) {
     subjects.add(newSubject);
