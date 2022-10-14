@@ -10,7 +10,7 @@ IESUser fromJsonToIESUser(Map<String, dynamic> json) {
       email: json['email']);
 }
 
-Map<String, dynamic> toJson(IESUser iesUser) {
+Map<String, dynamic> fromIESUserToJson(IESUser iesUser) {
   return {
     'firstname': iesUser.firstname,
     'surname': iesUser.surname,

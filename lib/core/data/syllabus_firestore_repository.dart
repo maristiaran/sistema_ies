@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
+import 'package:sistema_ies/core/data/utils/syllabus_json_convertion.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
