@@ -57,7 +57,9 @@ class IESSystem extends Operation {
       return [];
     } else {
       // print("roles");
-      // print(_currentIESUserIfAny!.roles.length);
+      print(_currentIESUserIfAny!.roles.length);
+      print(_currentIESUserIfAny!.roles);
+
       return _currentIESUserIfAny!.roles;
     }
   }
@@ -161,7 +163,7 @@ class IESSystem extends Operation {
     await registeringUseCase.initializeUseCase();
     changeState(
         const OperationState(stateName: IESSystemStateName.registering));
-    registeringUseCase.initRegistering();
+    // registeringUseCase.initRegistering();
   }
 
   void restartLogin() {

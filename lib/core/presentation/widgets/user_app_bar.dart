@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
@@ -10,9 +12,14 @@ class UserAppBar extends AppBar {
 }
 
 class _UserAppBarState extends State<UserAppBar> {
-  final UserRole _selectedRole = IESSystem().currentIESUserIfAny()!.defaultRole;
+  final UserRole? _selectedRole = null;
+  // final UserRole _selectedRole = IESSystem().getCurrentIESUserRoles().first;
+  // final UserRole? _selectedRole =
+  //     IESSystem().currentIESUserIfAny()!.defaultRole;
+
   @override
   Widget build(BuildContext context) {
+    print(_selectedRole);
     return Row(
       children: [
         const Icon(Icons.account_circle_rounded),
@@ -22,7 +29,10 @@ class _UserAppBarState extends State<UserAppBar> {
             items: IESSystem()
                 .getCurrentIESUserRoles()
                 .map((e) => DropdownMenuItem<UserRole>(
+                    // child: Text(Random(1000).nextInt(2000).toString())))
+
                     child: Text(e.userRoleName().name)))
+//
                 .toList(),
             value: _selectedRole,
             onChanged: _changeCurrentUserRole)

@@ -32,6 +32,7 @@ class RegisterPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _registeringStatesProvider =
         ref.watch(IESSystem().registeringUseCase.stateNotifierProvider);
+    print(_registeringStatesProvider.stateName.name);
 
     return GestureDetector(
       onTap: () {

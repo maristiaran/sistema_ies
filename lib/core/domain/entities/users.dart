@@ -48,6 +48,6 @@ abstract class UserRole {
 class GuestUserRole extends UserRole {
   @override
   Enum userRoleName() {
-    return UserRoleNames.teacher;
+    return UserRoleNames.guest;
   }
 }

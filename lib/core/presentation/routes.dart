@@ -18,8 +18,8 @@ late final systemRouter = GoRouter(
         builder: (context, state) => LoginPage(),
         routes: [
           GoRoute(
-            name: 'register',
-            path: 'register',
+            name: 'registering',
+            path: 'registering',
             builder: (context, state) => RegisterPage(),
           )
         ]),
@@ -29,12 +29,14 @@ late final systemRouter = GoRouter(
     // print(IESSystem().currentIESUserIfAny());
     // print(state.subloc);
     if (IESSystem().currentIESUserIfAny() == null) {
-      if (state.subloc == state.namedLocation('login')) {
+      if ((state.subloc == state.namedLocation('login')) ||
+          (state.subloc == state.namedLocation('registering'))) {
         return null;
       } else {
         return state.namedLocation('login');
       }
     } else {
+      print(IESSystem().currentState.stateName.name);
       if (state.subloc ==
           state.namedLocation(IESSystem().currentState.stateName.name)) {
         return null;
