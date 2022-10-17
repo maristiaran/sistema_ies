@@ -8,7 +8,7 @@ class Validator {
     if (email == null) {
       return (Left(Failure(
           failureName: FailureName.unknown,
-          message: "Dirección de email no válida")));
+          message: "El campo Email no puede estar vacío")));
     }
     String trimmedEmailString = email.trim();
     List<String> validExtensions = [
