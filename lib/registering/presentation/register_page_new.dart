@@ -74,8 +74,8 @@ class RegisterPageNew extends ConsumerWidget {
                           _emailTextController, Fields.email, false, context),
                       fieldRegister(
                           _dniTextController, Fields.dni, false, context),
-                      fieldBirthday(
-                          _birthDateTextController, Fields.birthday, context),
+                      fieldBirthday(_birthDateTextController, Fields.birthday,
+                          context, _registerFormKey),
                       fieldRegister(_passwordTextController, Fields.password,
                           true, context),
                       fieldConfirmPassword(

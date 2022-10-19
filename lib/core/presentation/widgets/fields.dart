@@ -60,11 +60,11 @@ TextFormField fieldPassword(controller, text, obscure, context) {
       if (value!.isNotEmpty) {
         return null;
       } else {
-        return "La ${fieldNames[text]} no puede estar vacía";
+        return "La contraseña no puede estar vacía";
       }
     },
     decoration: InputDecoration(
-      labelText: fieldNames[text],
+      labelText: text,
       filled: true,
       fillColor: Theme.of(context).colorScheme.tertiary,
       border: UnderlineInputBorder(
@@ -158,8 +158,9 @@ TextFormField fieldConfirmPassword(
   );
 }
 
-Widget fieldBirthday(controller, text, context) {
+Widget fieldBirthday(controller, text, context, key) {
   return DateTimeFormField(
+    key: key,
     decoration: InputDecoration(
       labelStyle: const TextStyle(color: Color.fromARGB(255, 63, 63, 63)),
       labelText: fieldNames[text],

@@ -49,8 +49,8 @@ class LoginPageNew extends ConsumerWidget {
                       fieldEmailDNI(
                           _emailTextController, "Email o DNI", false, context),
                       const SizedBox(height: 10),
-                      fieldPassword(_passwordTextController, Fields.password,
-                          true, context),
+                      fieldPassword(
+                          _passwordTextController, "Contraseña", true, context),
                       const SizedBox(height: 60),
                       Container(
                         width: MediaQuery.of(context).size.width / 0.5,
@@ -61,7 +61,9 @@ class LoginPageNew extends ConsumerWidget {
                                 BorderRadius.all(Radius.circular(10))),
                         child: TextButton(
                           onPressed: () async {
+                            print("Presionado Login...");
                             if (_formKey.currentState!.validate()) {
+                              print("Comprobando...");
                               IESSystem().loginUseCase.signIn(
                                   _emailTextController.text.trim(),
                                   _passwordTextController.text.trim());
