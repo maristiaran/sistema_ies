@@ -1,7 +1,10 @@
+import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/datetime.dart';
+import 'package:sistema_ies/core/domain/utils/value_objects.dart';
 import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
@@ -51,26 +54,36 @@ class RegisterPageNew extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
+                          Container(
+                            constraints: const BoxConstraints(
+                                maxWidth: 170, minWidth: 170),
                             width: MediaQuery.of(context).size.width / 6.5,
-                            child: registerField(
-                                _firstnameTextController, 'Nombre', false),
+                            child: fieldRegister(_firstnameTextController,
+                                Fields.name, false, context),
                           ),
-                          SizedBox(
+                          Container(
+                            constraints: const BoxConstraints(
+                                maxWidth: 170, minWidth: 170),
                             width: MediaQuery.of(context).size.width / 6.5,
-                            child: registerField(
-                                _surnameTextController, 'Apellido', false),
+                            child: fieldRegister(_surnameTextController,
+                                Fields.lastname, false, context),
                           )
                         ],
                       ),
-                      registerField(_emailTextController, "Email", false),
-                      registerField(_dniTextController, "DNI", false),
-                      registerField(_birthDateTextController,
-                          "Fecha de nacimiento", false),
-                      fieldPassword(
-                          _passwordTextController, "Contraseña", true, context),
-                      fieldPassword(_confirmPasswordTextController,
-                          "Confirmar contraseña", true, context),
+                      fieldRegister(
+                          _emailTextController, Fields.email, false, context),
+                      fieldRegister(
+                          _dniTextController, Fields.dni, false, context),
+                      fieldBirthday(
+                          _birthDateTextController, Fields.birthday, context),
+                      fieldRegister(_passwordTextController, Fields.password,
+                          true, context),
+                      fieldConfirmPassword(
+                          _confirmPasswordTextController,
+                          Fields.confirmPassword,
+                          _passwordTextController,
+                          true,
+                          context),
                       const SizedBox(height: 60),
                       Container(
                         width: MediaQuery.of(context).size.width / 1,
@@ -99,6 +112,11 @@ class RegisterPageNew extends ConsumerWidget {
                                               .trim(),
                                       birthdate: stringToDate(
                                           _birthDateTextController.text));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Corrija todos los campos invalidos antes")));
                             }
                           },
                           child: const Text(
@@ -117,9 +135,6 @@ class RegisterPageNew extends ConsumerWidget {
                         child: TextButton(
                           onPressed: () {
                             IESSystem().registeringUseCase.returnToLogin();
-                            // if (_registerFormKey.currentState!.validate()) {
-
-                            // }
                           },
                           child: const Text(
                             'Cancelar',

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/core/domain/utils/value_objects.dart';
 import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/login.dart';
@@ -61,9 +60,13 @@ class LoginPageNew extends ConsumerWidget {
                                 BorderRadius.all(Radius.circular(10))),
                         child: TextButton(
                           onPressed: () async {
-                            IESSystem().loginUseCase.signIn(
-                                _emailTextController.text.trim(),
-                                _passwordTextController.text.trim());
+                            if (_formKey.currentState!.validate()) {
+                              IESSystem().loginUseCase.signIn(
+                                  _emailTextController.text.trim(),
+                                  _passwordTextController.text.trim());
+                            } else {
+                              print("Ha ocurrido un error!");
+                            }
                           },
                           child: const Text(
                             'Iniciar Sesión',

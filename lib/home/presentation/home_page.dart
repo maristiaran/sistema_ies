@@ -25,8 +25,6 @@ class HomePage extends ConsumerWidget {
   ];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     final userName = IESSystem().currentIESUserIfAny()!.firstname;
     final _homeStatesProvider =
         ref.watch(IESSystem().homeUseCase.stateNotifierProvider);

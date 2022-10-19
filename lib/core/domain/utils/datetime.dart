@@ -1,9 +1,9 @@
-String dateToString(DateTime date) {
-  return '${date.day}/${date.month}/${date.year}';
-}
+import 'package:intl/intl.dart';
 
 DateTime stringToDate(String date) {
-  List<String> dayMonthYear = date.split('/');
-  return DateTime(int.parse(dayMonthYear[2]), int.parse(dayMonthYear[1]),
-      int.parse(dayMonthYear[0]));
+  return DateFormat("yyyy-MM-dd HH:mm").parse(date);
+}
+
+String dateToString(DateTime date) {
+  return DateFormat("yyyy-MM-dd HH:mm").format(date);
 }

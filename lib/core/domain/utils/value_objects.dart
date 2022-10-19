@@ -1,103 +1,107 @@
 import 'package:either_dart/either.dart';
-import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 enum FailureName { unknown }
 
+enum Fields { name, lastname, birthday, dni, email, password, confirmPassword }
+
 class Validator {
-  static Either<Failure, String> validateEmail({required String? email}) {
-    if (email == null) {
-      return (Left(Failure(
-          failureName: FailureName.unknown,
-          message: "El campo Email no puede estar vacío")));
-    }
-    String trimmedEmailString = email.trim();
-    List<String> validExtensions = [
-      '@gmail.com',
-      '@yahoo.com',
-      '@yahoo.com.ar',
-      '@hotmail.com',
-      '@mendoza.edu.ar'
-    ];
+  //***************** VALIDATORS FOR LOGIN **********************//
 
-    if ((trimmedEmailString == '') ||
-        !((validExtensions.any((ext) => trimmedEmailString.endsWith(ext))))) {
-      return (Left(Failure(
-          failureName: FailureName.unknown,
-          message: "Dirección de email no válida")));
-    } else {
-      return (Right(email));
-    }
-  }
-
-  static Either<Failure, String> validateDNIOrEmail(
-      {required String? dniOrEmail}) {
-    if (dniOrEmail == null) {
-      return (Left(Failure(
-          failureName: FailureName.unknown, message: "DNI o email no válido")));
-    } else {
-      if (dniOrEmail.contains('@')) {
-        return validateEmail(email: dniOrEmail);
+  static Either<String, bool> validateEmailDNI(String valueEmailDNI) {
+    bool hasOnlyNumbers = RegExp('^[0-9]*\$').hasMatch(valueEmailDNI);
+    if (hasOnlyNumbers) {
+      // should be a DNI, so:
+      bool isItCorrect = validateByDNI(valueEmailDNI);
+      if (isItCorrect) {
+        return Right(isItCorrect);
       } else {
-        return validateDNIString(dni: dniOrEmail);
+        return const Left("El DNI ingresado no es correcto");
+      }
+    } else {
+      bool isItCorrect = validateByEmail(valueEmailDNI);
+      if (isItCorrect) {
+        return Right(isItCorrect);
+      } else {
+        return const Left("El email ingresado no es correcto");
       }
     }
   }
 
-  static Either<Failure, String> validatePassword({required String? password}) {
-    if (password == null) {
-      return (Left(Failure(
-          failureName: FailureName.unknown,
-          message: "Dirección de email no válida")));
-    }
-    String trimmedPasswordString = password.trim();
+  static bool validateByDNI(String valueDNI) {
+    bool itIsCorrect = RegExp('^[0-9]*^.{5,12}\$').hasMatch(valueDNI);
 
-    if (trimmedPasswordString == '') {
-      return (Left(Failure(
-          failureName: FailureName.unknown, message: 'Contraseña no válida')));
-    } else {
-      return (Right(password));
+    return itIsCorrect;
+  }
+
+  static bool validateByEmail(String valueEmail) {
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(valueEmail);
+  }
+  //***************** VALIDATORS FOR REGISTER **********************//
+
+  static Either<String, bool> validateRegisterForm(String value, Enum type) {
+    switch (type) {
+      case Fields.name:
+        bool isItCorrect =
+            RegExp(r'[^!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value);
+        if (isItCorrect) {
+          return Right(isItCorrect);
+        } else {
+          return const Left("Ingrese un nombre correcto");
+        }
+      case Fields.lastname:
+        bool isItCorrect =
+            RegExp(r'[^!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value);
+        if (isItCorrect) {
+          return Right(isItCorrect);
+        } else {
+          return const Left(
+              "El apellido no es válido. Intente ingresarlo correctamente");
+        }
+      case Fields.dni:
+        return validateEmailDNI(value);
+      case Fields.email:
+        return validateEmailDNI(value);
+      case Fields.birthday:
+        return const Right(true);
+      case Fields.password:
+        bool isItCorrect = RegExp(
+                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+            .hasMatch(value);
+        if (isItCorrect) {
+          return Right(isItCorrect);
+        } else {
+          return const Left("La contraseña no es válida. Pruebe con otra");
+        }
+      default:
+        return const Left("Algo ha salido mal");
     }
   }
 
-  static Either<Failure, String> validateConfirmedPassword(
-      {required String firstPassword, required String? confirmedPassword}) {
-    if (confirmedPassword == null) {
-      return (Left(Failure(
-          failureName: FailureName.unknown, message: "Contraseña no válida")));
+  static Either<String, bool> validateBirthdate(DateTime value) {
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - value.year;
+
+    if (currentDate.month < value.month ||
+        (currentDate.month == value.month && currentDate.day < value.day)) {
+      age--;
     }
-    if (firstPassword.trim() != confirmedPassword.trim()) {
-      return (Left(Failure(
-          failureName: FailureName.unknown, message: 'Contraseña no válida')));
+    bool isOlder = RegExp(r'^(?:1[01][0-9]|120|1[7-9]|[2-9][0-9])$')
+        .hasMatch(age.toString());
+
+    if (isOlder) {
+      return Right(isOlder);
     } else {
-      return (Right(confirmedPassword));
+      return const Left("Tienes que ser mayor de 17 años para inscribirte");
     }
   }
 
-  static Either<Failure, String> validateUserFirtAndSurname(
-      {required String? name}) {
-    if (name == null) {
-      return (Left(Failure(
-          failureName: FailureName.unknown, message: "Nombre no válido")));
-    }
-    String trimmedEmailString = name.trim();
-    if (trimmedEmailString == '') {
-      return (Left(Failure(
-          failureName: FailureName.unknown, message: "Nombre no válido")));
+  static Either<String, bool> confirmPassword(String value, password) {
+    if (value == password.text) {
+      return Right(value == password);
     } else {
-      return (Right(name));
-    }
-  }
-
-  static Either<Failure, String> validateDNIString({required String? dni}) {
-    if (dni == null) {
-      return (Left(
-          Failure(failureName: FailureName.unknown, message: "DNI no válido")));
-    }
-    if (dni == '') {
-      return (Left(
-          Failure(failureName: FailureName.unknown, message: "DNI no válido")));
-    } else {
-      return (Right(dni));
+      return const Left("Las contraseñas no coinciden");
     }
   }
 }
