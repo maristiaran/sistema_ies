@@ -23,7 +23,7 @@ class LoginPage extends ConsumerWidget {
               Text(
                 'Ver',
                 style: Theme.of(context).textTheme.headline1,
-                selectionColor: const Color.fromARGB(255, 63, 63, 63),
+                /* selectionColor: Theme.of(context).colorScheme.secondary, */
               ),
               Text('App', style: Theme.of(context).textTheme.headline2)
             ],
