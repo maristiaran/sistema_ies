@@ -158,9 +158,8 @@ TextFormField fieldConfirmPassword(
   );
 }
 
-Widget fieldBirthday(controller, text, context, key) {
+Widget fieldBirthday(controller, text, context) {
   return DateTimeFormField(
-    key: key,
     decoration: InputDecoration(
       labelStyle: const TextStyle(color: Color.fromARGB(255, 63, 63, 63)),
       labelText: fieldNames[text],
@@ -183,12 +182,12 @@ Widget fieldBirthday(controller, text, context, key) {
         ),
       ),
     ),
-    dateFormat: DateFormat("yyyy-MM-dd"),
+    dateFormat: DateFormat("yyyy/MM/dd"),
     mode: DateTimeFieldPickerMode.date,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     validator: (DateTime? value) {
-      if ((value?.day ?? 0) == 1) {
-        if (Validator.validateBirthdate(value!).isRight) {
+      if (value != null) {
+        if (Validator.validateBirthdate(value).isRight) {
           return null;
         } else {
           return Validator.validateBirthdate(value).left;

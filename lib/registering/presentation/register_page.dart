@@ -1,7 +1,5 @@
-import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/datetime.dart';
 import 'package:sistema_ies/core/domain/utils/value_objects.dart';
@@ -20,8 +18,7 @@ class RegisterPage extends ConsumerWidget {
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _confirmPasswordTextController = TextEditingController();
-  final _birthDateTextController =
-      TextEditingController(text: dateToString(DateTime.now()));
+  final _birthDateTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,8 +71,8 @@ class RegisterPage extends ConsumerWidget {
                           _emailTextController, Fields.email, false, context),
                       fieldRegister(
                           _dniTextController, Fields.dni, false, context),
-                      fieldBirthday(_birthDateTextController, Fields.birthday,
-                          context, _registerFormKey),
+                      fieldBirthday(
+                          _birthDateTextController, Fields.birthday, context),
                       fieldRegister(_passwordTextController, Fields.password,
                           true, context),
                       fieldConfirmPassword(
