@@ -9,8 +9,8 @@ import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
 
-class RegisterPageNew extends ConsumerWidget {
-  RegisterPageNew({Key? key}) : super(key: key);
+class RegisterPage extends ConsumerWidget {
+  RegisterPage({Key? key}) : super(key: key);
 
   final _registerFormKey = GlobalKey<FormState>();
 

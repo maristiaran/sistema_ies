@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/core/domain/utils/value_objects.dart';
 import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/login.dart';
 
-class LoginPageNew extends ConsumerWidget {
-  LoginPageNew({Key? key}) : super(key: key);
+class LoginPage extends ConsumerWidget {
+  LoginPage({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
   final _emailTextController = TextEditingController();
@@ -61,14 +60,15 @@ class LoginPageNew extends ConsumerWidget {
                                 BorderRadius.all(Radius.circular(10))),
                         child: TextButton(
                           onPressed: () async {
-                            print("Presionado Login...");
                             if (_formKey.currentState!.validate()) {
-                              print("Comprobando...");
                               IESSystem().loginUseCase.signIn(
                                   _emailTextController.text.trim(),
                                   _passwordTextController.text.trim());
                             } else {
-                              print("Ha ocurrido un error!");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Completa todos los campos")));
                             }
                           },
                           child: const Text(

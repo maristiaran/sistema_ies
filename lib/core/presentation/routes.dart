@@ -15,12 +15,12 @@ late final systemRouter = GoRouter(
     GoRoute(
         name: 'login',
         path: '/login',
-        builder: (context, state) => LoginPageNew(),
+        builder: (context, state) => LoginPage(),
         routes: [
           GoRoute(
             name: 'registering',
             path: 'registering',
-            builder: (context, state) => RegisterPageNew(),
+            builder: (context, state) => RegisterPage(),
           )
         ]),
   ],
