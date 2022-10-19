@@ -30,7 +30,7 @@ class HomePage extends ConsumerWidget {
         ref.watch(IESSystem().homeUseCase.stateNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 120,
+        leadingWidth: 160,
         leading: Builder(
           builder: (BuildContext context) {
             return TextButton(
