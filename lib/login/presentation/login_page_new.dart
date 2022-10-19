@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/utils/value_objects.dart';
 import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/login.dart';
@@ -45,11 +46,11 @@ class LoginPageNew extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      fieldEmail(
+                      fieldEmailDNI(
                           _emailTextController, "Email o DNI", false, context),
                       const SizedBox(height: 10),
-                      fieldPassword(
-                          _passwordTextController, "Contraseña", true, context),
+                      fieldPassword(_passwordTextController, Fields.password,
+                          true, context),
                       const SizedBox(height: 60),
                       Container(
                         width: MediaQuery.of(context).size.width / 0.5,

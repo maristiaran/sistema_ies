@@ -15,7 +15,7 @@ final Map fieldNames = {
   Fields.confirmPassword: "Confirmar contraseña"
 };
 
-TextFormField fieldEmail(controller, text, obscure, context) {
+TextFormField fieldEmailDNI(controller, text, obscure, context) {
   return TextFormField(
     controller: controller,
     obscureText: obscure,
@@ -60,11 +60,11 @@ TextFormField fieldPassword(controller, text, obscure, context) {
       if (value!.isNotEmpty) {
         return null;
       } else {
-        return "El campo contraseña no puede estar vacío";
+        return "La ${fieldNames[text]} no puede estar vacía";
       }
     },
     decoration: InputDecoration(
-      labelText: text,
+      labelText: fieldNames[text],
       filled: true,
       fillColor: Theme.of(context).colorScheme.tertiary,
       border: UnderlineInputBorder(
@@ -96,7 +96,7 @@ TextFormField fieldRegister(controller, text, obscure, context) {
           return Validator.validateRegisterForm(value, text).left;
         }
       } else {
-        return "El campo ${fieldNames[text]} no puede estar vacío";
+        return "${fieldNames[text]} no puede estar vacío";
       }
     },
     decoration: InputDecoration(
@@ -134,7 +134,7 @@ TextFormField fieldConfirmPassword(
           return Validator.confirmPassword(value, oldPassword).left;
         }
       } else {
-        return "El campo ${fieldNames[text]} no puede estar vacío";
+        return "${fieldNames[text]} no puede estar vacío";
       }
     },
     decoration: InputDecoration(
@@ -182,15 +182,18 @@ Widget fieldBirthday(controller, text, context) {
         ),
       ),
     ),
-    initialValue: DateTime.now(),
     dateFormat: DateFormat("yyyy-MM-dd"),
     mode: DateTimeFieldPickerMode.date,
     autovalidateMode: AutovalidateMode.onUserInteraction,
     validator: (DateTime? value) {
-      if (Validator.validateBirthdate(value!).isRight) {
-        return null;
+      if ((value?.day ?? 0) == 1) {
+        if (Validator.validateBirthdate(value!).isRight) {
+          return null;
+        } else {
+          return Validator.validateBirthdate(value).left;
+        }
       } else {
-        return Validator.validateBirthdate(value).left;
+        return 'La fecha de nacimiento no puede estar vacía';
       }
     },
     onDateSelected: (DateTime value) {
