@@ -30,22 +30,24 @@ class HomePage extends ConsumerWidget {
         ref.watch(IESSystem().homeUseCase.stateNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 150,
+        leadingWidth: 160,
         leading: Builder(
           builder: (BuildContext context) {
             return TextButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text("Hola")));
-              },
+              onPressed: () {},
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(child: Text(userName[0]), maxRadius: 13),
                   const SizedBox(width: 10),
-                  Text(
-                    "Hola $userName",
-                    style: Theme.of(context).textTheme.headline3,
+                  Flexible(
+                    child: Text(
+                      "Hola $userName",
+                      overflow: TextOverflow.clip,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
