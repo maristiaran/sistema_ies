@@ -1,6 +1,4 @@
-// import 'package:flutter/widgets.dart';
-
-import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 
 class IESUser {
   final String firstname;
@@ -8,8 +6,8 @@ class IESUser {
   final DateTime birthdate;
   final int dni;
   final String email;
-  List<UserRole> roles = [GuestUserRole()];
-  UserRole defaultRole = GuestUserRole();
+  List<UserRole> roles = [];
+  late UserRole defaultRole;
 
   IESUser(
       {required this.firstname,
@@ -20,34 +18,10 @@ class IESUser {
 
   addRole(UserRole newRole) {
     if ((roles.length == 1) &&
-        (roles.first.userRoleName() == UserRoleNames.guest)) {
+        (roles.first.userRoleTypeName() == UserRoleTypeName.guest)) {
       roles.removeAt(0);
       defaultRole = newRole;
     }
     roles.add(newRole);
-  }
-}
-
-enum UserRoleNames {
-  student,
-  teacher,
-  systemAdmin,
-  administrative,
-  manager,
-  guest
-}
-
-abstract class UserRole {
-  // final IESUser user;
-  Enum userRoleName();
-  List<UserRoleOperation> userRoleOperations = [];
-  // UserRole({required this.user});
-  UserRole();
-}
-
-class GuestUserRole extends UserRole {
-  @override
-  Enum userRoleName() {
-    return UserRoleNames.guest;
   }
 }

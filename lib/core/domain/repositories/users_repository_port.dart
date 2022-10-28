@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/repositories.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
@@ -30,13 +31,13 @@ abstract class UsersRepositoryPort extends RepositoryPort {
       required String surname,
       required DateTime birthdate});
   reSendEmailVerification();
-  Future<Either<Failure, List<UserRole>>> getUserRoles({IESUser user});
+  Future<Either<Failure, List<UserRoleType>>> getUserRoles({IESUser user});
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(
-      {UserRole userRole});
+      {UserRoleType userRole});
 
   Future<Either<Failure, Success>> addUserRole(
-      {required IESUser user, required UserRole userRole});
+      {required IESUser user, required UserRoleType userRole});
 
   Future<Either<Failure, Success>> removeUserRole(
-      {required IESUser user, required UserRole userRole});
+      {required IESUser user, required UserRoleType userRole});
 }

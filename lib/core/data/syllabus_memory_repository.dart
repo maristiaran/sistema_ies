@@ -7,7 +7,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
   List<Syllabus>? _cachedSyllabuses;
 
   @override
-  Future<Either<Failure, List<Syllabus>>> getActiveSyllabuses() async {
+  Future<Either<Failure, Success>> initRepositoryCaches() async {
     Syllabus _buildSyllabusFromJson(Map<String, dynamic> json) {
       Syllabus newSyllabus =
           Syllabus(name: json['name'], administrativeResolution: '490-DGE-19');
@@ -668,7 +668,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
       _cachedSyllabuses!.add(_buildSyllabus501DGE19());
     }
 
-    return Right(_cachedSyllabuses!);
+    return Right(Success('Ok'));
   }
 
   @override
@@ -681,5 +681,22 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
     } else {
       return Left(Failure(failureName: FailureName.unknown));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<Syllabus>>>
+      getSyllabusesByAdministrativeResolution(
+          {required List<String> administrativeResolutions}) async {
+    List<Syllabus> syllabuses = [];
+    for (String res in administrativeResolutions) {
+      getSyllabusByAdministrativeResolution(administrativeResolution: res).fold(
+          (error) {
+        return error;
+      }, (syllabus) {
+        syllabuses.add(syllabus);
+      });
+    }
+
+    return Right(syllabuses);
   }
 }

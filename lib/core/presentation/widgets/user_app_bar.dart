@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
 class UserAppBar extends AppBar {
@@ -23,13 +23,13 @@ class _UserAppBarState extends State<UserAppBar> {
         const Icon(Icons.account_circle_rounded),
         Text(IESSystem().currentIESUserIfAny()!.firstname),
         const Icon(Icons.heart_broken),
-        DropdownButton(
+        DropdownButton<UserRole>(
             items: IESSystem()
                 .getCurrentIESUserRoles()
                 .map((e) => DropdownMenuItem<UserRole>(
                     // child: Text(Random(1000).nextInt(2000).toString())))
 
-                    child: Text(e.userRoleName().name)))
+                    child: Text(e.userRoleTypeName().name)))
 //
                 .toList(),
             value: _selectedRole,

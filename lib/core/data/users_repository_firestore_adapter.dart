@@ -3,12 +3,8 @@ import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/data/utils/iesuser_json_convertion.dart';
-import 'package:sistema_ies/core/domain/entities/administrative.dart';
-import 'package:sistema_ies/core/domain/entities/manager.dart';
-import 'package:sistema_ies/core/domain/entities/student.dart';
-import 'package:sistema_ies/core/domain/entities/system_admin.dart';
-import 'package:sistema_ies/core/domain/entities/teacher.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
@@ -16,6 +12,11 @@ import 'package:sistema_ies/core/domain/utils/datetime.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
+  @override
+  Future<Either<Failure, Success>> initRepositoryCaches() async {
+    return Right(Success('ok'));
+  }
+
   @override
   Future<Either<Failure, Success>> resetPasswordEmail(
       {required String email}) async {
@@ -62,27 +63,27 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
           case 'student':
             IESSystem()
                 .getSyllabusesRepository()
-                .getSyllabusByAdministrativeResolution(
-                    administrativeResolution: docRole['syllabus'])
+                .getSyllabusesByAdministrativeResolution(
+                    administrativeResolutions: docRole['syllabuses'])
                 .fold((left) {
               return left;
             }, (right) {
-              iesUser.addRole(Student(syllabus: right));
+              iesUser.addRole(Student(syllabuses: right));
             });
 
             break;
           case 'teacher':
-            iesUser.addRole(Teacher(course: docRole['course']));
+            iesUser.addRole(Teacher(subjects: docRole['subjects']));
             break;
           case 'administrative':
             IESSystem()
                 .getSyllabusesRepository()
-                .getSyllabusByAdministrativeResolution(
-                    administrativeResolution: docRole['syllabus'])
+                .getSyllabusesByAdministrativeResolution(
+                    administrativeResolutions: docRole['syllabuses'])
                 .fold((left) {
               return left;
             }, (right) {
-              iesUser.addRole(Administrative(syllabus: right));
+              iesUser.addRole(Administrative(syllabuses: right));
             });
 
             break;
@@ -244,19 +245,20 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   }
 
   @override
-  Future<Either<Failure, List<UserRole>>> getUserRoles({IESUser? user}) async {
+  Future<Either<Failure, List<UserRoleType>>> getUserRoles(
+      {IESUser? user}) async {
     return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
   }
 
   @override
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(
-      {UserRole? userRole}) async {
+      {UserRoleType? userRole}) async {
     return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
   }
 
   @override
   Future<Either<Failure, Success>> addUserRole(
-      {required IESUser user, required UserRole userRole}) async {
+      {required IESUser user, required UserRoleType userRole}) async {
     List<DocumentSnapshot> documentList;
     final DocumentReference<Map<String, dynamic>> roleDoc;
     final Map<String, dynamic> json;
@@ -273,10 +275,10 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     }
 
     try {
-      switch (userRole.userRoleName()) {
-        case UserRoleNames.student:
+      switch (userRole.name) {
+        case UserRoleTypeName.student:
           Student studentRole = userRole as Student;
-          json = {'syllabus': studentRole.syllabus};
+          json = {'syllabuses': studentRole.syllabuses};
           break;
         default:
           json = {};
@@ -294,7 +296,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
   @override
   Future<Either<Failure, Success>> removeUserRole(
-      {required IESUser user, required UserRole userRole}) async {
+      {required IESUser user, required UserRoleType userRole}) async {
     return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
   }
 }

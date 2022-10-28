@@ -1,6 +1,9 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
@@ -24,6 +27,7 @@ class IESSystem extends Operation {
   // Repositories
   UsersRepositoryPort? _usersRepository;
   SyllabusesRepositoryPort? _syllabusesRepository;
+  RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
 
   // Use cases
   late LoginUseCase loginUseCase;
@@ -51,6 +55,11 @@ class IESSystem extends Operation {
     return _syllabusesRepository!;
   }
 
+  RolesAndOperationsRepositoryPort getRolesAndOperationsRepository() {
+    _rolesAndOperationsRepository ??= rolesAndOperationsRepository;
+    return _rolesAndOperationsRepository!;
+  }
+
   List<UserRole> getCurrentIESUserRoles() {
     if (_currentIESUserIfAny == null) {
       // print("no user");
@@ -72,16 +81,16 @@ class IESSystem extends Operation {
     }
   }
 
-  // List<UserRoleOperation> getCurrentIESUserRoleOperations() {
-  //   List<UserRoleOperation> iesUserRoleOperations = [];
-
-  //   switch (_currentIESUserIfAny!.defaultRole.userRoleName()) {
-  //     case UserRoleNames.student:
-  //       iesUserRoleOperations.add(RegisterAsNewStudentOperation());
-  //   }
-  //   iesUserRoleOperations.add(RegisterAsNewStudentOperation());
-  //   return iesUserRoleOperations;
-  // }
+  List<ParameretizedUserRoleOperation>
+      getCurrentUserRoleParameterizedOperations() {
+    if (_currentIESUserRole == null) {
+      return [];
+    } else {
+      return getRolesAndOperationsRepository()
+          .getUserRoleType(_currentIESUserRole!.userRoleTypeName())
+          .parameterizedOperations;
+    }
+  }
 
   setCurrentRole(UserRole userRole) {
     _currentIESUserRole = userRole;

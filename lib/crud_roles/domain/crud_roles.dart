@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
@@ -31,7 +32,7 @@ class CRUDRoleUseCase extends UseCase {
   }
 
   Future addRoleToUser(
-      {required IESUser user, required UserRole userRole}) async {
+      {required IESUser user, required UserRoleType userRole}) async {
     Either<Failure, Success> response = await IESSystem()
         .getUsersRepository()
         .addUserRole(user: user, userRole: userRole);

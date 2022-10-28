@@ -20,11 +20,9 @@ class SelectUserRoleOperationPage extends StatelessWidget {
               ListView(
                   shrinkWrap: true,
                   children: IESSystem()
-                      .currentIESUserIfAny()!
-                      .defaultRole
-                      .userRoleOperations
+                      .getCurrentUserRoleParameterizedOperations()
                       .map((userOperation) => ElevatedButton(
-                          child: Text(userOperation.operationName()),
+                          child: Text(userOperation.operation.title),
                           onPressed: () => {}))
                       .toList()),
               const SizedBox(height: 28.0),

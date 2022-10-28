@@ -1,5 +1,4 @@
-enum UserRoleOperations {
-  registerAsUser,
+enum UserRoleOperationName {
   registerAsIncomingStudent,
   registerForCourse,
   registerForExam,
@@ -15,16 +14,18 @@ enum UserRoleOperations {
   adminStudentRecords,
   writeExamGrades,
   adminSyllabuses,
-
 }
 
-abstract class UserRoleOperation {
-  String operationName();
+class UserRoleOperation {
+  final UserRoleOperationName name;
+  final String title;
+
+  UserRoleOperation({required this.name, required this.title});
 }
 
-class RegisterAsNewStudentOperation extends UserRoleOperation {
-  @override
-  String operationName() {
-    return 'Inscripción a una carrera';
-  }
+class ParameretizedUserRoleOperation {
+  final UserRoleOperation operation;
+  Map<String, dynamic>? params;
+  ParameretizedUserRoleOperation(
+      {required this.operation, required this.params});
 }

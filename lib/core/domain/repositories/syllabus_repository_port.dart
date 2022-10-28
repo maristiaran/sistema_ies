@@ -6,7 +6,11 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 enum FailureName { unknown }
 
 abstract class SyllabusesRepositoryPort extends RepositoryPort {
-  Future<Either<Failure, List<Syllabus>>> getActiveSyllabuses();
+  // Future<Either<Failure, List<Syllabus>>> getActiveSyllabuses();
   Future<Either<Failure, Syllabus>> getSyllabusByAdministrativeResolution(
       {required String administrativeResolution});
+
+  Future<Either<Failure, List<Syllabus>>>
+      getSyllabusesByAdministrativeResolution(
+          {required List<String> administrativeResolutions});
 }

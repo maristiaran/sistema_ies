@@ -27,8 +27,7 @@ class RegisteringUseCase extends UseCase {
 
   @override
   Future<void> initializeRepositories() async {
-    (await IESSystem().getSyllabusesRepository().getActiveSyllabuses())
-        .fold((left) => syllabuses = [], (right) => syllabuses = right);
+    await IESSystem().getSyllabusesRepository().initRepositoryCaches();
   }
 
   setCurrentSyllabus(Syllabus? newSyllabus) {
