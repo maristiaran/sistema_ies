@@ -36,7 +36,7 @@ late final systemRouter = GoRouter(
         return state.namedLocation('login');
       }
     } else {
-      print(IESSystem().currentState.stateName.name);
+      // print(IESSystem().currentState.stateName.name);
       if (state.subloc ==
           state.namedLocation(IESSystem().currentState.stateName.name)) {
         return null;

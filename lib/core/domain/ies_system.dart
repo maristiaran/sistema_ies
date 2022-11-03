@@ -1,6 +1,6 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+// import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
@@ -19,8 +19,7 @@ enum IESSystemStateName { login, home, registering }
 class IESSystem extends Operation {
   // IESSystem as a Singleton
   static final IESSystem _singleton = IESSystem._internal();
-  // Observable obsSystemState = Observable();
-// Current User
+  // Current User
   IESUser? _currentIESUserIfAny;
   UserRole? _currentIESUserRole;
 
@@ -66,8 +65,8 @@ class IESSystem extends Operation {
       return [];
     } else {
       // print("roles");
-      print(_currentIESUserIfAny!.roles.length);
-      print(_currentIESUserIfAny!.roles);
+      // print(_currentIESUserIfAny!.roles.length);
+      // print(_currentIESUserIfAny!.roles);
 
       return _currentIESUserIfAny!.roles;
     }
@@ -81,22 +80,11 @@ class IESSystem extends Operation {
     }
   }
 
-  List<ParameretizedUserRoleOperation>
-      getCurrentUserRoleParameterizedOperations() {
-    if (_currentIESUserRole == null) {
-      return [];
-    } else {
-      return getRolesAndOperationsRepository()
-          .getUserRoleType(_currentIESUserRole!.userRoleTypeName())
-          .parameterizedOperations;
-    }
-  }
-
   setCurrentRole(UserRole userRole) {
     _currentIESUserRole = userRole;
   }
 
-  getCurrentRole(UserRole userRole) {
+  UserRole? getCurrentRoleIfAny() {
     return _currentIESUserRole;
   }
 
@@ -129,19 +117,6 @@ class IESSystem extends Operation {
   }
 
   initializeIESSystem() async {
-    // (await getSyllabusesRepository().getActiveSyllabuses()).fold((left) => null,
-    //     (syllabuses) {
-    //   for (Syllabus syllabus in syllabuses) {
-    //     print('---------------------------------------');
-    //     print(syllabus.name);
-    //     print('---------------------------------------');
-    //     for (Subject subject in syllabus.subjects) {
-    //       print(
-    //           '${subject.id}-${subject.name} ,para cursar: ${subject.coursesNeededForCoursing}, para rendir: ${subject.examNeededForExamination}');
-    //     }
-    //   }
-    // });
-
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -155,8 +130,6 @@ class IESSystem extends Operation {
     loginUseCase = LoginUseCase();
     await loginUseCase.initializeUseCase();
     changeState(const OperationState(stateName: IESSystemStateName.login));
-    // loginUseCase.initLogin();
-    // obsSystemState.notifyObservers(IESSystemStateName.login);
   }
 
   Future onUserLogged(IESUser userLogged) async {
@@ -181,13 +154,4 @@ class IESSystem extends Operation {
   }
 
   onCurrentUserLogout() {}
-  // onUserVerifiedEmail() {
-  //   print("qq");
-  //   if ((currentState.stateName == IESSystemStateName.iesAuth) &&
-  //       (authUseCase.currentState.stateName == AuthState.registering) &&
-  //       (authUseCase.registeringUseCase.currentState.stateName ==
-  //           RegisteringStateName.registeredWaitingEmailValidation)) {
-  //     authUseCase.registeringUseCase.onUserVerifiedEmail();
-  //   }
-  // }
 }

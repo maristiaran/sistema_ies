@@ -12,36 +12,29 @@ class OperationState extends Equatable {
   List<Object?> get props => [];
 }
 
-// class FailureState extends OperationState{
-//     final String message;
-//     const FailureState({required this.message});
+class OperationStateNotifier<T extends OperationState>
+    extends StateNotifier<T> {
+  OperationStateNotifier({required T initialState}) : super(initialState);
 
-//   @override
-//   List<Object?> get props => [];
-// }
-class OperationStateNotifier extends StateNotifier<OperationState> {
-  OperationStateNotifier({required OperationState initialState})
-      : super(initialState);
-
-  notifyStateChange(OperationState newOperationState) {
+  notifyStateChange(T newOperationState) {
     state = newOperationState;
   }
 }
 
-abstract class Operation {
-  late OperationState currentState;
+abstract class Operation<T extends OperationState> {
+  late T currentState;
   late OperationStateNotifier stateNotifier;
-  late StateNotifierProvider<OperationStateNotifier, OperationState>
+  late StateNotifierProvider<OperationStateNotifier<T>, T>
       stateNotifierProvider;
 
-  changeState(OperationState newOperationState) {
+  changeState(T newOperationState) {
     currentState = newOperationState;
     stateNotifier.notifyStateChange(newOperationState);
   }
 }
 
-abstract class UseCase extends Operation {
-  UseCase();
+abstract class UseCase<T extends OperationState> extends Operation<T> {
+  // UseCase();
 
   Future<void> initializeUseCase() async {
     await initializeRepositories();
@@ -49,13 +42,13 @@ abstract class UseCase extends Operation {
   }
 
   Future<void> initializeRepositories() async {}
-  OperationState initialState();
+  T initialState();
 
-  initializeStateNotifierProvider(OperationState initialState) {
-    OperationStateNotifier newStateNotifier =
-        OperationStateNotifier(initialState: initialState);
+  initializeStateNotifierProvider(T initialState) {
+    OperationStateNotifier<T> newStateNotifier =
+        OperationStateNotifier<T>(initialState: initialState);
     stateNotifierProvider =
-        StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
+        StateNotifierProvider<OperationStateNotifier<T>, T>((ref) {
       return newStateNotifier;
     });
     stateNotifier = newStateNotifier;

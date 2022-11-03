@@ -17,14 +17,14 @@ class SelectUserRoleOperationPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 28.0),
-              ListView(
-                  shrinkWrap: true,
-                  children: IESSystem()
-                      .getCurrentUserRoleParameterizedOperations()
-                      .map((userOperation) => ElevatedButton(
-                          child: Text(userOperation.operation.title),
-                          onPressed: () => {}))
-                      .toList()),
+              // ListView(
+              //     shrinkWrap: true,
+              //     children: IESSystem()
+              //         .getCurrentUserRoleParameterizedOperations()
+              //         .map((userOperation) => ElevatedButton(
+              //             child: Text(userOperation.operation.title),
+              //             onPressed: () => {}))
+              //         .toList()),
               const SizedBox(height: 28.0),
               ElevatedButton(
                 onPressed: () => IESSystem().restartLogin(),

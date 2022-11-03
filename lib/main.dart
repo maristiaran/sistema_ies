@@ -16,7 +16,7 @@ class AdminIESApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _iesSystemStatesProvider =
         ref.watch(IESSystem().stateNotifierProvider);
-    print(_iesSystemStatesProvider.stateName.name);
+    // print(_iesSystemStatesProvider.stateName.name);
     // systemRouter.goNamed(_iesSystemStatesProvider.stateName.name);
     systemRouter.goNamed(_iesSystemStatesProvider.stateName.name);
 

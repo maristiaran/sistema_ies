@@ -2,32 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:sistema_ies/application/ies_system.dart';
 // import 'package:sistema_ies/infrastructure/flutter/screens/users/auth/auth_views.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({Key? key}) : super(key: key);
+  // final List operations =
+  //     IESSystem().getCurrentUserRoleParameterizedOperations();
   final _currentIndex = StateProvider((ref) => 0);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-    ),
-    Text(
-      'Index 1: Trayecto estudiantil',
-    ),
-    Text(
-      'Index 2: Calendario',
-    ),
-    Text(
-      'Index 3: Menu',
-    ),
-  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userName = IESSystem().currentIESUserIfAny()!.firstname;
     final _homeStatesProvider =
         ref.watch(IESSystem().homeUseCase.stateNotifierProvider);
+    final List<Widget> _widgetOptions = <Widget>[
+      const Text(
+        'Index 0: Home',
+      ),
+      const Text(
+        'Index 1: Trayecto estudiantil',
+      ),
+      const Text(
+        'Index 2: Calendario',
+      ),
+      ListView.builder(
+          itemCount: _homeStatesProvider
+              .getCurrentUserRoleParameterizedOperations()
+              .length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+                title: Text(_homeStatesProvider
+                    .getCurrentUserRoleParameterizedOperations()[index]
+                    .operation
+                    .title));
+          }),
+    ];
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 160,

@@ -17,7 +17,7 @@ class _UserAppBarState extends State<UserAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    print(_selectedRole);
+    // print(_selectedRole);
     return Row(
       children: [
         const Icon(Icons.account_circle_rounded),
