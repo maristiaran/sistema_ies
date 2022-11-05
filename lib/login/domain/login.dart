@@ -17,38 +17,36 @@ enum LoginStateName {
 }
 
 class LoginState extends OperationState {
-  final IESUser? currentIESUser;
-  final IESUser? currentIESUserRole;
+  final IESUser? currentIESUserIfAny;
+  // final IESUser? currentIESUserRole;
 
-  const LoginState(this.currentIESUser, this.currentIESUserRole,
-      {required stateName})
+  const LoginState({required this.currentIESUserIfAny, required stateName})
       : super(stateName: stateName);
 
   @override
   List<Object?> get props => [];
+
+  LoginState copyChangingState({required LoginStateName newState}) {
+    return LoginState(
+        currentIESUserIfAny: currentIESUserIfAny, stateName: newState);
+  }
 }
 
 // LOGIN USE CASE
-class LoginUseCase extends UseCase {
+class LoginUseCase extends UseCase<LoginState> {
 //Auth Use Case initialization
   LoginUseCase() : super();
 
   @override
-  OperationState initialState() {
-    return const OperationState(stateName: LoginStateName.init);
+  LoginState initializeUseCase() {
+    return const LoginState(
+        currentIESUserIfAny: null, stateName: LoginStateName.init);
   }
-
-  // void initLogin() {
-  //   changeState(const OperationState(stateName: LoginStateName.init));
-  // }
 
   Future signIn(String userDNIOrEmail, String password) async {
     if (userDNIOrEmail == "") {
-      changeState(const OperationState(stateName: LoginStateName.failure
-          // ,
-          // changes: {'failure': 'El dni o email no puede ser un texto vacio'}
-
-          ));
+      changeState(
+          currentState.copyChangingState(newState: LoginStateName.failure));
       return null;
     }
     String userEmail = userDNIOrEmail;
@@ -57,11 +55,8 @@ class LoginUseCase extends UseCase {
           .getUsersRepository()
           .getIESUserByDNI(dni: int.parse(userDNIOrEmail))
           .then((getIESUserByDNI) => getIESUserByDNI.fold(
-                  (failure) => changeState(
-                      const OperationState(stateName: LoginStateName.failure
-                          // ,
-                          // changes: {'failure': failure.message}
-                          )), (iesUser) {
+                  (failure) => changeState(currentState.copyChangingState(
+                      newState: LoginStateName.failure)), (iesUser) {
                 userEmail = iesUser.email;
               }));
     }
@@ -71,31 +66,17 @@ class LoginUseCase extends UseCase {
         .then((signInResponse) => signInResponse.fold((failure) {
               if (failure.failureName ==
                   UsersRepositoryFailureName.notVerifiedEmail) {
-                changeState(const OperationState(
-                    stateName: LoginStateName.emailNotVerifiedFailure
-                    // ,
-                    // changes: {'failure': failure.message}
-
-                    ));
+                changeState(currentState.copyChangingState(
+                    newState: LoginStateName.emailNotVerifiedFailure));
               } else {
-                changeState(
-                    const OperationState(stateName: LoginStateName.failure
-                        // ,
-                        // changes: {'failure': failure.message}
-
-                        ));
+                changeState(currentState.copyChangingState(
+                    newState: LoginStateName.failure));
               }
             }, (iesUser) {
-              changeState(const OperationState(
+              changeState(LoginState(
+                  currentIESUserIfAny: iesUser,
                   stateName: LoginStateName.successfullySignIn));
               IESSystem().onUserLogged(iesUser);
-              // TODO: default role;
-              // if (iesUser.roles.length > 1) {
-              //   (parentOperation as HomeUseCase).startSelectingUserRole();
-              // } else {
-              //   (parentOperation as HomeUseCase)
-              //       .startSelectingUserRoleOperation();
-              // }
             }));
   }
 
@@ -103,14 +84,11 @@ class LoginUseCase extends UseCase {
     Either<Failure, Success> response =
         await IESSystem().getUsersRepository().reSendEmailVerification();
     response.fold(
-        (failure) =>
-            changeState(const OperationState(stateName: LoginStateName.failure
-                // ,
-                // changes: {'failure': failure.message}
-                )), (success) {
-      changeState(const OperationState(
-          stateName: LoginStateName.verificationEmailSent));
-      // changeState(const OperationState(stateName: LoginStateName.init));
+        (failure) => changeState(
+            currentState.copyChangingState(newState: LoginStateName.failure)),
+        (success) {
+      changeState(currentState.copyChangingState(
+          newState: LoginStateName.verificationEmailSent));
     });
   }
 
@@ -122,15 +100,11 @@ class LoginUseCase extends UseCase {
     Either<Failure, Success> response =
         await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
     response.fold((failure) {
-      changeState(const OperationState(stateName: LoginStateName.failure
-          // ,
-          // changes: {'failure': failure.message}
-          ));
-      // changeState(const OperationState(stateName: LoginStateName.init));
-    }, (success) {
       changeState(
-          const OperationState(stateName: LoginStateName.passwordResetSent));
-      // changeState(const OperationState(stateName: LoginStateName.init));
+          currentState.copyChangingState(newState: LoginStateName.failure));
+    }, (success) {
+      changeState(currentState.copyChangingState(
+          newState: LoginStateName.passwordResetSent));
     });
   }
 }

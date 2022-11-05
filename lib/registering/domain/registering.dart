@@ -21,14 +21,14 @@ class RegisteringUseCase extends UseCase {
   RegisteringUseCase();
 
   @override
-  OperationState initialState() {
+  OperationState initializeUseCase() {
     return const OperationState(stateName: RegisteringStateName.init);
   }
 
-  @override
-  Future<void> initializeRepositories() async {
-    await IESSystem().getSyllabusesRepository().initRepositoryCaches();
-  }
+  // @override
+  // Future<void> initializeRepositories() async {
+  //   await IESSystem().getSyllabusesRepository().initRepositoryCaches();
+  // }
 
   setCurrentSyllabus(Syllabus? newSyllabus) {
     currentSyllabus = newSyllabus;

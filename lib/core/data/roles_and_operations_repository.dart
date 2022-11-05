@@ -6,8 +6,10 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 class RolesAndOperationsRepositoryMemoryAdapter
     implements RolesAndOperationsRepositoryPort {
-  late Map<UserRoleTypeName, UserRoleType> _cachedUserRoleTypes;
-  late Map<UserRoleOperationName, UserRoleOperation> _cachedUserRoleOperations;
+  final Map<UserRoleTypeName, UserRoleType> _cachedUserRoleTypes =
+      <UserRoleTypeName, UserRoleType>{};
+  final Map<UserRoleOperationName, UserRoleOperation>
+      _cachedUserRoleOperations = <UserRoleOperationName, UserRoleOperation>{};
 
   @override
   Future<Either<Failure, Success>> initRepositoryCaches() async {
@@ -43,6 +45,11 @@ class RolesAndOperationsRepositoryMemoryAdapter
 
   @override
   UserRoleType getUserRoleType(UserRoleTypeName userRoleName) {
-    return _cachedUserRoleTypes[userRoleName]!;
+    if (_cachedUserRoleTypes[userRoleName] == null) {
+      return _cachedUserRoleTypes[userRoleName]!;
+    } else {
+      return _cachedUserRoleTypes[userRoleName]!;
+    }
+    // return _cachedUserRoleTypes[userRoleName]!;
   }
 }

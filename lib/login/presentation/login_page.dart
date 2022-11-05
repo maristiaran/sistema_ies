@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
-import 'package:sistema_ies/login/login.dart';
+import 'package:sistema_ies/login/domain/login.dart';
 
 class LoginPage extends ConsumerWidget {
   LoginPage({Key? key}) : super(key: key);

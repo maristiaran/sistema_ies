@@ -15,9 +15,11 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userName = IESSystem().currentIESUserIfAny()!.firstname;
     final _homeStatesProvider =
         ref.watch(IESSystem().homeUseCase.stateNotifierProvider);
+
+    final userName = IESSystem().homeUseCase.currentIESUser.firstname;
+
     final List<Widget> _widgetOptions = <Widget>[
       const Text(
         'Index 0: Home',

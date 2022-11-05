@@ -1,4 +1,4 @@
-import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+// import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
@@ -10,10 +10,7 @@ enum HomeStateName { init, calendar, selectingRole, selectingRoleOperation }
 class HomeState extends OperationState {
   // final IESUser currentUser;
   final UserRole currentRole;
-  const HomeState(
-      {required Enum stateName,
-      // required this.currentUser,
-      required this.currentRole})
+  const HomeState({required Enum stateName, required this.currentRole})
       : super(stateName: stateName);
   HomeState copyChangingRole({required UserRole newUserRole}) {
     return HomeState(stateName: stateName, currentRole: newUserRole);
@@ -23,16 +20,8 @@ class HomeState extends OperationState {
     return HomeState(stateName: newState, currentRole: currentRole);
   }
 
-  IESUser getCurrentUser() {
-    return IESSystem().getCurrentIESUserIfAny()!;
-  }
-
-  UserRole getUserRole() {
-    return IESSystem().getCurrentRoleIfAny()!;
-  }
-
   UserRoleTypeName getUserRoleTypeName() {
-    return IESSystem().getCurrentRoleIfAny()!.userRoleTypeName();
+    return currentRole.userRoleTypeName();
   }
 
   List<ParameretizedUserRoleOperation>
@@ -47,17 +36,16 @@ class HomeState extends OperationState {
 // AUTORIZATION
 class HomeUseCase extends UseCase<HomeState> {
   //Accessors
-  late List<Syllabus> syllabuses;
-  late Syllabus currentSyllabus;
+  // late List<Syllabus> syllabuses;
+  // late Syllabus currentSyllabus;
+  final IESUser currentIESUser;
 
 //Auth Use Case initialization
-  HomeUseCase();
-
+  HomeUseCase({required this.currentIESUser});
   @override
-  HomeState initialState() {
+  HomeState initializeUseCase() {
     return HomeState(
-        stateName: HomeStateName.init,
-        currentRole: IESSystem().getCurrentRoleIfAny()!);
+        stateName: HomeStateName.init, currentRole: currentIESUser.defaultRole);
   }
 
   void startSelectingUserRole() async {

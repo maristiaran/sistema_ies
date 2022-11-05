@@ -28,21 +28,21 @@ late final systemRouter = GoRouter(
   redirect: (state) {
     // print(IESSystem().currentIESUserIfAny());
     // print(state.subloc);
-    if (IESSystem().currentIESUserIfAny() == null) {
-      if ((state.subloc == state.namedLocation('login')) ||
-          (state.subloc == state.namedLocation('registering'))) {
-        return null;
-      } else {
-        return state.namedLocation('login');
-      }
+    // if (IESSystem().currentIESUserIfAny() == null) {
+    //   if ((state.subloc == state.namedLocation('login')) ||
+    //       (state.subloc == state.namedLocation('registering'))) {
+    //     return null;
+    //   } else {
+    //     return state.namedLocation('login');
+    //   }
+    // } else {
+    // print(IESSystem().currentState.stateName.name);
+    if (state.subloc ==
+        state.namedLocation(IESSystem().currentState.stateName.name)) {
+      return null;
     } else {
-      // print(IESSystem().currentState.stateName.name);
-      if (state.subloc ==
-          state.namedLocation(IESSystem().currentState.stateName.name)) {
-        return null;
-      } else {
-        return state.namedLocation(IESSystem().currentState.stateName.name);
-      }
+      return state.namedLocation(IESSystem().currentState.stateName.name);
+      // }
     }
 
     // return null;

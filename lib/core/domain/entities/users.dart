@@ -7,7 +7,7 @@ class IESUser {
   final int dni;
   final String email;
   List<UserRole> roles = [];
-  late UserRole defaultRole;
+  UserRole defaultRole = Guest();
 
   IESUser(
       {required this.firstname,

@@ -34,15 +34,7 @@ abstract class Operation<T extends OperationState> {
 }
 
 abstract class UseCase<T extends OperationState> extends Operation<T> {
-  // UseCase();
-
-  Future<void> initializeUseCase() async {
-    await initializeRepositories();
-    initializeStateNotifierProvider(initialState());
-  }
-
-  Future<void> initializeRepositories() async {}
-  T initialState();
+  T initializeUseCase();
 
   initializeStateNotifierProvider(T initialState) {
     OperationStateNotifier<T> newStateNotifier =
@@ -52,5 +44,9 @@ abstract class UseCase<T extends OperationState> extends Operation<T> {
       return newStateNotifier;
     });
     stateNotifier = newStateNotifier;
+  }
+
+  UseCase() {
+    initializeStateNotifierProvider(initializeUseCase());
   }
 }

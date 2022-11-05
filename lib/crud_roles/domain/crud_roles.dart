@@ -27,7 +27,7 @@ class CRUDRoleUseCase extends UseCase {
   CRUDRoleUseCase({required Operation parentOperation});
 
   @override
-  OperationState initialState() {
+  OperationState initializeUseCase() {
     return const OperationState(stateName: CRUDRoleState.initial);
   }
 
