@@ -101,9 +101,10 @@ class LoginPage extends ConsumerWidget {
                       ),
                       TextButton(
                         onPressed: () async {
-                          IESSystem()
+                          IESSystem().startRecoveryPass();
+                          /* IESSystem()
                               .loginUseCase
-                              .changePassword(_emailTextController.text.trim());
+                              .changePassword(_emailTextController.text.trim()); */
                         },
                         child: Text(
                           '¿Olvidaste la contraseña?',

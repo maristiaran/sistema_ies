@@ -12,7 +12,7 @@ import 'package:sistema_ies/home/domain/home.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
 
-enum IESSystemStateName { login, home, registering }
+enum IESSystemStateName { login, home, registering, recoverypass }
 
 // class IESSystemState extends OperationState {
 //   IESSystemState({required IESSystemStateName  stateName}):super(stateName: stateName);
@@ -81,6 +81,13 @@ class IESSystem extends Operation {
     loginUseCase = LoginUseCase();
     // loginUseCase.initializeUseCase();
     changeState(const OperationState(stateName: IESSystemStateName.login));
+  }
+
+  startRecoveryPass() {
+    loginUseCase = LoginUseCase();
+    // loginUseCase.initializeUseCase();
+    changeState(
+        const OperationState(stateName: IESSystemStateName.recoverypass));
   }
 
   Future onUserLogged(IESUser userLogged) async {
