@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/domain/login.dart';
@@ -68,6 +69,12 @@ class LoginPage extends ConsumerWidget {
                                   const SnackBar(
                                       content:
                                           Text("Completa todos los campos")));
+                            }
+                            print(IESSystem().currentState.stateName);
+                            if (IESSystem().currentState.stateName !=
+                                LoginStateName.successfullySignIn) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Error")));
                             }
                           },
                           child: const Text(
