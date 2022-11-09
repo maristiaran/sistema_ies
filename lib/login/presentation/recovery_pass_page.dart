@@ -46,38 +46,46 @@ class RecoveryPassPage extends ConsumerWidget {
                         fieldEmailDNI(_emailTextController, "Email o DNI",
                             false, context),
                         const SizedBox(height: 10),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 0.5,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 36, 110, 221),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: TextButton(
-                            onPressed: () async {
-                              if (_formRecoveryPassKey.currentState!
-                                  .validate()) {
-                                IESSystem().loginUseCase.changePassword(
-                                    _emailTextController.text.trim());
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Coloca tu correo o contraseña primero")));
-                              }
-                              if (_loginStatesProvider.stateName ==
-                                  LoginStateName.failure) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Ha ocurrido un error. Por favor intentelo de nuevo más tarde")));
-                              }
-                            },
-                            child: const Text(
-                              'Recuperar contraseña',
-                              style: TextStyle(color: Colors.white),
+                        Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width / 0.5,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 36, 110, 221),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              child: TextButton(
+                                onPressed: () async {
+                                  if (_formRecoveryPassKey.currentState!
+                                      .validate()) {
+                                    IESSystem().loginUseCase.changePassword(
+                                        _emailTextController.text.trim());
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Coloca un correo electrónico correcto primero")));
+                                  }
+                                  if (_loginStatesProvider.stateName ==
+                                      LoginStateName.failure) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Ha ocurrido un error. Por favor intentelo de nuevo más tarde")));
+                                  }
+                                },
+                                child: const Text(
+                                  'Recuperar contraseña',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ),
-                          ),
+                            TextButton(
+                                onPressed: () =>
+                                    IESSystem().loginUseCase.returnToLogin(),
+                                child: const Text("Cancelar"))
+                          ],
                         ),
                       ],
                     ),

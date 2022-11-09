@@ -100,7 +100,7 @@ class IESSystem extends Operation {
         const OperationState(stateName: IESSystemStateName.registering));
   }
 
-  void restartLogin() {
+  restartLogin() {
     changeState(const OperationState(stateName: IESSystemStateName.login));
     // loginUseCase.initLogin();
   }

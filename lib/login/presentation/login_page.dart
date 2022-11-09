@@ -25,19 +25,20 @@ class LoginPage extends ConsumerWidget {
           passwordTextController: _passwordTextController,
           loginStatesProvider: _loginStatesProvider),
       RecoveryPassPage(),
-      passwordResetSent(context)
+      passwordResetSent(context),
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
     ];
     final _elements = {
       LoginStateName.init: 0,
       LoginStateName.recoverypass: 1,
-      LoginStateName.emailNotVerifiedFailure: 4,
-      LoginStateName.successfullySignIn: 3,
       LoginStateName.passwordResetSent: 2,
-      LoginStateName.verificationEmailSent: 5,
-      LoginStateName.failure: 6
+      LoginStateName.successfullySignIn: 3,
+      LoginStateName.emailNotVerifiedFailure: 5,
+      LoginStateName.verificationEmailSent: 6,
+      LoginStateName.failure: 0,
     };
-
     return _widgetOptions.elementAt(_elements[_loginStatesProvider.stateName]!);
-    // return _widgetOptions.elementAt(elementIndex);
   }
 }

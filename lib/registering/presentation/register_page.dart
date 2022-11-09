@@ -26,6 +26,7 @@ class RegisterPage extends ConsumerWidget {
         ref.watch(IESSystem().registeringUseCase.stateNotifierProvider);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Registro',
           style: Theme.of(context).textTheme.headline1,
@@ -45,15 +46,17 @@ class RegisterPage extends ConsumerWidget {
               child: Center(
                 child: Form(
                   key: _registerFormKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    runSpacing: 15,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
                             constraints: const BoxConstraints(
-                                maxWidth: 170, minWidth: 170),
+                                maxWidth: 170, minWidth: 100),
                             width: MediaQuery.of(context).size.width / 6.5,
                             child: fieldRegister(_firstnameTextController,
                                 Fields.name, false, context),
@@ -81,7 +84,7 @@ class RegisterPage extends ConsumerWidget {
                           _passwordTextController,
                           true,
                           context),
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 40),
                       Container(
                         width: MediaQuery.of(context).size.width / 1,
                         height: 50,
@@ -122,65 +125,10 @@ class RegisterPage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 0.5,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 198, 198, 198),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        child: TextButton(
-                          onPressed: () {
-                            IESSystem().registeringUseCase.returnToLogin();
-                          },
-                          child: const Text(
-                            'Cancelar',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 63, 63, 63)),
-                          ),
-                        ),
-                      ),
-                      Consumer(builder: (context, ref, child) {
-                        if (_registeringStatesProvider.stateName ==
-                            RegisteringStateName
-                                .registeredWaitingEmailValidation) {
-                          return ElevatedButton(
-                              onPressed: () {
-                                IESSystem()
-                                    .registeringUseCase
-                                    .reSendEmailVerification();
-                              },
-                              child: const Text(
-                                'Reenviar email de verificación',
-                                style: TextStyle(color: Colors.white),
-                              ));
-                        } else {
-                          return const Text('');
-                        }
-                      }),
-                      Consumer(builder: (context, ref, child) {
-                        if (_registeringStatesProvider.stateName ==
-                            RegisteringStateName.failure) {
-                          return snackbarLike(
-                              text: _registeringStatesProvider.stateName.name,
-                              isFailure: true);
-                        } else if (_registeringStatesProvider.stateName ==
-                            RegisteringStateName
-                                .registeredWaitingEmailValidation) {
-                          return snackbarLike(
-                              text:
-                                  '¡Ya estás registrado! Deberás ingresar en el enlace enviado a tu email para poder ingresar',
-                              isFailure: false);
-                        } else if (_registeringStatesProvider.stateName ==
-                            RegisteringStateName.verificationEmailSent) {
-                          return snackbarLike(
-                              text:
-                                  'Email de recuperación de contraseña enviado a: ${_emailTextController.text}',
-                              isFailure: false);
-                        }
-
-                        return const Text('');
-                      })
+                      TextButton(
+                          onPressed: () =>
+                              IESSystem().registeringUseCase.returnToLogin(),
+                          child: const Text("Cancelar")),
                     ],
                   ),
                 ),

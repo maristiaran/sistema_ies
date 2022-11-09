@@ -80,11 +80,22 @@ class LoginPageMain extends StatelessWidget {
                                       content:
                                           Text("Completa todos los campos")));
                             }
-                            /* if (_loginStatesProvider.stateName !=
-                                LoginStateName.successfullySignIn) {
+                            if (_loginStatesProvider.stateName ==
+                                LoginStateName.failure) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Error")));
-                            } */
+                                  SnackBar(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
+                                      content: const Text(
+                                          "Usuario o contraseñas incorrecta")));
+                            } else if (_loginStatesProvider.stateName ==
+                                LoginStateName.emailNotVerifiedFailure) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  content: const Text(
+                                      "Su email no ha sido verificado aún. Revise si casilla de correos por favor")));
+                            }
                           },
                           child: const Text(
                             'Iniciar Sesión',

@@ -39,7 +39,7 @@ Widget passwordResetSent(context) {
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: TextButton(
             onPressed: () {
-              IESSystem().restartLogin();
+              IESSystem().loginUseCase.returnToLogin();
             },
             child: const Text(
               'Aceptar',

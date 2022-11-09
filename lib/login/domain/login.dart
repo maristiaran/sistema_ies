@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
@@ -112,5 +114,9 @@ class LoginUseCase extends Operation<LoginState> {
       changeState(currentState.copyChangingState(
           newState: LoginStateName.passwordResetSent));
     });
+  }
+
+  returnToLogin() {
+    changeState(currentState.copyChangingState(newState: LoginStateName.init));
   }
 }
