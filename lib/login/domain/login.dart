@@ -13,6 +13,7 @@ enum LoginStateName {
   emailNotVerifiedFailure,
   successfullySignIn,
   passwordResetSent,
+  recoverypass,
   verificationEmailSent
 }
 
@@ -94,6 +95,11 @@ class LoginUseCase extends UseCase<LoginState> {
 
   void startRegisteringIncomingUser() async {
     IESSystem().startRegisteringNewUser();
+  }
+
+  void startRecoveryPass() {
+    changeState(
+        currentState.copyChangingState(newState: LoginStateName.recoverypass));
   }
 
   Future changePassword(String email) async {

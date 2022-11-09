@@ -83,13 +83,6 @@ class IESSystem extends Operation {
     changeState(const OperationState(stateName: IESSystemStateName.login));
   }
 
-  startRecoveryPass() {
-    loginUseCase = LoginUseCase();
-    // loginUseCase.initializeUseCase();
-    changeState(
-        const OperationState(stateName: IESSystemStateName.recoverypass));
-  }
-
   Future onUserLogged(IESUser userLogged) async {
     homeUseCase = HomeUseCase(currentIESUser: userLogged);
     // homeUseCase.initializeUseCase();
