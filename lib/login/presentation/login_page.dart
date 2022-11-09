@@ -17,6 +17,7 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _loginStatesProvider =
         ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
+    print(_loginStatesProvider.stateName.name);
     final List<Widget> _widgetOptions = <Widget>[
       LoginPageMain(
           formKey: _formKey,
@@ -35,7 +36,8 @@ class LoginPage extends ConsumerWidget {
       LoginStateName.verificationEmailSent: 5,
       LoginStateName.failure: 6
     };
-    //return _widgetOptions.elementAt(_elements[_loginStatesProvider.stateName]!);
-    return _widgetOptions.elementAt(0);
+
+    return _widgetOptions.elementAt(_elements[_loginStatesProvider.stateName]!);
+    // return _widgetOptions.elementAt(elementIndex);
   }
 }

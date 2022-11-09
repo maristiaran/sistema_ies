@@ -1,5 +1,5 @@
 import "package:firebase_core/firebase_core.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
+// import "package:hooks_riverpod/hooks_riverpod.dart";
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
@@ -58,28 +58,32 @@ class IESSystem extends Operation {
     return _rolesAndOperationsRepository!;
   }
 
-  initializeStatesAndStateNotifier() {
-    OperationStateNotifier newStateNotifier = (OperationStateNotifier(
-        initialState:
-            const OperationState(stateName: IESSystemStateName.home)));
-    stateNotifierProvider =
-        StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
-      return newStateNotifier;
-    });
-    stateNotifier = newStateNotifier;
+  // initializeStatesAndStateNotifier() {
+  //   OperationStateNotifier newStateNotifier = (OperationStateNotifier(
+  //       initialState:
+  //           const OperationState(stateName: IESSystemStateName.home)));
+  //   stateNotifierProvider =
+  //       StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
+  //     return newStateNotifier;
+  //   });
+  //   stateNotifier = newStateNotifier;
+  // }
+  @override
+  OperationState initializeUseCase() {
+    return const OperationState(stateName: IESSystemStateName.login);
   }
 
   initializeIESSystem() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    initializeStatesAndStateNotifier();
+    // initializeStatesAndStateNotifier();
     await startLogin();
   }
 
   startLogin() {
     loginUseCase = LoginUseCase();
-    // loginUseCase.initializeUseCase();
+    print("start login");
     changeState(const OperationState(stateName: IESSystemStateName.login));
   }
 

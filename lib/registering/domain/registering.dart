@@ -12,7 +12,7 @@ enum RegisteringStateName {
   verificationEmailSent
 }
 
-class RegisteringUseCase extends UseCase {
+class RegisteringUseCase extends Operation {
   List<Syllabus> syllabuses = [];
   Syllabus? currentSyllabus;
   Timer? _timer;

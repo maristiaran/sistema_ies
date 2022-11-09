@@ -34,7 +34,7 @@ class HomeState extends OperationState {
 }
 
 // AUTORIZATION
-class HomeUseCase extends UseCase<HomeState> {
+class HomeUseCase extends Operation<HomeState> {
   //Accessors
   // late List<Syllabus> syllabuses;
   // late Syllabus currentSyllabus;

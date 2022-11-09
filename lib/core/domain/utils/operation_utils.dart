@@ -27,13 +27,16 @@ abstract class Operation<T extends OperationState> {
   late StateNotifierProvider<OperationStateNotifier<T>, T>
       stateNotifierProvider;
 
+  Operation() {
+    currentState = initializeUseCase();
+    initializeStateNotifierProvider(currentState);
+  }
+
   changeState(T newOperationState) {
     currentState = newOperationState;
     stateNotifier.notifyStateChange(newOperationState);
   }
-}
 
-abstract class UseCase<T extends OperationState> extends Operation<T> {
   T initializeUseCase();
 
   initializeStateNotifierProvider(T initialState) {
@@ -44,9 +47,5 @@ abstract class UseCase<T extends OperationState> extends Operation<T> {
       return newStateNotifier;
     });
     stateNotifier = newStateNotifier;
-  }
-
-  UseCase() {
-    initializeStateNotifierProvider(initializeUseCase());
   }
 }

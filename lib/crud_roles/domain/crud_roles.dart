@@ -14,7 +14,7 @@ import 'package:sistema_ies/registering/domain/registering.dart';
 enum CRUDRoleState { initial, failure, addedRole, removedRole }
 
 // AUTORIZATION
-class CRUDRoleUseCase extends UseCase {
+class CRUDRoleUseCase extends Operation {
   // Use cases
   late LoginUseCase loginUseCase;
   late RegisteringUseCase registeringUseCase;

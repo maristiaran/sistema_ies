@@ -34,7 +34,7 @@ class LoginState extends OperationState {
 }
 
 // LOGIN USE CASE
-class LoginUseCase extends UseCase<LoginState> {
+class LoginUseCase extends Operation<LoginState> {
 //Auth Use Case initialization
   LoginUseCase() : super();
 
@@ -65,11 +65,13 @@ class LoginUseCase extends UseCase<LoginState> {
         .getUsersRepository()
         .signInUsingEmailAndPassword(email: userEmail, password: password)
         .then((signInResponse) => signInResponse.fold((failure) {
+              print("A");
               if (failure.failureName ==
                   UsersRepositoryFailureName.notVerifiedEmail) {
                 changeState(currentState.copyChangingState(
                     newState: LoginStateName.emailNotVerifiedFailure));
               } else {
+                print("B");
                 changeState(currentState.copyChangingState(
                     newState: LoginStateName.failure));
               }
