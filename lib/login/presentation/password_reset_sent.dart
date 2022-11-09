@@ -2,20 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
 Widget passwordResetSent(context) {
+  const bannerProfileImage = AssetImage("lib/core/assets/images/tick.jpg");
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width / 2,
           decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("lib/core/assets/images/ok_tick.png"))),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: bannerProfileImage,
+            ),
+          ),
+          width: 220,
+          height: 220,
+        ),
+        const SizedBox(
+          height: 50,
+        ),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Text(
+            "Se ha recuperado la contraseña.",
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        const SizedBox(
+          height: 50,
         ),
         Container(
-          constraints: const BoxConstraints(maxHeight: 100, maxWidth: 300),
-          width: MediaQuery.of(context).size.width / 0.5,
+          height: 50,
+          width: 300,
           decoration: const BoxDecoration(
               color: Color.fromARGB(255, 36, 110, 221),
               borderRadius: BorderRadius.all(Radius.circular(10))),

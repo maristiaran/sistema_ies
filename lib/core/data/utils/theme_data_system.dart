@@ -30,6 +30,11 @@ mixin ThemeDataSW implements ThemeData {
           fontSize: 12.0,
           fontFamily: 'Roboto',
           color: Color.fromARGB(255, 255, 255, 255)),
+      bodyText1: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'Roboto',
+          color: Color.fromARGB(255, 28, 28, 28)),
       bodyText2: TextStyle(fontSize: 14.0),
     ),
   );
