@@ -72,7 +72,6 @@ class RecoveryPassPage extends ConsumerWidget {
                                         content: Text(
                                             "Ha ocurrido un error. Por favor intentelo de nuevo más tarde")));
                               }
-                              print(_loginStatesProvider.stateName);
                             },
                             child: const Text(
                               'Recuperar contraseña',
