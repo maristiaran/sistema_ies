@@ -47,6 +47,7 @@ class LoginUseCase extends Operation<LoginState> {
   }
 
   Future signIn(String userDNIOrEmail, String password) async {
+    // Is necessary? Validations are done in forms
     if (userDNIOrEmail == "") {
       changeState(
           currentState.copyChangingState(newState: LoginStateName.failure));

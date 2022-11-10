@@ -4,8 +4,8 @@ import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 
-class LoginPageMain extends ConsumerWidget {
-  LoginPageMain({Key? key}) : super(key: key);
+class LoginPage extends ConsumerWidget {
+  LoginPage({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 

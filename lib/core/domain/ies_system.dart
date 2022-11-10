@@ -2,6 +2,7 @@ import "package:firebase_core/firebase_core.dart";
 // import "package:hooks_riverpod/hooks_riverpod.dart";
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
+import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
@@ -11,8 +12,15 @@ import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/home/domain/home.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
+import 'package:sistema_ies/studentrecord/domain/student_record.dart';
 
-enum IESSystemStateName { login, home, registering, recoverypass }
+enum IESSystemStateName {
+  login,
+  home,
+  registering,
+  recoverypass,
+  studentrecord
+}
 
 // class IESSystemState extends OperationState {
 //   IESSystemState({required IESSystemStateName  stateName}):super(stateName: stateName);
@@ -26,12 +34,14 @@ class IESSystem extends Operation {
   UsersRepositoryPort? _usersRepository;
   SyllabusesRepositoryPort? _syllabusesRepository;
   RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
+  StudentRecordRepositoryPort? _studentRecordRepository;
 
   // Use cases
   late LoginUseCase loginUseCase;
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
   late CRUDRoleUseCase crudRolesUseCase;
+  late StudentRecordUseCase studentRecordUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -56,6 +66,11 @@ class IESSystem extends Operation {
     }
 
     return _rolesAndOperationsRepository!;
+  }
+
+  StudentRecordRepositoryPort? getStudentRecordRepository() {
+    _studentRecordRepository ??= studentRecordFakeDatasource;
+    return _studentRecordRepository;
   }
 
   // initializeStatesAndStateNotifier() {
@@ -103,6 +118,12 @@ class IESSystem extends Operation {
   restartLogin() {
     changeState(const OperationState(stateName: IESSystemStateName.login));
     // loginUseCase.initLogin();
+  }
+
+  startStudentRecord(IESUser userLogged) {
+    studentRecordUseCase = StudentRecordUseCase(currentIESUser: userLogged);
+    changeState(
+        const OperationState(stateName: IESSystemStateName.studentrecord));
   }
 
   onCurrentUserLogout() {}
