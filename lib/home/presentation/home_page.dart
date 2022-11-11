@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/studentrecord/presentation/studentrecord_main_page.dart';
 
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:sistema_ies/application/ies_system.dart';
@@ -27,9 +28,7 @@ class HomePage extends ConsumerWidget {
                 .startStudentRecord(IESSystem().homeUseCase.currentIESUser),
             child: const Text("StudentRecord")),
       ),
-      const Text(
-        'Index 1: Trayecto estudiantil',
-      ),
+      const StudentRecordMainPage(),
       const Text(
         'Index 2: Calendario',
       ),

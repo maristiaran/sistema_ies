@@ -126,5 +126,9 @@ class IESSystem extends Operation {
         const OperationState(stateName: IESSystemStateName.studentrecord));
   }
 
+  startStudentRecordFromHome(IESUser userLogged) {
+    studentRecordUseCase = StudentRecordUseCase(currentIESUser: userLogged);
+  }
+
   onCurrentUserLogout() {}
 }
