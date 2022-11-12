@@ -24,8 +24,13 @@ class HomePage extends ConsumerWidget {
     final List<Widget> _widgetOptions = <Widget>[
       Center(
         child: TextButton(
-            onPressed: () => IESSystem()
-                .startStudentRecord(IESSystem().homeUseCase.currentIESUser),
+            onPressed: () {
+              IESSystem()
+                  .startStudentRecord(IESSystem().homeUseCase.currentIESUser);
+              IESSystem()
+                  .studentRecordUseCase
+                  .setAsLoading(IESSystem().homeUseCase.currentIESUser);
+            },
             child: const Text("StudentRecord")),
       ),
       const StudentRecordMainPage(),

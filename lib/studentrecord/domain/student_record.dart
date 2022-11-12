@@ -1,6 +1,4 @@
-import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
-import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
@@ -12,46 +10,34 @@ enum StudentRecordStateName {
 }
 
 class StudentRecordState extends OperationState {
-  final IESUser currentUser;
-  final StudentRecord? studentRecord;
-  const StudentRecordState(this.currentUser, this.studentRecord,
-      {required Enum stateName})
+  final IESUser currentIESUser;
+  // final IESUser? currentIESUserRole;
+
+  const StudentRecordState({required this.currentIESUser, required stateName})
       : super(stateName: stateName);
-  StudentRecordState copyNewState(
-      {required StudentRecordStateName newState,
-      required StudentRecord? studentRecord}) {
-    return StudentRecordState(currentUser, studentRecord, stateName: stateName);
+
+  StudentRecordState copyNewState({required StudentRecordStateName newState}) {
+    return StudentRecordState(
+        currentIESUser: currentIESUser, stateName: newState);
   }
 }
 
-class StudentRecordUseCase extends Operation<StudentRecordState> {
-  final IESUser currentIESUser;
-
-  StudentRecordUseCase({required this.currentIESUser});
+// LOGIN USE CASE
+class StudentRecordUsecase extends Operation<StudentRecordState> {
+  List<StudentRecord> currentStudentRecords = [];
+  IESUser currentIESUser;
+//Auth Use Case initialization
+  StudentRecordUsecase({required this.currentIESUser}) : super();
 
   @override
   StudentRecordState initializeUseCase() {
-    return StudentRecordState(currentIESUser, null,
-        stateName: StudentRecordStateName.init);
+    return StudentRecordState(
+        currentIESUser: currentIESUser, stateName: StudentRecordStateName.init);
   }
 
-  // Define methods here //
-  /////////////////////////
-  getStudentRecords(currentIESUser, syllabusId) async {
-    changeState(currentState.copyNewState(
-        newState: StudentRecordStateName.loading, studentRecord: null));
-    await IESSystem()
-        .getStudentRecordRepository()
-        ?.getStudentRecord(syllabusId, currentIESUser)
-        .fold(
-            (left) => changeState(currentState.copyNewState(
-                newState: StudentRecordStateName.failure, studentRecord: null)),
-            (right) => {
-                  changeState(currentState.copyNewState(
-                      newState:
-                          StudentRecordStateName.studentRecordGetSuccesfully,
-                      studentRecord: right))
-                });
+  void setAsLoading(currentIESUser) {
+    changeState(
+        currentState.copyNewState(newState: StudentRecordStateName.loading));
   }
   /////////////////////////
 }

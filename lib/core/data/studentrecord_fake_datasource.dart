@@ -13,4 +13,13 @@ class StudentRecordFakeDatasource implements StudentRecordRepositoryPort {
   Future<Either<Failure, Success>> initRepositoryCaches() async {
     return Right(Success('ok'));
   }
+
+  @override
+  Future<Either<Failure, List<StudentRecord>>> getAllStudentRecord() async {
+    List<StudentRecord> careers = [
+      StudentRecord(name: "Computacion y redes"),
+      StudentRecord(name: "Desarrollo de software")
+    ];
+    return Right(careers);
+  }
 }

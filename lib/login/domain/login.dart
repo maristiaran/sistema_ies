@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
@@ -47,12 +45,7 @@ class LoginUseCase extends Operation<LoginState> {
   }
 
   Future signIn(String userDNIOrEmail, String password) async {
-    // Is necessary? Validations are done in forms
-    if (userDNIOrEmail == "") {
-      changeState(
-          currentState.copyChangingState(newState: LoginStateName.failure));
-      return null;
-    }
+    var response;
     String userEmail = userDNIOrEmail;
     if (!userDNIOrEmail.contains('@')) {
       await IESSystem()
@@ -63,6 +56,7 @@ class LoginUseCase extends Operation<LoginState> {
                       newState: LoginStateName.failure)), (iesUser) {
                 userEmail = iesUser.email;
               }));
+      response = LoginStateName.failure;
     }
     await IESSystem()
         .getUsersRepository()
@@ -72,16 +66,21 @@ class LoginUseCase extends Operation<LoginState> {
                   UsersRepositoryFailureName.notVerifiedEmail) {
                 changeState(currentState.copyChangingState(
                     newState: LoginStateName.emailNotVerifiedFailure));
+                response = LoginStateName.emailNotVerifiedFailure;
               } else {
                 changeState(currentState.copyChangingState(
                     newState: LoginStateName.failure));
+                response = LoginStateName.failure;
               }
             }, (iesUser) {
               changeState(LoginState(
                   currentIESUserIfAny: iesUser,
                   stateName: LoginStateName.successfullySignIn));
               IESSystem().onUserLogged(iesUser);
+              response = LoginStateName.successfullySignIn;
             }));
+
+    return response;
   }
 
   Future reSendEmailVerification() async {

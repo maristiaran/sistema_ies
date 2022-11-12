@@ -22,7 +22,9 @@ class StudentRecordMainPage extends ConsumerWidget {
     };
     final List<Widget> _widgetOptions = <Widget>[
       StudentRecordPage(),
-      StudentRecordPage(),
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
       StudentRecordPage(),
       StudentRecordPage(),
     ];

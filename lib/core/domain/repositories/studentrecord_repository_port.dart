@@ -5,6 +5,7 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 abstract class StudentRecordRepositoryPort extends RepositoryPort {
   Future<Either<Failure, StudentRecord>> getStudentRecord(
       currentIESUser, syllabusId);
+  Future<Either<Failure, List<StudentRecord>>> getAllStudentRecord();
 }
 
 class StudentRecord {

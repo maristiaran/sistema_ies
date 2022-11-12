@@ -1,5 +1,4 @@
 import "package:firebase_core/firebase_core.dart";
-// import "package:hooks_riverpod/hooks_riverpod.dart";
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
@@ -41,7 +40,7 @@ class IESSystem extends Operation {
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
   late CRUDRoleUseCase crudRolesUseCase;
-  late StudentRecordUseCase studentRecordUseCase;
+  late StudentRecordUsecase studentRecordUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -121,13 +120,13 @@ class IESSystem extends Operation {
   }
 
   startStudentRecord(IESUser userLogged) {
-    studentRecordUseCase = StudentRecordUseCase(currentIESUser: userLogged);
+    studentRecordUseCase = StudentRecordUsecase(currentIESUser: userLogged);
     changeState(
         const OperationState(stateName: IESSystemStateName.studentrecord));
   }
 
   startStudentRecordFromHome(IESUser userLogged) {
-    studentRecordUseCase = StudentRecordUseCase(currentIESUser: userLogged);
+    studentRecordUseCase = StudentRecordUsecase(currentIESUser: userLogged);
   }
 
   onCurrentUserLogout() {}
