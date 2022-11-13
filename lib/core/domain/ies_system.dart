@@ -36,11 +36,11 @@ class IESSystem extends Operation {
   StudentRecordRepositoryPort? _studentRecordRepository;
 
   // Use cases
+  late StudentRecordUseCase studentRecordUseCase;
   late LoginUseCase loginUseCase;
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
   late CRUDRoleUseCase crudRolesUseCase;
-  late StudentRecordUsecase studentRecordUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -119,14 +119,11 @@ class IESSystem extends Operation {
     // loginUseCase.initLogin();
   }
 
-  startStudentRecord(IESUser userLogged) {
-    studentRecordUseCase = StudentRecordUsecase(currentIESUser: userLogged);
+  startStudentRecord(IESUser userLogged) async {
+    studentRecordUseCase = StudentRecordUseCase(currentIESUser: userLogged);
+    IESSystem().studentRecordUseCase.getStudentRecord();
     changeState(
         const OperationState(stateName: IESSystemStateName.studentrecord));
-  }
-
-  startStudentRecordFromHome(IESUser userLogged) {
-    studentRecordUseCase = StudentRecordUsecase(currentIESUser: userLogged);
   }
 
   onCurrentUserLogout() {}

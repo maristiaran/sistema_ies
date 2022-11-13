@@ -27,13 +27,10 @@ class HomePage extends ConsumerWidget {
             onPressed: () {
               IESSystem()
                   .startStudentRecord(IESSystem().homeUseCase.currentIESUser);
-              IESSystem()
-                  .studentRecordUseCase
-                  .setAsLoading(IESSystem().homeUseCase.currentIESUser);
             },
             child: const Text("StudentRecord")),
       ),
-      const StudentRecordMainPage(),
+      const Text("StudentRecord"),
       const Text(
         'Index 2: Calendario',
       ),

@@ -12,26 +12,30 @@ class StudentRecordMainPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    IESSystem()
-        .startStudentRecordFromHome(IESSystem().homeUseCase.currentIESUser);
     final _elements = {
       StudentRecordStateName.init: 0,
       StudentRecordStateName.loading: 1,
+      StudentRecordStateName.studentRecordGetSuccesfully: 0,
       StudentRecordStateName.failure: 2,
-      StudentRecordStateName.studentRecordGetSuccesfully: 3,
     };
     final List<Widget> _widgetOptions = <Widget>[
-      StudentRecordPage(),
+      const StudentRecordPage(),
       const Center(
         child: CircularProgressIndicator(),
       ),
-      StudentRecordPage(),
-      StudentRecordPage(),
     ];
     final _currentStudentRecordState =
         ref.watch(IESSystem().studentRecordUseCase.stateNotifierProvider);
-    return _widgetOptions
-        .elementAt(_elements[_currentStudentRecordState.stateName]!);
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => IESSystem().studentRecordUseCase.returnToHome(),
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+      ),
+      body: _widgetOptions
+          .elementAt(_elements[_currentStudentRecordState.stateName]!),
+    );
   }
 }
 // _currentStudentRecordState.studentRecord != null? _currentStudentRecordState.studentRecord!.name

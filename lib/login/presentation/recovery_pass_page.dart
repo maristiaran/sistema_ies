@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/domain/login.dart';
-import 'package:sistema_ies/login/presentation/password_reset_sent.dart';
 
 class RecoveryPassPage extends ConsumerWidget {
   RecoveryPassPage({Key? key}) : super(key: key);

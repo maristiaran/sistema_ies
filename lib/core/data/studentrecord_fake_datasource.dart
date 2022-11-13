@@ -4,8 +4,7 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 class StudentRecordFakeDatasource implements StudentRecordRepositoryPort {
   @override
-  Future<Either<Failure, StudentRecord>> getStudentRecord(
-      currentIESUser, syllabusId) async {
+  Future<Either<Failure, StudentRecord>> getStudentRecord() async {
     return Right(StudentRecord(name: "Brian"));
   }
 

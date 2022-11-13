@@ -1,4 +1,5 @@
 import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
@@ -11,33 +12,59 @@ enum StudentRecordStateName {
 
 class StudentRecordState extends OperationState {
   final IESUser currentIESUser;
-  // final IESUser? currentIESUserRole;
-
-  const StudentRecordState({required this.currentIESUser, required stateName})
+  const StudentRecordState({required stateName, required this.currentIESUser})
       : super(stateName: stateName);
 
-  StudentRecordState copyNewState({required StudentRecordStateName newState}) {
+  StudentRecordState copyChangingState(
+      {required StudentRecordStateName newState}) {
     return StudentRecordState(
         currentIESUser: currentIESUser, stateName: newState);
   }
 }
 
-// LOGIN USE CASE
-class StudentRecordUsecase extends Operation<StudentRecordState> {
+class StudentRecordUseCase extends Operation<StudentRecordState> {
+  //Accessors
+  final IESUser currentIESUser;
   List<StudentRecord> currentStudentRecords = [];
-  IESUser currentIESUser;
-//Auth Use Case initialization
-  StudentRecordUsecase({required this.currentIESUser}) : super();
 
+//Auth Use Case initialization
+  StudentRecordUseCase({required this.currentIESUser});
   @override
   StudentRecordState initializeUseCase() {
     return StudentRecordState(
         currentIESUser: currentIESUser, stateName: StudentRecordStateName.init);
   }
 
-  void setAsLoading(currentIESUser) {
-    changeState(
-        currentState.copyNewState(newState: StudentRecordStateName.loading));
+  void addNewStudentRecord(List<StudentRecord> studentRecordGot) {
+    currentStudentRecords = studentRecordGot;
+  }
+
+  void setAsLoading() {
+    changeState(currentState.copyChangingState(
+        newState: StudentRecordStateName.loading));
+  }
+
+  Future getStudentRecord() async {
+    var response;
+    setAsLoading();
+    await IESSystem()
+        .getStudentRecordRepository()
+        ?.getAllStudentRecord()
+        .then((value) => value.fold((failure) {
+              response = StudentRecordStateName.failure;
+            }, (studentRecord) {
+              changeState(StudentRecordState(
+                  currentIESUser: currentIESUser,
+                  stateName:
+                      StudentRecordStateName.studentRecordGetSuccesfully));
+              addNewStudentRecord(studentRecord);
+              response = StudentRecordStateName.studentRecordGetSuccesfully;
+            }));
+    return response;
+  }
+
+  returnToHome() {
+    IESSystem().onUserLogged(currentIESUser);
   }
   /////////////////////////
 }
