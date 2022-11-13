@@ -1,8 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/studentrecord/presentation/studentrecord_detail_page.dart';
+import 'package:sistema_ies/studentrecord/presentation/widget/dropdown_button_studentrecord_w.dart';
+import 'package:sistema_ies/studentrecord/presentation/widget/user_info_w.dart';
 
 final studentRecords = IESSystem().studentRecordUseCase.currentStudentRecords;
 final studentRecordItems =
@@ -27,12 +30,9 @@ class StudentRecordPage extends ConsumerWidget {
       body: Center(
           child: Column(
         children: [
-          DropdownButton<StudentRecord>(
-              value: ref.watch(dropDownValueProvider),
-              onChanged: (StudentRecord? value) {
-                ref.read(dropDownValueProvider.notifier).state = value!;
-              },
-              items: studentRecordItems),
+          userInfoBar(IESSystem().studentRecordUseCase.currentIESUser, context),
+          dropDownButtonStudentRecord(
+              studentRecordItems, ref, dropDownValueProvider),
           StudentRecordDetailsPage(
             studentRecord: ref.watch(dropDownValueProvider),
           )
@@ -40,12 +40,4 @@ class StudentRecordPage extends ConsumerWidget {
       )),
     );
   }
-}
-
-Widget dropDownButon(ref, dropDownValueProvider, items) {
-  return DropdownButton<StudentRecord>(
-      value: ref.watch(dropDownValueProvider),
-      onChanged: (value) =>
-          ref.read(dropDownValueProvider.notifier).state = value!,
-      items: items);
 }
