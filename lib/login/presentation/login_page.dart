@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 
@@ -14,8 +15,19 @@ class LoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _loginStatesProvider =
-        ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
+    ref.listen<OperationState>(IESSystem().loginUseCase.stateNotifierProvider,
+        (previous, next) {
+      if (next.stateName == LoginStateName.failure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).colorScheme.error,
+            content: const Text("Usuario o contraseñas incorrecta")));
+      } else if (next.stateName == LoginStateName.emailNotVerifiedFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            content: const Text(
+                "Su email no ha sido verificado aún. Revise si casilla de correos por favor")));
+      }
+    });
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -64,35 +76,9 @@ class LoginPage extends ConsumerWidget {
                         child: TextButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              await IESSystem()
-                                  .loginUseCase
-                                  .signIn(_emailTextController.text.trim(),
-                                      _passwordTextController.text.trim())
-                                  .then((value) {
-                                if (value == LoginStateName.failure) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .error,
-                                          content: const Text(
-                                              "Usuario o contraseña incorrecta. Inténtelo de nuevo por favor")));
-                                } else if (value ==
-                                    LoginStateName.emailNotVerifiedFailure) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          content: const Text(
-                                              "Su email no ha sido verificado aún. Revise si casilla de correos por favor")));
-                                }
-                              });
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text("Completa todos los campos")));
+                              await IESSystem().loginUseCase.signIn(
+                                  _emailTextController.text.trim(),
+                                  _passwordTextController.text.trim());
                             }
                           },
                           child: const Text(

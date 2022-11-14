@@ -32,6 +32,43 @@ class PanelStateNotifier extends ChangeNotifier {
   }
 }
 
+@immutable
+class PanelState {
+  final List<bool> panelStates = [];
+  PanelState remove() {
+    for (var i = 0; i < panelStates.length; i++) {
+      panelStates[i] = false;
+    }
+    return PanelState();
+  }
+
+  PanelState add(length) {
+    for (var i = 0; i < length; i++) {
+      panelStates[i] = false;
+    }
+    return PanelState();
+  }
+
+  PanelState toggle(int index) {
+    for (var i = 0; i < panelStates.length; i++) {
+      if (i == index) {
+        panelStates[i] = !panelStates[i];
+      } else {
+        panelStates[i] = false;
+      }
+    }
+    return PanelState();
+  }
+}
+
+class PanelNotifier extends StateNotifier<PanelState> {
+  PanelNotifier() : super(PanelState());
+}
+
+StateNotifierProvider<PanelNotifier, PanelState> panelStateNotifier =
+    StateNotifierProvider<PanelNotifier, PanelState>(
+        ((ref) => PanelNotifier()));
+
 final todosProvider = ChangeNotifierProvider<PanelStateNotifier>((ref) {
   return PanelStateNotifier();
 });
