@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
+import 'package:sistema_ies/core/domain/entities/student_record.dart';
 
 DropdownButton<StudentRecord> dropDownButtonStudentRecord(
     studentRecordItems, WidgetRef ref, dropDownValueProvider) {

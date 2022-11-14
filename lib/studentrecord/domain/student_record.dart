@@ -1,3 +1,4 @@
+import 'package:sistema_ies/core/domain/entities/student_record.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';

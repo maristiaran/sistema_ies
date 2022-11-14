@@ -1,8 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/entities/student_record.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/studentrecord/presentation/studentrecord_detail_page.dart';
 import 'package:sistema_ies/studentrecord/presentation/widget/dropdown_button_studentrecord_w.dart';
 import 'package:sistema_ies/studentrecord/presentation/widget/user_info_w.dart';
