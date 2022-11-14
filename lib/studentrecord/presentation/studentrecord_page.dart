@@ -32,8 +32,12 @@ class StudentRecordPage extends ConsumerWidget {
           userInfoBar(IESSystem().studentRecordUseCase.currentIESUser, context),
           dropDownButtonStudentRecord(
               studentRecordItems, ref, dropDownValueProvider),
-          StudentRecordDetailsPage(
-            studentRecord: ref.watch(dropDownValueProvider),
+          Container(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            child: StudentRecordDetailsPage(
+              studentRecord: ref.watch(dropDownValueProvider),
+            ),
           )
         ],
       )),

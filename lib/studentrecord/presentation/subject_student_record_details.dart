@@ -45,10 +45,6 @@ class SubjectDetails extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final subjectMovements = subjectSR.movements;
 
-    /* for (var i = 0; i < subjectMovements.length; i++) {
-      ref.read(todosProvider.notifier).add(false);
-    } */
-
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -58,23 +54,29 @@ class SubjectDetails extends ConsumerWidget {
             Container(
               width: MediaQuery.of(context).size.width / 2,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [Text("Materia ${subjectSR.name}")],
               ),
             ),
-            ExpansionPanelList(
-              expansionCallback: (panelIndex, isExpanded) {
-                ref.read(todosProvider.notifier).toggle(panelIndex);
-              },
-              children: subjectMovements.map((MovementStudentRecord value) {
-                return ExpansionPanel(
-                    headerBuilder: (context, isExpanded) {
-                      return Text("Cursado ${value.year} ");
-                    },
-                    body: Text("Nota: ${value.nota}"),
-                    isExpanded: ref
-                        .watch(todosProvider)
-                        .panelStates[subjectMovements.indexOf(value)]);
-              }).toList(),
+            Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width / 2),
+              child: ExpansionPanelList(
+                expansionCallback: (panelIndex, isExpanded) {
+                  ref.read(todosProvider.notifier).toggle(panelIndex);
+                },
+                children: subjectMovements.map((MovementStudentRecord value) {
+                  return ExpansionPanel(
+                      headerBuilder: (context, isExpanded) {
+                        return Text("Cursado ${value.year} ");
+                      },
+                      body: Text("Nota: ${value.nota}"),
+                      isExpanded: ref
+                          .watch(todosProvider)
+                          .panelStates[subjectMovements.indexOf(value)]);
+                }).toList(),
+              ),
             )
           ],
         ),
