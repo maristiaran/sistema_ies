@@ -1,5 +1,3 @@
-import 'package:sistema_ies/core/domain/entities/syllabus.dart';
-
 class StudentRecord {
   String name;
   List<SubjectSR> subjects = [];

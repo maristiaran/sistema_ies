@@ -14,7 +14,8 @@ enum LoginStateName {
   successfullySignIn,
   passwordResetSent,
   recoverypass,
-  verificationEmailSent
+  verificationEmailSent,
+  loading
 }
 
 class LoginState extends OperationState {
@@ -47,6 +48,8 @@ class LoginUseCase extends Operation<LoginState> {
   Future signIn(String userDNIOrEmail, String password) async {
     var response;
     String userEmail = userDNIOrEmail;
+    changeState(
+        currentState.copyChangingState(newState: LoginStateName.loading));
     if (!userDNIOrEmail.contains('@')) {
       await IESSystem()
           .getUsersRepository()
@@ -96,6 +99,7 @@ class LoginUseCase extends Operation<LoginState> {
   }
 
   void startRegisteringIncomingUser() async {
+    /*  */
     IESSystem().startRegisteringNewUser();
   }
 

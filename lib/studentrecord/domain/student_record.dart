@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/student_record.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
 enum StudentRecordStateName {
@@ -68,4 +69,32 @@ class StudentRecordUseCase extends Operation<StudentRecordState> {
     IESSystem().onUserLogged(currentIESUser);
   }
   /////////////////////////
+}
+
+@immutable
+class PanelState {
+  final List<bool> panelState;
+  const PanelState({required this.panelState});
+}
+
+class PanelNotifier extends StateNotifier<PanelState> {
+  PanelNotifier() : super(const PanelState(panelState: [true, false, false]));
+  init() {
+    state = const PanelState(panelState: [true, false, false]);
+  }
+
+  toggle(index) {
+    List<bool> newList = [];
+    for (var x = 0; x < state.panelState.length; x++) {
+      newList.add(false);
+    }
+    for (var i = 0; i < newList.length; i++) {
+      if (i == index) {
+        newList[i] = !state.panelState[i];
+      } else {
+        newList[i] = false;
+      }
+    }
+    state = PanelState(panelState: newList);
+  }
 }

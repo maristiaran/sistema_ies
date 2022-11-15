@@ -109,7 +109,6 @@ class IESSystem extends Operation {
 
   startRegisteringNewUser() {
     registeringUseCase = RegisteringUseCase();
-    // registeringUseCase.initializeUseCase();
     changeState(
         const OperationState(stateName: IESSystemStateName.registering));
   }

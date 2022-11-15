@@ -20,7 +20,7 @@ class StudentRecordDetailsPage extends ConsumerWidget {
                   studentRecord.subjects[index].name,
                 ),
                 onTap: () {
-                  ref.read(todosProvider.notifier).remove();
+                  ref.read(panelStateNotifier.notifier).init();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
