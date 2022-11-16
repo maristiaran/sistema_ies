@@ -24,5 +24,7 @@ class SubjectSR {
 class MovementStudentRecord {
   String nota;
   String year;
-  MovementStudentRecord({required this.nota, required this.year});
+  String isApproved;
+  MovementStudentRecord(
+      {required this.nota, required this.year, required this.isApproved});
 }

@@ -17,7 +17,7 @@ late final systemRouter = GoRouter(
     GoRoute(
         name: 'login',
         path: '/login',
-        builder: (context, state) => const LoginPageMain(),
+        builder: (context, state) => LoginPageMain(),
         routes: [
           GoRoute(
             name: 'registering',

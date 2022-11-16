@@ -33,8 +33,8 @@ class StudentRecordPage extends ConsumerWidget {
           dropDownButtonStudentRecord(
               studentRecordItems, ref, dropDownValueProvider),
           Container(
-            constraints:
-                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            constraints: BoxConstraints(
+                maxWidth: (MediaQuery.of(context).size.width / 10) * 9),
             child: StudentRecordDetailsPage(
               studentRecord: ref.watch(dropDownValueProvider),
             ),

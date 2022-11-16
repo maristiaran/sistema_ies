@@ -28,20 +28,20 @@ class StudentRecordFakeDatasource implements StudentRecordRepositoryPort {
     SubjectSR subjectSof2 = SubjectSR(name: "Base de datos I");
     SubjectSR subjectSof3 = SubjectSR(name: "Práctica profesionalizante I");
 
-    subjectSof1
-        .addMovementsToSubject(MovementStudentRecord(nota: "10", year: '2022'));
-    subjectSof1
-        .addMovementsToSubject(MovementStudentRecord(nota: "8", year: '2021'));
-    subjectSof2
-        .addMovementsToSubject(MovementStudentRecord(nota: "10", year: '2022'));
-    subjectSof3
-        .addMovementsToSubject(MovementStudentRecord(nota: "10", year: '2022'));
-    subjectCyR1
-        .addMovementsToSubject(MovementStudentRecord(nota: "10", year: '2020'));
-    subjectCyR2
-        .addMovementsToSubject(MovementStudentRecord(nota: "10", year: '2020'));
-    subjectCyR3
-        .addMovementsToSubject(MovementStudentRecord(nota: "10", year: '2020'));
+    subjectSof1.addMovementsToSubject(
+        MovementStudentRecord(nota: "4", year: '2022', isApproved: "regular"));
+    subjectSof1.addMovementsToSubject(
+        MovementStudentRecord(nota: "8", year: '2021', isApproved: "approved"));
+    subjectSof2.addMovementsToSubject(MovementStudentRecord(
+        nota: "10", year: '2022', isApproved: "approved"));
+    subjectSof3.addMovementsToSubject(MovementStudentRecord(
+        nota: "3", year: '2022', isApproved: "desapproved"));
+    subjectCyR1.addMovementsToSubject(
+        MovementStudentRecord(nota: "5", year: '2020', isApproved: "regular"));
+    subjectCyR2.addMovementsToSubject(MovementStudentRecord(
+        nota: "10", year: '2020', isApproved: "approved"));
+    subjectCyR3.addMovementsToSubject(MovementStudentRecord(
+        nota: "2", year: '2020', isApproved: "desapproved"));
 
     career1.addSubjects(subjectSof1);
     career1.addSubjects(subjectSof2);

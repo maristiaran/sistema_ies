@@ -79,11 +79,15 @@ class PanelState {
 
 class PanelNotifier extends StateNotifier<PanelState> {
   PanelNotifier() : super(const PanelState(panelState: [true, false, false]));
-  init() {
-    state = const PanelState(panelState: [true, false, false]);
+  init(int index) {
+    List<bool> states = [];
+    for (var i = 0; i < index; i++) {
+      i == 0 ? states.add(true) : states.add(false);
+    }
+    state = PanelState(panelState: states);
   }
 
-  toggle(index) {
+  toggle(int index) {
     List<bool> newList = [];
     for (var x = 0; x < state.panelState.length; x++) {
       newList.add(false);
@@ -98,3 +102,7 @@ class PanelNotifier extends StateNotifier<PanelState> {
     state = PanelState(panelState: newList);
   }
 }
+
+StateNotifierProvider<PanelNotifier, PanelState> panelStateNotifier =
+    StateNotifierProvider<PanelNotifier, PanelState>(
+        ((ref) => PanelNotifier()));

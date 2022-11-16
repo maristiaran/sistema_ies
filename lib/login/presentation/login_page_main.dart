@@ -8,13 +8,9 @@ import 'package:sistema_ies/login/presentation/password_reset_sent.dart';
 import 'package:sistema_ies/login/presentation/recovery_pass_page.dart';
 
 class LoginPageMain extends ConsumerWidget {
-  const LoginPageMain({Key? key}) : super(key: key);
-
+  LoginPageMain({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _loginStatesProvider =
-        ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
-    print(_loginStatesProvider.stateName.name);
     final List<Widget> _widgetOptions = <Widget>[
       LoginPage(),
       RecoveryPassPage(),
@@ -33,12 +29,14 @@ class LoginPageMain extends ConsumerWidget {
       LoginStateName.emailNotVerifiedFailure: 5,
       LoginStateName.verificationEmailSent: 6,
     };
+    final _loginStatesProvider =
+        ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
+
     ref.listen<OperationState>(IESSystem().loginUseCase.stateNotifierProvider,
         (previous, next) {
       if (previous!.stateName == LoginStateName.failure) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Theme.of(context).colorScheme.error,
-            content: const Text("Usuario o contraseñas incorrecta")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Usuario o contraseña incorrecta")));
       } else if (next.stateName == LoginStateName.emailNotVerifiedFailure) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).colorScheme.primary,

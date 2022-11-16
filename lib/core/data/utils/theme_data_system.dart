@@ -6,6 +6,7 @@ mixin ThemeDataSW implements ThemeData {
     appBarTheme:
         const AppBarTheme(backgroundColor: Color.fromARGB(255, 73, 145, 254)),
     colorScheme: ColorScheme.fromSeed(
+        outline: const Color.fromARGB(255, 27, 182, 61),
         primary: const Color.fromARGB(255, 81, 126, 240),
         secondary: const Color.fromARGB(255, 63, 63, 63),
         tertiary: const Color.fromARGB(255, 198, 198, 198),

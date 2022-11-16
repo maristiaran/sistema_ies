@@ -21,11 +21,12 @@ class AdminIESApp extends ConsumerWidget {
     systemRouter.goNamed(_iesSystemStatesProvider.stateName.name);
 
     return MaterialApp.router(
-        title: 'Flutter Authentication',
-        routeInformationParser: systemRouter.routeInformationParser,
-        routerDelegate: systemRouter.routerDelegate,
-        routeInformationProvider: systemRouter.routeInformationProvider,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeDataSW.themeDataSW);
+      title: 'Flutter Authentication',
+      routeInformationParser: systemRouter.routeInformationParser,
+      routerDelegate: systemRouter.routerDelegate,
+      routeInformationProvider: systemRouter.routeInformationProvider,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeDataSW.themeDataSW,
+    );
   }
 }
