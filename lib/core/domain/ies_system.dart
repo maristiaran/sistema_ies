@@ -83,7 +83,6 @@ class IESSystem extends Operation {
 
   startLogin() {
     loginUseCase = LoginUseCase();
-    print("start login");
     changeState(const OperationState(stateName: IESSystemStateName.login));
   }
 

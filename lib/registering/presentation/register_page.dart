@@ -3,9 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/datetime.dart';
 import 'package:sistema_ies/core/domain/utils/value_objects.dart';
-import 'package:sistema_ies/core/presentation/views_utils.dart';
 import 'package:sistema_ies/core/presentation/widgets/fields.dart';
-import 'package:sistema_ies/registering/domain/registering.dart';
 
 class RegisterPage extends ConsumerWidget {
   RegisterPage({Key? key}) : super(key: key);

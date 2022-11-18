@@ -31,15 +31,25 @@ class HomePage extends ConsumerWidget {
         'Index 2: Calendario',
       ),
       ListView.builder(
-          itemCount: _homeStatesProvider
-              .getCurrentUserRoleParameterizedOperations()
-              .length,
+          itemCount: _homeStatesProvider.getCurrentUserRoleOperations().length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-                title: Text(_homeStatesProvider
-                    .getCurrentUserRoleParameterizedOperations()[index]
-                    .operation
-                    .title));
+              title: TextButton(
+                onPressed: () async {
+                  print(_homeStatesProvider
+                      .getCurrentUserRoleOperations()[index]
+                      .name
+                      .name);
+                },
+                child: Text(
+                  _homeStatesProvider
+                      .getCurrentUserRoleOperations()[index]
+                      .title,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            );
           }),
     ];
     return Scaffold(

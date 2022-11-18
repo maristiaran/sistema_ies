@@ -15,12 +15,18 @@ class UserRoleType {
   // final IESUser user;
   UserRoleTypeName name;
   String title;
-  List<ParameretizedUserRoleOperation> parameterizedOperations;
+  List<UserRoleOperationName> operationNames;
 
   UserRoleType(
-      {required this.name,
-      required this.title,
-      required this.parameterizedOperations});
+      {required this.name, required this.title, required this.operationNames});
+
+  // operationTitles() {
+  //   RolesAndOperationsRepositoryPort operationsRepository =
+  //       IESSystem().getRolesAndOperationsRepository();
+  //   return operationNames
+  //       .map((op) => operationsRepository.getUserRoleOperations(this))
+  //       .toList();
+  // }
 }
 
 abstract class UserRole {

@@ -1,8 +1,10 @@
 // import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
 enum HomeStateName { init, calendar, selectingRole, selectingRoleOperation }
@@ -24,12 +26,11 @@ class HomeState extends OperationState {
     return currentRole.userRoleTypeName();
   }
 
-  List<ParameretizedUserRoleOperation>
-      getCurrentUserRoleParameterizedOperations() {
-    return IESSystem()
-        .getRolesAndOperationsRepository()
-        .getUserRoleType(getUserRoleTypeName())
-        .parameterizedOperations;
+  List<UserRoleOperation> getCurrentUserRoleOperations() {
+    RolesAndOperationsRepositoryPort operationsAndRolesRepo =
+        IESSystem().getRolesAndOperationsRepository();
+
+    return operationsAndRolesRepo.getUserRoleOperations(getUserRoleTypeName());
   }
 }
 
