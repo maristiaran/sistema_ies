@@ -13,4 +13,6 @@ abstract class SyllabusesRepositoryPort extends RepositoryPort {
   Future<Either<Failure, List<Syllabus>>>
       getSyllabusesByAdministrativeResolution(
           {required List<String> administrativeResolutions});
+
+  List<Syllabus> getAllSyllabuses();
 }

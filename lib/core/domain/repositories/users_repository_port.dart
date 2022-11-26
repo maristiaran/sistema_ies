@@ -1,4 +1,6 @@
 import 'package:either_dart/either.dart';
+import 'package:sistema_ies/core/domain/entities/course.dart';
+import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
@@ -40,4 +42,9 @@ abstract class UsersRepositoryPort extends RepositoryPort {
 
   Future<Either<Failure, Success>> removeUserRole(
       {required IESUser user, required UserRoleType userRole});
+
+  Either<Failure, Success> updateStudentEducationalRecord(
+      IESUser student, Syllabus syllabus, List<Course> updatedCourses);
+  Either<Failure, IESUser> registerAsIncomingStudent(
+      {required IESUser iesUser, required Syllabus syllabus});
 }

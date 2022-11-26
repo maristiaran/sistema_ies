@@ -1,8 +1,9 @@
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/utils/datetime.dart';
 
-IESUser fromJsonToIESUser(Map<String, dynamic> json) {
+IESUser fromJsonToIESUser(Map<String, dynamic> json, dynamic id) {
   return IESUser(
+      id: id,
       firstname: json['firstname'],
       surname: json['surname'],
       dni: json['dni'],

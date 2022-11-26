@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
-import 'package:sistema_ies/core/data/utils/iesuser_json_convertion.dart';
+// import 'package:sistema_ies/core/data/utils/iesuser_json_convertion.dart';
+import 'package:sistema_ies/core/domain/entities/course.dart';
+import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/datetime.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
@@ -34,71 +38,77 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   Future<Either<Failure, IESUser>> getIESUserByID(
       {required String idUser}) async {
     List<Map<String, dynamic>> docRoles;
-    try {
+    Future<IESUser> _getIESUserBasicInfo({required String idUser}) async {
       final DocumentSnapshot userDoc =
           (await firestoreInstance.collection("iesUsers").doc(idUser).get());
 
-      IESUser iesUser = (IESUser(
+      // print("----${userDoc.id}");
+      return (IESUser(
+          id: idUser,
           firstname: userDoc.get('firstname'),
           surname: userDoc.get('surname'),
           birthdate: stringToDate(userDoc.get('birthdate')),
           dni: userDoc.get('dni'),
           email: userDoc.get('email')));
-
-      try {
-        docRoles = (await firestoreInstance
-                .collection("iesUsers")
-                .doc(idUser)
-                .collection('roles')
-                .get())
-            .docs
-            .map((e) => e.data())
-            .toList();
-      } catch (e) {
-        docRoles = [];
-      }
-
-      for (Map<String, dynamic> docRole in docRoles) {
-        switch (docRole['userRoleName']) {
-          case 'student':
-            IESSystem()
-                .getSyllabusesRepository()
-                .getSyllabusesByAdministrativeResolution(
-                    administrativeResolutions: docRole['syllabuses'])
-                .fold((left) {
-              return left;
-            }, (right) {
-              iesUser.addRole(Student(syllabuses: right));
-            });
-
-            break;
-          case 'teacher':
-            iesUser.addRole(Teacher(subjects: docRole['subjects']));
-            break;
-          case 'administrative':
-            IESSystem()
-                .getSyllabusesRepository()
-                .getSyllabusesByAdministrativeResolution(
-                    administrativeResolutions: docRole['syllabuses'])
-                .fold((left) {
-              return left;
-            }, (right) {
-              iesUser.addRole(Administrative(syllabuses: right));
-            });
-
-            break;
-          case 'systemadmin':
-            iesUser.addRole(SystemAdmin());
-            break;
-          default:
-            iesUser.addRole(Manager());
-            break;
-        }
-      }
-      return Right(iesUser);
-    } catch (exception) {
-      return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
     }
+
+    // try {
+    IESUser iesUser = await _getIESUserBasicInfo(idUser: idUser);
+    try {
+      docRoles = (await firestoreInstance
+              .collection("iesUsers")
+              .doc(idUser)
+              .collection('roles')
+              .get())
+          .docs
+          .map((e) => e.data())
+          .toList();
+    } catch (e) {
+      docRoles = [];
+    }
+
+    for (Map<String, dynamic> docRole in docRoles) {
+      switch (docRole['userRoleName']) {
+        case 'student':
+          IESSystem()
+              .getSyllabusesRepository()
+              .getSyllabusesByAdministrativeResolution(
+                  administrativeResolutions: docRole['syllabuses'])
+              .fold((left) {
+            return left;
+          }, (right) {
+            iesUser.addRole(Student(syllabuses: right));
+          });
+
+          break;
+        case 'teacher':
+          iesUser.addRole(Teacher(subjects: docRole['subjects']));
+          break;
+        case 'administrative':
+          IESSystem()
+              .getSyllabusesRepository()
+              .getSyllabusesByAdministrativeResolution(
+                  administrativeResolutions: docRole['syllabuses'])
+              .fold((left) {
+            return left;
+          }, (right) {
+            iesUser.addRole(Administrative(syllabuses: right));
+          });
+
+          break;
+        case 'systemadmin':
+          iesUser.addRole(SystemAdmin());
+          break;
+        default:
+          iesUser.addRole(Manager());
+          break;
+      }
+    }
+    return Right(iesUser);
+    // } catch (exception) {
+    //   print(exception);
+    //   return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+    // }
   }
 
   @override
@@ -128,6 +138,9 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
         .docs;
 
     if (documentList.length == 1) {
+      // print(documentList.first.reference);
+      // print(documentList.first.id);
+
       return getIESUserByID(idUser: documentList.first.id);
     } else {
       return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
@@ -138,6 +151,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   Future<Either<Failure, IESUser>> signInUsingEmailAndPassword(
       {String? email, String? password}) async {
     try {
+      // print('$email - $password');
       UserCredential userCredential = await firestoreAuthInstance
           .signInWithEmailAndPassword(email: email!, password: password!);
       if (userCredential.user != null) {
@@ -153,7 +167,8 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
             failureName: UsersRepositoryFailureName.unknown,
             message: 'Usuario y/o contraseña incorrecto'));
       }
-    } on FirebaseAuthException {
+    } catch (failure) {
+      // print(failure);
       // String m = '';
       // if (e.message != null) {
       //   m = e.message!;
@@ -186,40 +201,46 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
       required String surname,
       required DateTime birthdate}) async {
     try {
-      IESUser? iesUser = await getIESUserByDNI(dni: dni)
-          .fold((failure) => null, (iesUser) => iesUser);
+      // IESUser? iesUser = await getIESUserByDNI(dni: dni)
+      //     .fold((failure) => null, (iesUser) => iesUser);
 
-      if (iesUser == null) {
-        UserCredential userCredential = await firestoreAuthInstance
-            .createUserWithEmailAndPassword(email: email, password: password);
-        if (userCredential.user != null) {
-          // final User user = userCredential.user!;
-          IESUser newIESUser = IESUser(
+      // if (iesUser == null) {
+      UserCredential userCredential = await firestoreAuthInstance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      if (userCredential.user != null) {
+        final usersCollectionRef = firestoreInstance.collection('iesUsers');
+        try {
+          final docRef = await usersCollectionRef.add(<String, dynamic>{
+            'firstname': firstname,
+            'surname': surname,
+            'birthdate': dateToString(birthdate),
+            'dni': dni,
+            'email': email
+          });
+          userCredential.user!.sendEmailVerification();
+
+          return Right(IESUser(
+              id: docRef.id,
               firstname: firstname,
               surname: surname,
               birthdate: birthdate,
               dni: dni,
-              email: email);
-          final iesUserDoc = firestoreInstance.collection('iesUsers').doc();
-          final Map<String, dynamic> json = fromIESUserToJson(newIESUser);
-          try {
-            iesUserDoc.set(json);
-            return Right(newIESUser);
-          } catch (e) {
-            Left(Failure(
-                failureName: UsersRepositoryFailureName.unknown,
-                message: 'Error desconocido en la creación del nuevo usuario'));
-          }
-        } else {
-          return Left(Failure(
+              email: email));
+        } catch (e) {
+          Left(Failure(
               failureName: UsersRepositoryFailureName.unknown,
               message: 'Error desconocido en la creación del nuevo usuario'));
         }
       } else {
         return Left(Failure(
-            failureName: UsersRepositoryFailureName.userExists,
-            message: 'El usuario ya existe'));
+            failureName: UsersRepositoryFailureName.unknown,
+            message: 'Error desconocido en la creación del nuevo usuario'));
       }
+      // } else {
+      //   return Left(Failure(
+      //       failureName: UsersRepositoryFailureName.userExists,
+      //       message: 'El usuario ya existe'));
+      // }
     } on FirebaseAuthException catch (e) {
       String m = '';
       if (e.message != null) {
@@ -298,5 +319,46 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   Future<Either<Failure, Success>> removeUserRole(
       {required IESUser user, required UserRoleType userRole}) async {
     return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+  }
+
+  @override
+  Either<Failure, Success> updateStudentEducationalRecord(
+      IESUser student, Syllabus syllabus, List<Course> updatedCourses) {
+    return Left(Failure(failureName: FailureName.unknown));
+  }
+
+  @override
+  Either<Failure, IESUser> registerAsIncomingStudent(
+      {required IESUser iesUser, required Syllabus syllabus}) {
+    Student studentRole;
+    UserRole? studentRoleIfAny = iesUser.roles.firstWhereOrNull(((userRole) =>
+        userRole.userRoleTypeName() == UserRoleTypeName.student));
+    print("here: $studentRoleIfAny ");
+    if (studentRoleIfAny == null) {
+      print("here: ${iesUser.roles} 222");
+      studentRole = Student(syllabuses: []);
+      if (iesUser.roles.first.userRoleTypeName() == UserRoleTypeName.guest) {
+        print("here: $studentRoleIfAny 333");
+        iesUser.roles.removeAt(0);
+        iesUser.roles.add(studentRole);
+        iesUser.defaultRole = studentRole;
+      } else {
+        print("Why!!!${iesUser.roles}");
+        print("Why!!!${iesUser.roles.first.userRoleTypeName().name}");
+      }
+    } else {
+      studentRole = studentRoleIfAny as Student;
+      print("here: $studentRoleIfAny 444");
+    }
+
+    if (studentRole.syllabuses.contains(syllabus)) {
+      print("here: $studentRoleIfAny 555");
+      return Left(Failure(failureName: FailureName.unknown));
+    } else {
+      print("here: $studentRoleIfAny 555");
+      studentRole.syllabuses.add(syllabus);
+
+      return Right(iesUser);
+    }
   }
 }

@@ -18,17 +18,8 @@ class RegisteringUseCase extends Operation {
   Timer? _timer;
 
 //Auth Use Case initialization
-  RegisteringUseCase();
-
-  @override
-  OperationState initializeUseCase() {
-    return const OperationState(stateName: RegisteringStateName.init);
-  }
-
-  // @override
-  // Future<void> initializeRepositories() async {
-  //   await IESSystem().getSyllabusesRepository().initRepositoryCaches();
-  // }
+  RegisteringUseCase()
+      : super(const OperationState(stateName: RegisteringStateName.init));
 
   setCurrentSyllabus(Syllabus? newSyllabus) {
     currentSyllabus = newSyllabus;

@@ -38,13 +38,9 @@ class LoginState extends OperationState {
 // LOGIN USE CASE
 class LoginUseCase extends Operation<LoginState> {
 //Auth Use Case initialization
-  LoginUseCase() : super();
-
-  @override
-  LoginState initializeUseCase() {
-    return const LoginState(
-        currentIESUserIfAny: null, stateName: LoginStateName.init);
-  }
+  LoginUseCase()
+      : super(const LoginState(
+            currentIESUserIfAny: null, stateName: LoginStateName.init));
 
   Future signIn(String userDNIOrEmail, String password) async {
     if (userDNIOrEmail == "") {

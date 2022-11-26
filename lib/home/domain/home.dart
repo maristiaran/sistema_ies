@@ -36,18 +36,13 @@ class HomeState extends OperationState {
 
 // AUTORIZATION
 class HomeUseCase extends Operation<HomeState> {
-  //Accessors
-  // late List<Syllabus> syllabuses;
-  // late Syllabus currentSyllabus;
   final IESUser currentIESUser;
 
 //Auth Use Case initialization
-  HomeUseCase({required this.currentIESUser});
-  @override
-  HomeState initializeUseCase() {
-    return HomeState(
-        stateName: HomeStateName.init, currentRole: currentIESUser.defaultRole);
-  }
+  HomeUseCase({required this.currentIESUser})
+      : super(HomeState(
+            stateName: HomeStateName.init,
+            currentRole: currentIESUser.defaultRole));
 
   void startSelectingUserRole() async {
     changeState(

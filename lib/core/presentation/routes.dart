@@ -5,16 +5,23 @@ import 'package:sistema_ies/login/presentation/login_page.dart';
 // import 'package:sistema_ies/login/presentation/login_page.dart';
 // import 'package:sistema_ies/login/presentation/password_reset_sent.dart';
 import 'package:sistema_ies/login/presentation/recovery_pass_page.dart';
+import 'package:sistema_ies/register_as_incoming_student/presentation/register_as_incoming_student_page.dart';
 import 'package:sistema_ies/registering/presentation/register_page.dart';
 
 late final systemRouter = GoRouter(
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
-      name: 'home',
-      path: '/',
-      builder: (context, state) => HomePage(),
-    ),
+        name: 'home',
+        path: '/',
+        builder: (context, state) => HomePage(),
+        routes: [
+          GoRoute(
+            name: 'registeringAsIncomingStudent',
+            path: 'registeringAsIncomingStudent',
+            builder: (context, state) => RegisterAsIncomingStudentPage(),
+          )
+        ]),
     GoRoute(
         name: 'login',
         path: '/login',

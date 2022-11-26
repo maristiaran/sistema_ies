@@ -40,6 +40,8 @@ class HomePage extends ConsumerWidget {
                       .getCurrentUserRoleOperations()[index]
                       .name
                       .name);
+                  IESSystem().onHomeSelectedOperation(_homeStatesProvider
+                      .getCurrentUserRoleOperations()[index]);
                 },
                 child: Text(
                   _homeStatesProvider

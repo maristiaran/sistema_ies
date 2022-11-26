@@ -1,4 +1,5 @@
 import "package:firebase_core/firebase_core.dart";
+import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 // import "package:hooks_riverpod/hooks_riverpod.dart";
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
@@ -10,13 +11,16 @@ import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/home/domain/home.dart';
 import 'package:sistema_ies/login/domain/login.dart';
+import 'package:sistema_ies/register_as_incoming_student/domain/registering_as_incoming_user.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
 
-enum IESSystemStateName { login, home, registering, recoverypass }
-
-// class IESSystemState extends OperationState {
-//   IESSystemState({required IESSystemStateName  stateName}):super(stateName: stateName);
-// }
+enum IESSystemStateName {
+  login,
+  home,
+  registering,
+  registeringAsIncomingStudent,
+  recoverypass
+}
 
 class IESSystem extends Operation {
   // IESSystem as a Singleton
@@ -32,12 +36,14 @@ class IESSystem extends Operation {
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
   late CRUDRoleUseCase crudRolesUseCase;
+  late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
     return _singleton;
   }
-  IESSystem._internal();
+  IESSystem._internal()
+      : super(const OperationState(stateName: IESSystemStateName.login));
 
   UsersRepositoryPort getUsersRepository() {
     _usersRepository ??= usersRepository;
@@ -45,7 +51,10 @@ class IESSystem extends Operation {
   }
 
   SyllabusesRepositoryPort getSyllabusesRepository() {
-    _syllabusesRepository ??= syllabusesRepository;
+    if (_syllabusesRepository == null) {
+      _syllabusesRepository = syllabusesRepository;
+      _syllabusesRepository!.initRepositoryCaches();
+    }
     return _syllabusesRepository!;
   }
 
@@ -56,21 +65,6 @@ class IESSystem extends Operation {
     }
 
     return _rolesAndOperationsRepository!;
-  }
-
-  // initializeStatesAndStateNotifier() {
-  //   OperationStateNotifier newStateNotifier = (OperationStateNotifier(
-  //       initialState:
-  //           const OperationState(stateName: IESSystemStateName.home)));
-  //   stateNotifierProvider =
-  //       StateNotifierProvider<OperationStateNotifier, OperationState>((ref) {
-  //     return newStateNotifier;
-  //   });
-  //   stateNotifier = newStateNotifier;
-  // }
-  @override
-  OperationState initializeUseCase() {
-    return const OperationState(stateName: IESSystemStateName.login);
   }
 
   initializeIESSystem() async {
@@ -88,8 +82,19 @@ class IESSystem extends Operation {
 
   Future onUserLogged(IESUser userLogged) async {
     homeUseCase = HomeUseCase(currentIESUser: userLogged);
-    // homeUseCase.initializeUseCase();
     changeState(const OperationState(stateName: IESSystemStateName.home));
+  }
+
+  Future onReturnFromOperation() async {
+    changeState(const OperationState(stateName: IESSystemStateName.home));
+  }
+
+  Future onHomeSelectedOperation(UserRoleOperation userOperation) async {
+    registeringAsIncomingStudentUseCase = RegisteringAsIncomingStudentUseCase(
+        iesUser: homeUseCase.currentIESUser);
+
+    changeState(const OperationState(
+        stateName: IESSystemStateName.registeringAsIncomingStudent));
   }
 
   startRegisteringNewUser() {

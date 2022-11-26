@@ -1,6 +1,9 @@
+import 'package:collection/collection.dart';
+// import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 
 class IESUser {
+  final dynamic id;
   final String firstname;
   final String surname;
   final DateTime birthdate;
@@ -10,7 +13,8 @@ class IESUser {
   UserRole defaultRole = Guest();
 
   IESUser(
-      {required this.firstname,
+      {required this.id,
+      required this.firstname,
       required this.surname,
       required this.dni,
       required this.birthdate,
@@ -23,5 +27,15 @@ class IESUser {
       defaultRole = newRole;
     }
     roles.add(newRole);
+  }
+
+  Student? studentRoleIfAny() {
+    UserRole? studentRoleIfAny = roles.firstWhereOrNull(
+        (userRole) => userRole.userRoleTypeName() == UserRoleTypeName.student);
+    if (studentRoleIfAny == null) {
+      return null;
+    } else {
+      return studentRoleIfAny as Student;
+    }
   }
 }

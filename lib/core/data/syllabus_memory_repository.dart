@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
@@ -9,8 +10,9 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
   @override
   Future<Either<Failure, Success>> initRepositoryCaches() async {
     Syllabus _buildSyllabusFromJson(Map<String, dynamic> json) {
-      Syllabus newSyllabus =
-          Syllabus(name: json['name'], administrativeResolution: '490-DGE-19');
+      Syllabus newSyllabus = Syllabus(
+          name: json['name'],
+          administrativeResolution: json['administrativeResolution']);
       for (Map<String, dynamic> subjectJson in json['subjects']) {
         Subject newSubject = Subject(
             id: subjectJson['id'],
@@ -698,5 +700,10 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
     }
 
     return Right(syllabuses);
+  }
+
+  @override
+  List<Syllabus> getAllSyllabuses() {
+    return _cachedSyllabuses ?? [];
   }
 }
