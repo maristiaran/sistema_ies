@@ -45,6 +45,6 @@ abstract class UsersRepositoryPort extends RepositoryPort {
 
   Either<Failure, Success> updateStudentEducationalRecord(
       IESUser student, Syllabus syllabus, List<Course> updatedCourses);
-  Either<Failure, IESUser> registerAsIncomingStudent(
+  Future<Either<Failure, Success>> registerAsIncomingStudent(
       {required IESUser iesUser, required Syllabus syllabus});
 }

@@ -1,4 +1,5 @@
 import "package:firebase_core/firebase_core.dart";
+import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 // import "package:hooks_riverpod/hooks_riverpod.dart";
 import 'package:sistema_ies/core/domain/entities/users.dart';
@@ -19,6 +20,7 @@ enum IESSystemStateName {
   home,
   registering,
   registeringAsIncomingStudent,
+  checkStudentRecord,
   recoverypass
 }
 
@@ -37,6 +39,7 @@ class IESSystem extends Operation {
   late RegisteringUseCase registeringUseCase;
   late CRUDRoleUseCase crudRolesUseCase;
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
+  late CheckStudentRecordUseCase checkStudentRecordUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -85,16 +88,30 @@ class IESSystem extends Operation {
     changeState(const OperationState(stateName: IESSystemStateName.home));
   }
 
-  Future onReturnFromOperation() async {
+  void onReturningToHome() {
     changeState(const OperationState(stateName: IESSystemStateName.home));
   }
 
   Future onHomeSelectedOperation(UserRoleOperation userOperation) async {
-    registeringAsIncomingStudentUseCase = RegisteringAsIncomingStudentUseCase(
-        iesUser: homeUseCase.currentIESUser);
+    switch (userOperation.name) {
+      case UserRoleOperationName.registerAsIncomingStudent:
+        registeringAsIncomingStudentUseCase =
+            RegisteringAsIncomingStudentUseCase(
+                iesUser: homeUseCase.currentIESUser);
 
-    changeState(const OperationState(
-        stateName: IESSystemStateName.registeringAsIncomingStudent));
+        changeState(const OperationState(
+            stateName: IESSystemStateName.registeringAsIncomingStudent));
+        break;
+      case UserRoleOperationName.checkStudentRecord:
+        checkStudentRecordUseCase = CheckStudentRecordUseCase(
+            currentIESUser: homeUseCase.currentIESUser);
+
+        changeState(const OperationState(
+            stateName: IESSystemStateName.checkStudentRecord));
+        break;
+
+      default:
+    }
   }
 
   startRegisteringNewUser() {

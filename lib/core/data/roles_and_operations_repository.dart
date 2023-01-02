@@ -128,7 +128,8 @@ class RolesAndOperationsRepositoryMemoryAdapter
   @override
   UserRoleType getUserRoleType(UserRoleTypeName userRoleName) {
     if (_cachedUserRoleTypes[userRoleName] == null) {
-      return _cachedUserRoleTypes[userRoleName]!;
+      throw Exception();
+      // return _cachedUserRoleTypes[userRoleName]!;
     } else {
       return _cachedUserRoleTypes[userRoleName]!;
     }

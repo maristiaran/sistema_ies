@@ -1,6 +1,8 @@
+// import 'package:collection/collection.dart';
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
+// import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
@@ -43,34 +45,16 @@ class RegisteringAsIncomingStudentUseCase
             stateName: RegisteringAsIncomingStudentStateName.init));
 
   List<Syllabus> getRegisteringSyllabuses() {
-    List<Syllabus> iesUserSyllabuses;
-    Student? studentRoleIfAny = iesUser.studentRoleIfAny();
-    if (studentRoleIfAny == null) {
-      iesUserSyllabuses = [];
-    } else {
-      iesUserSyllabuses = studentRoleIfAny.syllabuses;
-    }
-    print('-------yy------');
-
-    for (Syllabus s
-        in IESSystem().getSyllabusesRepository().getAllSyllabuses()) {
-      print(s.administrativeResolution);
-    }
-
-    print('-------ii-------');
-    print(iesUserSyllabuses);
-    print('--------------');
-    // return IESSystem().getSyllabusesRepository().getAllSyllabuses();
-    return IESSystem().getSyllabusesRepository().getAllSyllabuses();
-    // return IESSystem()
-    //     .getSyllabusesRepository()
-    //     .getAllSyllabuses()
-    //     .where((syllabus) => !iesUserSyllabuses.contains(syllabus))
-    //     .toList();
+    return IESSystem()
+        .getSyllabusesRepository()
+        .getAllSyllabuses()
+        .where(
+            (syllabus) => !iesUser.studentRolesSyllabuses().contains(syllabus))
+        .toList();
   }
 
   void cancelRegistation() {
-    IESSystem().onReturnFromOperation();
+    IESSystem().homeUseCase.onReturnFromOperation();
   }
 
   void changeSelectedSyllabus(Syllabus? newSelectedSyllabus) {
@@ -81,25 +65,33 @@ class RegisteringAsIncomingStudentUseCase
   }
 
   void registerAsIncomingStudent() async {
-    print("entro");
     if (currentState.selectedSyllabusIfAny == null) {
-      print("entro1");
       changeState(currentState
           .newChangingState(RegisteringAsIncomingStudentStateName.failure));
     } else {
-      print("entro2");
-      Either<Failure, IESUser> response = IESSystem()
-          .getUsersRepository()
-          .registerAsIncomingStudent(
-              iesUser: iesUser, syllabus: currentState.selectedSyllabusIfAny!);
-      print("entro3r");
-      response.fold(
-          (failure) => changeState(currentState.newChangingState(
-              RegisteringAsIncomingStudentStateName.failure)), (iesUser) {
-        changeState(currentState.newChangingState(
-            RegisteringAsIncomingStudentStateName.successfullyRegistered));
-        IESSystem().onReturnFromOperation();
-      });
+      if (iesUser
+          .studentRolesSyllabuses()
+          .contains(currentState.selectedSyllabusIfAny)) {
+        changeState(currentState
+            .newChangingState(RegisteringAsIncomingStudentStateName.failure));
+      } else {
+        Either<Failure, Success> response = await IESSystem()
+            .getUsersRepository()
+            .registerAsIncomingStudent(
+                iesUser: iesUser,
+                syllabus: currentState.selectedSyllabusIfAny!);
+
+        response.fold(
+            (failure) => changeState(currentState.newChangingState(
+                RegisteringAsIncomingStudentStateName.failure)), (success) {
+          changeState(currentState.newChangingState(
+              RegisteringAsIncomingStudentStateName.successfullyRegistered));
+          IESSystem().homeUseCase.onReturnFromRegisteringAsIncommingStudent(
+              currentState.selectedSyllabusIfAny == null
+                  ? null
+                  : Student(syllabus: currentState.selectedSyllabusIfAny!));
+        });
+      }
     }
   }
 }

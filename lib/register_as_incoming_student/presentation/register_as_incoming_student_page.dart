@@ -34,7 +34,7 @@ class RegisterAsIncomingStudentPage extends ConsumerWidget {
                       const Text('Planes de estudio:'),
                       const SizedBox(height: 10),
                       DropdownButton<Syllabus>(
-                          // value: null,
+                          //  value: null,
                           value: _registeringAsIncomingStudentStatesProvider
                               .selectedSyllabusIfAny,
                           items: IESSystem()
@@ -65,6 +65,7 @@ class RegisterAsIncomingStudentPage extends ConsumerWidget {
                               child: const Text(
                                 '¡Me inscribo!',
                                 style: TextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
                               ))),
                       TextButton(
                         onPressed: () async {

@@ -9,14 +9,10 @@ class Syllabus {
     subjects.add(newSubject);
   }
 
-  // @override
-  // bool operator ==(Object other) =>
-  //     other is Syllabus &&
-  //     other.runtimeType == runtimeType &&
-  //     other.administrativeResolution == administrativeResolution;
-
-  // @override
-  // int get hashCode => administrativeResolution.hashCode;
+  @override
+  String toString() {
+    return "$name ($administrativeResolution)";
+  }
 
   Subject? getSubjectIfAnyByID(int id) {
     if (subjects.length >= id) {

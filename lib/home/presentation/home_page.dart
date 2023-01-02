@@ -36,10 +36,6 @@ class HomePage extends ConsumerWidget {
             return ListTile(
               title: TextButton(
                 onPressed: () async {
-                  print(_homeStatesProvider
-                      .getCurrentUserRoleOperations()[index]
-                      .name
-                      .name);
                   IESSystem().onHomeSelectedOperation(_homeStatesProvider
                       .getCurrentUserRoleOperations()[index]);
                 },
@@ -68,8 +64,8 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Flexible(
                     child: Text(
-                      "Hola $userName",
-                      overflow: TextOverflow.clip,
+                      "Hola $userName - ${IESSystem().getRolesAndOperationsRepository().getUserRoleType(_homeStatesProvider.currentRole.userRoleTypeName()).title}",
+                      overflow: TextOverflow.visible,
                       maxLines: 1,
                       softWrap: false,
                       style: Theme.of(context).textTheme.headline3,

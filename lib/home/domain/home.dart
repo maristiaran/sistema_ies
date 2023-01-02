@@ -1,5 +1,5 @@
 // import 'package:sistema_ies/core/domain/entities/syllabus.dart';
-
+// import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
@@ -42,7 +42,7 @@ class HomeUseCase extends Operation<HomeState> {
   HomeUseCase({required this.currentIESUser})
       : super(HomeState(
             stateName: HomeStateName.init,
-            currentRole: currentIESUser.defaultRole));
+            currentRole: currentIESUser.getDefaultRole()));
 
   void startSelectingUserRole() async {
     changeState(
@@ -52,5 +52,17 @@ class HomeUseCase extends Operation<HomeState> {
   void startSelectingUserRoleOperation() async {
     changeState(currentState.copyChangingState(
         newState: HomeStateName.selectingRoleOperation));
+  }
+
+  Future onReturnFromOperation() async {
+    changeState(currentState.copyChangingState(newState: HomeStateName.init));
+  }
+
+  Future onReturnFromRegisteringAsIncommingStudent(
+      Student? studentRoleIfAny) async {
+    changeState(HomeState(
+        stateName: HomeStateName.init,
+        currentRole: studentRoleIfAny ?? currentState.currentRole));
+    IESSystem().onReturningToHome();
   }
 }
