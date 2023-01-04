@@ -78,7 +78,14 @@ class StudentEvent {
 
   @override
   String toString() {
-    return "${eventName.name} : ${subject.name} ";
+    String eName;
+    if (eventName == StudentEventName.finalExamApproved) {
+      eName = 'Examen';
+    } else {
+      eName = 'Equivalencia';
+    }
+
+    return "$eName (${date.day}-${date.month}-${date.year}): ${subject.name}  ";
   }
 
   // final Subject subject;

@@ -68,6 +68,53 @@ class Student extends UserRole {
         date: DateTime(2020, 12, 9),
         numericalGrade: 10,
         certificationResolution: '85CO20'));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(3)!,
+        date: DateTime(2020, 8, 3),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 1));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(4)!,
+        date: DateTime(2020, 12, 16),
+        numericalGrade: 8,
+        bookNumber: 1,
+        pageNumber: 9));
+
+    sEvents.add(StudentEvent.finalExamApprovedByCertification(
+        subject: syllabus.getSubjectIfAnyByID(5)!,
+        date: DateTime(2020, 12, 9),
+        numericalGrade: 9,
+        certificationResolution: '85CO20'));
+
+    sEvents.add(StudentEvent.finalExamApprovedByCertification(
+        subject: syllabus.getSubjectIfAnyByID(6)!,
+        date: DateTime(2020, 12, 9),
+        numericalGrade: 9,
+        certificationResolution: '85CO20'));
+
+    sEvents.add(StudentEvent.finalExamApprovedByCertification(
+        subject: syllabus.getSubjectIfAnyByID(7)!,
+        date: DateTime(2021, 10, 21),
+        numericalGrade: 9,
+        certificationResolution: '35TI'));
+    sEvents.add(StudentEvent.finalExamApprovedByCertification(
+        subject: syllabus.getSubjectIfAnyByID(8)!,
+        date: DateTime(2020, 12, 10),
+        numericalGrade: 8,
+        certificationResolution: '85CO20'));
+    sEvents.add(StudentEvent.finalExamApprovedByCertification(
+        subject: syllabus.getSubjectIfAnyByID(9)!,
+        date: DateTime(2021, 12, 3),
+        numericalGrade: 10,
+        certificationResolution: '34TI'));
+
+    sEvents.add(StudentEvent.finalExamApprovedByCertification(
+        subject: syllabus.getSubjectIfAnyByID(10)!,
+        date: DateTime(2021, 12, 16),
+        numericalGrade: 10,
+        certificationResolution: '34TI'));
+
     studentEvents = sEvents;
   }
 

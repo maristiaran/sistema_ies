@@ -11,11 +11,14 @@ class CheckStudentRecordPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _checkStudentRecordStatesProvider =
         ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
+    String sEventName = "";
     for (StudentEvent studentEvent
         in (_checkStudentRecordStatesProvider.currentRole as Student)
             .studentEvents) {
-      print(studentEvent);
+      sEventName = sEventName + "\n" + studentEvent.toString();
+      // print(studentEvent);
     }
-    return const Text('Check Student Record');
+    return Text('Check Student Record \n $sEventName ',
+        style: const TextStyle(color: Colors.black, fontSize: 14));
   }
 }
