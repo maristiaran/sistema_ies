@@ -13,7 +13,6 @@ enum LoginStateName {
   emailNotVerifiedFailure,
   successfullySignIn,
   passwordResetSent,
-  recoverypass,
   verificationEmailSent,
   loading
 }
@@ -101,23 +100,6 @@ class LoginUseCase extends Operation<LoginState> {
   void startRegisteringIncomingUser() async {
     /*  */
     IESSystem().startRegisteringNewUser();
-  }
-
-  void startRecoveryPass() {
-    changeState(
-        currentState.copyChangingState(newState: LoginStateName.recoverypass));
-  }
-
-  Future changePassword(String email) async {
-    Either<Failure, Success> response =
-        await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
-    response.fold((failure) {
-      changeState(
-          currentState.copyChangingState(newState: LoginStateName.failure));
-    }, (success) {
-      changeState(currentState.copyChangingState(
-          newState: LoginStateName.passwordResetSent));
-    });
   }
 
   returnToLogin() {

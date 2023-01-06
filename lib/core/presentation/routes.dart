@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/home/presentation/home_page.dart';
 import 'package:sistema_ies/login/presentation/login_page_main.dart';
-import 'package:sistema_ies/login/presentation/recovery_pass_page.dart';
+import 'package:sistema_ies/recoverypass/presentation/recovery_pass_page.dart';
 import 'package:sistema_ies/registering/presentation/register_page.dart';
 import 'package:sistema_ies/studentrecord/presentation/studentrecord_main_page.dart';
 

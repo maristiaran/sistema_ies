@@ -10,6 +10,7 @@ import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/home/domain/home.dart';
 import 'package:sistema_ies/login/domain/login.dart';
+import 'package:sistema_ies/recoverypass/domain/recoverypass.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
 import 'package:sistema_ies/studentrecord/domain/student_record.dart';
 
@@ -40,6 +41,7 @@ class IESSystem extends Operation {
   late LoginUseCase loginUseCase;
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
+  late RecoveryPassUseCase recoveryPassUseCase;
   late CRUDRoleUseCase crudRolesUseCase;
 
   // IESSystem as a Singleton
@@ -111,6 +113,12 @@ class IESSystem extends Operation {
     registeringUseCase = RegisteringUseCase();
     changeState(
         const OperationState(stateName: IESSystemStateName.registering));
+  }
+
+  startRecoveryPass() {
+    recoveryPassUseCase = RecoveryPassUseCase();
+    changeState(
+        const OperationState(stateName: IESSystemStateName.recoverypass));
   }
 
   restartLogin() {

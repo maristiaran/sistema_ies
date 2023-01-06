@@ -92,7 +92,7 @@ class LoginPage extends ConsumerWidget {
                       ),
                       TextButton(
                         onPressed: () async {
-                          IESSystem().loginUseCase.startRecoveryPass();
+                          IESSystem().startRecoveryPass();
                         },
                         child: Text(
                           '¿Olvidaste la contraseña?',

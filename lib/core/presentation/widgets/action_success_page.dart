@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
-Widget passwordResetSent(context) {
+Widget actionSuccessPage(context) {
   const bannerProfileImage = AssetImage("lib/core/assets/images/tick.jpg");
   return Center(
     child: Column(

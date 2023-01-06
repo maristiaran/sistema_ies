@@ -58,8 +58,10 @@ class RecoveryPassPage extends ConsumerWidget {
                                 onPressed: () async {
                                   if (_formRecoveryPassKey.currentState!
                                       .validate()) {
-                                    IESSystem().loginUseCase.changePassword(
-                                        _emailTextController.text.trim());
+                                    IESSystem()
+                                        .recoveryPassUseCase
+                                        .changePassword(
+                                            _emailTextController.text.trim());
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
@@ -81,8 +83,7 @@ class RecoveryPassPage extends ConsumerWidget {
                               ),
                             ),
                             TextButton(
-                                onPressed: () =>
-                                    IESSystem().loginUseCase.returnToLogin(),
+                                onPressed: () => IESSystem().restartLogin(),
                                 child: const Text("Cancelar"))
                           ],
                         ),
