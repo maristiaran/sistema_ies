@@ -13,10 +13,8 @@ enum RecoveryStateName {
 }
 
 class RecoveryPassUseCase extends Operation {
-  @override
-  OperationState initializeUseCase() {
-    return const OperationState(stateName: RecoveryStateName.init);
-  }
+  RecoveryPassUseCase()
+      : super(const OperationState(stateName: RecoveryStateName.init));
 
   Future changePassword(String email) async {
     Either<Failure, Success> response =

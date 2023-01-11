@@ -45,7 +45,7 @@ dependencies:
   font_awesome_flutter: ^10.2.1
   intl: ^0.17.0
   date_field: ^3.0.0
-
+  collection: ^1.16.0
   
 dev_dependencies:
   flutter_test:

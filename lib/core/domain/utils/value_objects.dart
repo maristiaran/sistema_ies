@@ -72,6 +72,8 @@ class Validator {
         if (isItCorrect) {
           return Right(isItCorrect);
         } else {
+          // return const Right(true);
+          //TODO: Reponer validación contraseña
           return const Left("La contraseña no es válida. Pruebe con otra");
         }
       default:

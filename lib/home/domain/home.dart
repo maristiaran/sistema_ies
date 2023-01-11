@@ -1,8 +1,10 @@
 // import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+// import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
 enum HomeStateName { init, calendar, selectingRole, selectingRoleOperation }
@@ -24,29 +26,23 @@ class HomeState extends OperationState {
     return currentRole.userRoleTypeName();
   }
 
-  List<ParameretizedUserRoleOperation>
-      getCurrentUserRoleParameterizedOperations() {
-    return IESSystem()
-        .getRolesAndOperationsRepository()
-        .getUserRoleType(getUserRoleTypeName())
-        .parameterizedOperations;
+  List<UserRoleOperation> getCurrentUserRoleOperations() {
+    RolesAndOperationsRepositoryPort operationsAndRolesRepo =
+        IESSystem().getRolesAndOperationsRepository();
+
+    return operationsAndRolesRepo.getUserRoleOperations(getUserRoleTypeName());
   }
 }
 
 // AUTORIZATION
 class HomeUseCase extends Operation<HomeState> {
-  //Accessors
-  // late List<Syllabus> syllabuses;
-  // late Syllabus currentSyllabus;
   final IESUser currentIESUser;
 
 //Auth Use Case initialization
-  HomeUseCase({required this.currentIESUser});
-  @override
-  HomeState initializeUseCase() {
-    return HomeState(
-        stateName: HomeStateName.init, currentRole: currentIESUser.defaultRole);
-  }
+  HomeUseCase({required this.currentIESUser})
+      : super(HomeState(
+            stateName: HomeStateName.init,
+            currentRole: currentIESUser.getDefaultRole()));
 
   void startSelectingUserRole() async {
     changeState(
@@ -56,5 +52,17 @@ class HomeUseCase extends Operation<HomeState> {
   void startSelectingUserRoleOperation() async {
     changeState(currentState.copyChangingState(
         newState: HomeStateName.selectingRoleOperation));
+  }
+
+  Future onReturnFromOperation() async {
+    changeState(currentState.copyChangingState(newState: HomeStateName.init));
+  }
+
+  Future onReturnFromRegisteringAsIncommingStudent(
+      Student? studentRoleIfAny) async {
+    changeState(HomeState(
+        stateName: HomeStateName.init,
+        currentRole: studentRoleIfAny ?? currentState.currentRole));
+    IESSystem().onReturningToHome();
   }
 }

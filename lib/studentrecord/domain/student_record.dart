@@ -29,13 +29,10 @@ class StudentRecordUseCase extends Operation<StudentRecordState> {
   final IESUser currentIESUser;
   List<StudentRecord> currentStudentRecords = [];
 
-//Auth Use Case initialization
-  StudentRecordUseCase({required this.currentIESUser});
-  @override
-  StudentRecordState initializeUseCase() {
-    return StudentRecordState(
-        currentIESUser: currentIESUser, stateName: StudentRecordStateName.init);
-  }
+  StudentRecordUseCase(this.currentIESUser)
+      : super(StudentRecordState(
+            stateName: StudentRecordStateName.init,
+            currentIESUser: currentIESUser));
 
   void addNewStudentRecord(List<StudentRecord> studentRecordGot) {
     currentStudentRecords = studentRecordGot;

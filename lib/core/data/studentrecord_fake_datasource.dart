@@ -1,12 +1,19 @@
 import 'package:either_dart/either.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/student_record.dart';
+import 'package:sistema_ies/core/domain/entities/student_record_entries.dart';
+import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 class StudentRecordFakeDatasource implements StudentRecordRepositoryPort {
   @override
   Future<Either<Failure, StudentRecord>> getStudentRecord() async {
-    return Right(StudentRecord(name: "Brian"));
+    return Right(StudentRecord(
+        syllabus: Syllabus(
+            name: "Tecnicatura Superior en Desarrollo de Software",
+            administrativeResolution: "501-DGE-19")));
   }
 
   @override
@@ -17,8 +24,14 @@ class StudentRecordFakeDatasource implements StudentRecordRepositoryPort {
   @override
   Future<Either<Failure, List<StudentRecord>>> getAllStudentRecord() async {
     List<StudentRecord> careers = [];
-    StudentRecord career2 = StudentRecord(name: "Computacion y redes");
-    StudentRecord career1 = StudentRecord(name: "Desarrollo de software");
+    StudentRecord career2 = StudentRecord(
+        syllabus: Syllabus(
+            name: "Tecnicatura Superior en Desarrollo de Software",
+            administrativeResolution: "501-DGE-19"));
+    StudentRecord career1 = StudentRecord(
+        syllabus: Syllabus(
+            name: "Tecnicatura Superior en Computación y Redes",
+            administrativeResolution: "490-DGE-19"));
 
     SubjectSR subjectCyR1 = SubjectSR(name: "Redes I");
     SubjectSR subjectCyR2 = SubjectSR(name: "Sistemas Operativos I");

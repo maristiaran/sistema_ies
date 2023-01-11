@@ -11,7 +11,7 @@ final studentRecordItems =
     studentRecords.map<DropdownMenuItem<StudentRecord>>((StudentRecord value) {
   return DropdownMenuItem<StudentRecord>(
     value: value,
-    child: Text(value.name),
+    child: Text(value.syllabus.name),
   );
 }).toList();
 final dropDownValueProvider = StateProvider((ref) => studentRecords[0]);

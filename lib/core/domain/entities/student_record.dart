@@ -1,7 +1,9 @@
+import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+
 class StudentRecord {
-  String name;
+  Syllabus syllabus;
   List<SubjectSR> subjects = [];
-  StudentRecord({required this.name});
+  StudentRecord({required this.syllabus});
 
   addSubjects(SubjectSR subject) {
     if (!subjects.contains(subject)) {

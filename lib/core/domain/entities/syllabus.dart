@@ -9,30 +9,10 @@ class Syllabus {
     subjects.add(newSubject);
   }
 
-  // addSubject(
-  //     {required int id,
-  //     required int year,
-  //     required String name,
-  //     required List<SubjectType> subjectType,
-  //     required SubjectDuration subjectDuration,
-  //     required int hoursPerWeek,
-  //     required List<int> coursesNeededForCoursingIds,
-  //     required List<int> examNeededForExaminationIds}) {
-  //   Subject newSubject = Subject(
-  //       id: id,
-  //       name: name,
-  //       subjectType: subjectType,
-  //       subjectDuration: subjectDuration,
-  //       hoursPerWeek: hoursPerWeek,
-  //       courseYear: year);
-  //   for (id in coursesNeededForCoursingIds) {
-  //     newSubject.addCourseNeededForCoursing(getSubjectIfAnyByID(id)!);
-  //   }
-  //   for (id in examNeededForExaminationIds) {
-  //     newSubject.addExamNeededForExamination(getSubjectIfAnyByID(id)!);
-  //   }
-  //   subjects.add(newSubject);
-  // }
+  @override
+  String toString() {
+    return "$name ($administrativeResolution)";
+  }
 
   Subject? getSubjectIfAnyByID(int id) {
     if (subjects.length >= id) {

@@ -22,10 +22,3 @@ class UserRoleOperation {
 
   UserRoleOperation({required this.name, required this.title});
 }
-
-class ParameretizedUserRoleOperation {
-  final UserRoleOperation operation;
-  Map<String, dynamic>? params;
-  ParameretizedUserRoleOperation(
-      {required this.operation, required this.params});
-}

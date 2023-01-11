@@ -34,15 +34,23 @@ class HomePage extends ConsumerWidget {
         'Index 2: Calendario',
       ),
       ListView.builder(
-          itemCount: _homeStatesProvider
-              .getCurrentUserRoleParameterizedOperations()
-              .length,
+          itemCount: _homeStatesProvider.getCurrentUserRoleOperations().length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-                title: Text(_homeStatesProvider
-                    .getCurrentUserRoleParameterizedOperations()[index]
-                    .operation
-                    .title));
+              title: TextButton(
+                onPressed: () async {
+                  IESSystem().onHomeSelectedOperation(_homeStatesProvider
+                      .getCurrentUserRoleOperations()[index]);
+                },
+                child: Text(
+                  _homeStatesProvider
+                      .getCurrentUserRoleOperations()[index]
+                      .title,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            );
           }),
     ];
     return Scaffold(
@@ -59,8 +67,8 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Flexible(
                     child: Text(
-                      "Hola $userName",
-                      overflow: TextOverflow.clip,
+                      "Hola $userName - ${IESSystem().getRolesAndOperationsRepository().getUserRoleType(_homeStatesProvider.currentRole.userRoleTypeName()).title}",
+                      overflow: TextOverflow.visible,
                       maxLines: 1,
                       softWrap: false,
                       style: Theme.of(context).textTheme.headline3,

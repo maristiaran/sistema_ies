@@ -4,7 +4,6 @@ import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 import 'package:sistema_ies/login/presentation/login_page.dart';
-import 'package:sistema_ies/recoverypass/presentation/recovery_pass_page.dart';
 
 class LoginPageMain extends ConsumerWidget {
   const LoginPageMain({Key? key}) : super(key: key);

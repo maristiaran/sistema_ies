@@ -34,4 +34,9 @@ class SyllabusesRepositoryFirestoreAdapter implements SyllabusesRepositoryPort {
           {required List<String> administrativeResolutions}) async {
     return Left(Failure(failureName: FailureName.unknown));
   }
+
+  @override
+  List<Syllabus> getAllSyllabuses() {
+    return _cachedSyllabuses ?? [];
+  }
 }
