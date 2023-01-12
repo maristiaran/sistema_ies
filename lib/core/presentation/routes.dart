@@ -6,7 +6,6 @@ import 'package:sistema_ies/login/presentation/login_page_main.dart';
 import 'package:sistema_ies/recoverypass/presentation/recovery_pass_page.dart';
 import 'package:sistema_ies/register_as_incoming_student/presentation/register_as_incoming_student_page.dart';
 import 'package:sistema_ies/registering/presentation/register_page.dart';
-import 'package:sistema_ies/studentrecord/presentation/studentrecord_main_page.dart';
 
 late final systemRouter = GoRouter(
   debugLogDiagnostics: true,
@@ -43,10 +42,6 @@ late final systemRouter = GoRouter(
             builder: (context, state) => RecoveryPassPage(),
           ),
         ]),
-    GoRoute(
-        path: StudentRecordMainPage.pathRoute,
-        name: StudentRecordMainPage.nameRoute,
-        builder: (context, state) => const StudentRecordMainPage())
   ],
 
   redirect: (state) {

@@ -15,7 +15,6 @@ import 'package:sistema_ies/login/domain/login.dart';
 import 'package:sistema_ies/register_as_incoming_student/domain/registering_as_incoming_user.dart';
 import 'package:sistema_ies/recoverypass/domain/recoverypass.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
-import 'package:sistema_ies/studentrecord/domain/student_record.dart';
 
 enum IESSystemStateName {
   login,
@@ -38,7 +37,6 @@ class IESSystem extends Operation {
   StudentRecordRepositoryPort? _studentRecordRepository;
 
   // Use cases
-  late StudentRecordUseCase studentRecordUseCase;
   late LoginUseCase loginUseCase;
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
@@ -155,13 +153,6 @@ class IESSystem extends Operation {
   restartLogin() {
     changeState(const OperationState(stateName: IESSystemStateName.login));
     // loginUseCase.initLogin();
-  }
-
-  startStudentRecord(IESUser userLogged) async {
-    studentRecordUseCase = StudentRecordUseCase(userLogged);
-    IESSystem().studentRecordUseCase.getStudentRecord();
-    changeState(
-        const OperationState(stateName: IESSystemStateName.studentRecord));
   }
 
   onCurrentUserLogout() {}

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/core/domain/entities/student_record.dart';
+import 'package:sistema_ies/core/domain/entities/student_record_entries.dart';
 
-DropdownButton<StudentRecord> dropDownButtonStudentRecord(
+DropdownButton<StudentEvent> dropDownButtonStudentRecord(
     studentRecordItems, WidgetRef ref, dropDownValueProvider) {
-  return DropdownButton<StudentRecord>(
+  return DropdownButton<StudentEvent>(
       value: ref.watch(dropDownValueProvider),
-      onChanged: (StudentRecord? value) {
+      onChanged: (StudentEvent? value) {
         ref.read(dropDownValueProvider.notifier).state = value!;
       },
       items: studentRecordItems);

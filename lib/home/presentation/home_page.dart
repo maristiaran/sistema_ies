@@ -21,14 +21,7 @@ class HomePage extends ConsumerWidget {
     final userName = IESSystem().homeUseCase.currentIESUser.firstname;
 
     final List<Widget> _widgetOptions = <Widget>[
-      Center(
-        child: TextButton(
-            onPressed: () {
-              IESSystem()
-                  .startStudentRecord(IESSystem().homeUseCase.currentIESUser);
-            },
-            child: const Text("StudentRecord")),
-      ),
+      const Text("Home"),
       const Text("StudentRecord"),
       const Text(
         'Index 2: Calendario',

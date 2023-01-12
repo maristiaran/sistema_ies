@@ -57,9 +57,47 @@ class Student extends UserRole {
   Student({required this.syllabus});
   Student.forTesting({required this.syllabus}) {
     List<StudentEvent> sEvents = [];
+
     sEvents.add(StudentEvent.finalExamApproved(
         subject: syllabus.getSubjectIfAnyByID(1)!,
-        date: DateTime(2021, 12, 10),
+        date: DateTime(2021, 12, 11),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 36));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(1)!,
+        date: DateTime(2021, 12, 9),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 36));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(1)!,
+        date: DateTime(2021, 12, 9),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 36));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(1)!,
+        date: DateTime(2021, 12, 9),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 36));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(1)!,
+        date: DateTime(2021, 12, 9),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 36));
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(1)!,
+        date: DateTime(2021, 12, 9),
+        numericalGrade: 10,
+        bookNumber: 1,
+        pageNumber: 36));
+
+    sEvents.add(StudentEvent.finalExamApproved(
+        subject: syllabus.getSubjectIfAnyByID(1)!,
+        date: DateTime(2021, 12, 12),
         numericalGrade: 10,
         bookNumber: 1,
         pageNumber: 36));
