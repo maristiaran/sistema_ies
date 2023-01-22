@@ -34,7 +34,7 @@ class SubjectDetails extends ConsumerWidget {
             Container(
               constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width / 2),
-              child: ExpandedPanelStudentRecord(events: subjectMovements),
+              child: ExpandedPanelStudentRecord(events: event.movements),
             )
           ],
         ),

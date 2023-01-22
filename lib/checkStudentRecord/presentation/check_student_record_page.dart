@@ -20,7 +20,9 @@ class CheckStudentRecordPage extends ConsumerWidget {
       // print(studentEvent);
     }
     final subjects = _checkStudentRecordStatesProvider.currentRole.srSubjects;
-    print(subjects);
+    // print(subjects);
+    // print(subjects[0].movements);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
