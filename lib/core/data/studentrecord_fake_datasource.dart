@@ -17,84 +17,99 @@ class StudentFakeDatasource implements StudentRepositoryPort {
             subjectId: x, name: syllabus.getSubjectIfAnyByID(x)!.name))
         .toList();
 
-    srSubjects[0].addMovement(MSRFinalExamApproved(
+    srSubjects[0].addMovFinalExamApproved(
         date: DateTime(2021, 12, 11),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-    srSubjects[1].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[1].addMovFinalExamApproved(
         date: DateTime(2021, 12, 9),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-    srSubjects[2].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[2].addMovFinalExamApproved(
         date: DateTime(2021, 12, 9),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-    srSubjects[3].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[3].addMovFinalExamApproved(
         date: DateTime(2021, 12, 9),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-    srSubjects[4].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[4].addMovFinalExamApproved(
         date: DateTime(2021, 12, 9),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-    srSubjects[5].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[5].addMovFinalExamApproved(
         date: DateTime(2021, 12, 9),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-
-    srSubjects[6].addMovement(MSRFinalExamApproved(
-        date: DateTime(2021, 12, 12),
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[6].addMovFinalExamApproved(
+        date: DateTime(2021, 12, 9),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 36));
-    srSubjects[7].addMovement(MSRFinalExamApprovedByCertification(
+        pageNumber: 1,
+        bookNumber: 36);
+    srSubjects[7].addMovFinalExamApprovedByCertification(
         date: DateTime(2020, 12, 9),
         numericalGrade: 10,
-        certificationResolution: '85CO20'));
-    srSubjects[8].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 1,
+        certificationResolution: '85CO20');
+    srSubjects[8].addMovFinalExamApprovedByCertification(
         date: DateTime(2020, 8, 3),
         numericalGrade: 10,
-        bookNumber: 1,
-        pageNumber: 1));
-    srSubjects[9].addMovement(MSRFinalExamApproved(
+        pageNumber: 1,
+        bookNumber: 36,
+        certificationResolution: '85CO20');
+    srSubjects[9].addMovFinalExamApproved(
         date: DateTime(2020, 12, 16),
         numericalGrade: 8,
         bookNumber: 1,
-        pageNumber: 9));
-
-    srSubjects[10].addMovement(MSRFinalExamApprovedByCertification(
+        pageNumber: 9);
+    srSubjects[10].addMovFinalExamApprovedByCertification(
         date: DateTime(2020, 12, 9),
         numericalGrade: 9,
-        certificationResolution: '85CO20'));
+        bookNumber: 1,
+        pageNumber: 1,
+        certificationResolution: '85CO20');
 
-    srSubjects[11].addMovement(MSRFinalExamApprovedByCertification(
+    srSubjects[11].addMovFinalExamApprovedByCertification(
         date: DateTime(2020, 12, 9),
         numericalGrade: 9,
-        certificationResolution: '85CO20'));
+        bookNumber: 1,
+        pageNumber: 1,
+        certificationResolution: '85CO20');
 
-    srSubjects[12].addMovement(MSRFinalExamApprovedByCertification(
+    srSubjects[12].addMovFinalExamApprovedByCertification(
         date: DateTime(2021, 10, 21),
         numericalGrade: 9,
-        certificationResolution: '35TI'));
-    srSubjects[13].addMovement(MSRFinalExamApprovedByCertification(
-        date: DateTime(2020, 12, 10),
+        bookNumber: 1,
+        pageNumber: 1,
+        certificationResolution: '35TI');
+
+    srSubjects[13].addMovFinalExamApprovedByCertification(
+        date: DateTime(2020, 12, 9),
         numericalGrade: 8,
-        certificationResolution: '85CO20'));
-    srSubjects[14].addMovement(MSRFinalExamApprovedByCertification(
+        bookNumber: 1,
+        pageNumber: 1,
+        certificationResolution: '85CO20');
+
+    srSubjects[14].addMovFinalExamApprovedByCertification(
         date: DateTime(2021, 12, 3),
         numericalGrade: 10,
-        certificationResolution: '34TI'));
+        bookNumber: 1,
+        pageNumber: 1,
+        certificationResolution: '34TI');
 
-    srSubjects[15].addMovement(MSRFinalExamApprovedByCertification(
+    srSubjects[15].addMovFinalExamApprovedByCertification(
         date: DateTime(2021, 12, 16),
         numericalGrade: 10,
-        certificationResolution: '34TI'));
+        bookNumber: 1,
+        pageNumber: 1,
+        certificationResolution: '34TI');
 
     return Right(srSubjects);
   }

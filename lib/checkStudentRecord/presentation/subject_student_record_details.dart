@@ -15,8 +15,8 @@ class SubjectDetails extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _checkStudentRecordStatesProvider =
         ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
-    final subjectMovements =
-        _checkStudentRecordStatesProvider.currentRole.studentEvents;
+    // final subjectMovements =
+    //     _checkStudentRecordStatesProvider.currentRole.studentEvents;
     return Scaffold(
       appBar: AppBar(),
       body: Center(

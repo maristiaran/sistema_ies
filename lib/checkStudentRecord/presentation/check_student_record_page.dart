@@ -13,12 +13,12 @@ class CheckStudentRecordPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _checkStudentRecordStatesProvider =
         ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
-    String sEventName = "";
-    for (MovementStudentRecord studentEvent
-        in _checkStudentRecordStatesProvider.currentRole.studentEvents) {
-      sEventName = sEventName + "\n" + studentEvent.toString();
-      // print(studentEvent);
-    }
+    // String sEventName = "";
+    // for (MovementStudentRecord studentEvent
+    //     in _checkStudentRecordStatesProvider.currentRole.studentEvents) {
+    //   sEventName = sEventName + "\n" + studentEvent.toString();
+    //   // print(studentEvent);
+    // }
     final subjects = _checkStudentRecordStatesProvider.currentRole.srSubjects;
     // print(subjects);
     // print(subjects[0].movements);
