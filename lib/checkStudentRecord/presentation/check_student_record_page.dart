@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/subject_student_record_details.dart';
-import 'package:sistema_ies/core/domain/entities/student_record_entries.dart';
-import 'package:sistema_ies/core/domain/entities/syllabus.dart';
-import 'package:sistema_ies/core/domain/entities/user_roles.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
 
@@ -16,15 +14,13 @@ class CheckStudentRecordPage extends ConsumerWidget {
     final _checkStudentRecordStatesProvider =
         ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
     String sEventName = "";
-    for (StudentEvent studentEvent
-        in (_checkStudentRecordStatesProvider.currentRole as Student)
-            .studentEvents) {
+    for (MovementStudentRecord studentEvent
+        in _checkStudentRecordStatesProvider.currentRole.studentEvents) {
       sEventName = sEventName + "\n" + studentEvent.toString();
       // print(studentEvent);
     }
-    final subjects = repeatedSubjectFilter(
-        (_checkStudentRecordStatesProvider.currentRole as Student)
-            .studentEvents);
+    final subjects = _checkStudentRecordStatesProvider.currentRole.srSubjects;
+    print(subjects);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -50,8 +46,8 @@ class CheckStudentRecordPage extends ConsumerWidget {
                               child: Container(
                                 margin: const EdgeInsets.symmetric(vertical: 4),
                                 decoration: BoxDecoration(
-                                    boxShadow: [
-                                      const BoxShadow(
+                                    boxShadow: const [
+                                      BoxShadow(
                                         offset: Offset(-5, 6),
                                         spreadRadius: -8,
                                         blurRadius: 12,
@@ -73,18 +69,18 @@ class CheckStudentRecordPage extends ConsumerWidget {
                                           const EdgeInsets.symmetric(
                                               vertical: 10, horizontal: 10),
                                       title: Text(
-                                        subjects[index].subject.name,
+                                        subjects[index].name,
                                       ),
                                       onTap: () {
                                         ref
                                             .read(panelStateNotifier.notifier)
-                                            .init(getAllStudentEventBySubject(
-                                                    (_checkStudentRecordStatesProvider
-                                                                .currentRole
-                                                            as Student)
-                                                        .studentEvents,
-                                                    subjects[index])
-                                                .length);
+                                            .init(5);
+
+                                        // .init(
+                                        //     (_checkStudentRecordStatesProvider
+                                        //             .currentRole as Student)
+                                        //         .studentEvents
+                                        //         .length);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -110,30 +106,36 @@ class CheckStudentRecordPage extends ConsumerWidget {
 
 // Fuctions needed
 
-List<StudentEvent> repeatedSubjectFilter(List<StudentEvent> events) {
-  List<StudentEvent> result = [];
-  for (StudentEvent studentEvent in events) {
-    if (result.every((element) => element.subject != studentEvent.subject)) {
-      result.add(studentEvent);
-    }
-  }
-  return result;
-}
+// List<MovementStudentRecord> repeatedSubjectFilter(
+//     List<MovementStudentRecord> events) {
+//   List<MovementStudentRecord> result = [];
+//   for (MovementStudentRecord studentEvent in events) {
+//     if (result.every((element) => element.subject != studentEvent.subject)) {
+//       result.add(studentEvent);
+//     }
+//   }
+//   return result;
+// }
 
-Color selectColorByState(StudentEvent state) {
+Color selectColorByState(SubjectSR state) {
   Color color = const Color.fromARGB(255, 163, 163, 163);
-  if (state.eventName == StudentEventName.finalExamApprovedByCertification ||
-      state.eventName == StudentEventName.courseApprovedWithAccreditation ||
-      state.eventName == StudentEventName.finalExamApprovedByCertification) {
-    color = const Color.fromARGB(255, 27, 182, 61);
-  } else if (state.eventName == StudentEventName.courseFailedNonFree ||
-      state.eventName == StudentEventName.finalExamApproved) {
-    color = const Color.fromARGB(255, 81, 126, 240);
-  } else if (state.eventName == StudentEventName.courseRegistering) {
-    color = const Color.fromARGB(255, 240, 232, 81);
-  } else if (state.eventName == StudentEventName.courseFailedFree ||
-      state.eventName == StudentEventName.finalExamNonApproved) {
-    color = const Color.fromARGB(255, 182, 27, 27);
-  }
+  // if (state.movementName ==
+  //         MovementStudentRecordName.finalExamApprovedByCertification ||
+  //     state.movementName ==
+  //         MovementStudentRecordName.courseApprovedWithAccreditation ||
+  //     state.movementName ==
+  //         MovementStudentRecordName.finalExamApprovedByCertification) {
+  //   color = const Color.fromARGB(255, 27, 182, 61);
+  // } else if (state.movementName ==
+  //         MovementStudentRecordName.courseFailedNonFree ||
+  //     state.movementName == MovementStudentRecordName.finalExamApproved) {
+  //   color = const Color.fromARGB(255, 81, 126, 240);
+  // } else if (state.movementName ==
+  //     MovementStudentRecordName.courseRegistering) {
+  //   color = const Color.fromARGB(255, 240, 232, 81);
+  // } else if (state.movementName == MovementStudentRecordName.courseFailedFree ||
+  //     state.movementName == MovementStudentRecordName.finalExamNonApproved) {
+  //   color = const Color.fromARGB(255, 182, 27, 27);
+  // }
   return color;
 }

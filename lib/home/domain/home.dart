@@ -1,5 +1,6 @@
 // import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 // import 'package:sistema_ies/core/domain/entities/syllabus.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';

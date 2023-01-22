@@ -13,4 +13,4 @@ final syllabusesRepository = SyllabusesRepositoryMemoryAdapter();
 final RolesAndOperationsRepositoryPort rolesAndOperationsRepository =
     RolesAndOperationsRepositoryMemoryAdapter();
 
-final studentRecordFakeDatasource = StudentRecordFakeDatasource();
+final studentRecordFakeDatasource = StudentFakeDatasource();

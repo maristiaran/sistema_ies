@@ -1,4 +1,8 @@
 import 'package:either_dart/either.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
+// import 'package:sistema_ies/core/domain/entities/student.dart';
+// import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
@@ -41,7 +45,11 @@ class LoginUseCase extends Operation<LoginState> {
             currentIESUserIfAny: null, stateName: LoginStateName.init));
 
   Future signIn(String userDNIOrEmail, String password) async {
-    var response;
+    // var response;
+    bool successfullyLogin = false;
+    bool validEmail = true;
+    LoginStateName failureType = LoginStateName.failure;
+    IESUser? signInUser;
     String userEmail = userDNIOrEmail;
     changeState(
         currentState.copyChangingState(newState: LoginStateName.loading));
@@ -49,36 +57,45 @@ class LoginUseCase extends Operation<LoginState> {
       await IESSystem()
           .getUsersRepository()
           .getIESUserByDNI(dni: int.parse(userDNIOrEmail))
-          .then((getIESUserByDNI) => getIESUserByDNI.fold(
-                  (failure) => changeState(currentState.copyChangingState(
-                      newState: LoginStateName.failure)), (iesUser) {
+          .then((getIESUserByDNI) =>
+              getIESUserByDNI.fold((failure) => validEmail = false, (iesUser) {
                 userEmail = iesUser.email;
               }));
-      response = LoginStateName.failure;
     }
-    await IESSystem()
-        .getUsersRepository()
-        .signInUsingEmailAndPassword(email: userEmail, password: password)
-        .then((signInResponse) => signInResponse.fold((failure) {
-              if (failure.failureName ==
-                  UsersRepositoryFailureName.notVerifiedEmail) {
-                changeState(currentState.copyChangingState(
-                    newState: LoginStateName.emailNotVerifiedFailure));
-                response = LoginStateName.emailNotVerifiedFailure;
-              } else {
-                changeState(currentState.copyChangingState(
-                    newState: LoginStateName.failure));
-                response = LoginStateName.failure;
-              }
-            }, (iesUser) {
-              changeState(LoginState(
-                  currentIESUserIfAny: iesUser,
-                  stateName: LoginStateName.successfullySignIn));
-              IESSystem().onUserLogged(iesUser);
-              response = LoginStateName.successfullySignIn;
-            }));
+    if (validEmail) {
+      await IESSystem()
+          .getUsersRepository()
+          .signInUsingEmailAndPassword(email: userEmail, password: password)
+          .then((signInResponse) => signInResponse.fold((failure) {
+                if (failure.failureName ==
+                    UsersRepositoryFailureName.notVerifiedEmail) {
+                  failureType = LoginStateName.emailNotVerifiedFailure;
+                }
+              }, (iesUser) {
+                successfullyLogin = true;
+                signInUser = iesUser;
+              }));
+    }
+    if (successfullyLogin) {
+      if ((signInUser!.defaultRole != null) &&
+          (signInUser!.defaultRole!.userRoleTypeName() ==
+              UserRoleTypeName.student)) {
+        await IESSystem()
+            .getStudentRecordRepository()
+            .getStudentRecord(student: (signInUser!.defaultRole as Student))
+            .fold(
+                (left) => {},
+                (right) =>
+                    {(signInUser!.defaultRole! as Student).srSubjects = right});
+      }
 
-    return response;
+      changeState(LoginState(
+          currentIESUserIfAny: signInUser,
+          stateName: LoginStateName.successfullySignIn));
+      IESSystem().onUserLogged(signInUser!);
+    } else {
+      changeState(currentState.copyChangingState(newState: failureType));
+    }
   }
 
   Future reSendEmailVerification() async {

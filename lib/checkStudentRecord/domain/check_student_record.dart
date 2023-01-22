@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
@@ -11,11 +12,11 @@ enum CheckStudentRecordStateName { init }
 
 class CheckStudentRecordState extends OperationState {
   // final IESUser currentUser;
-  final UserRole currentRole;
+  final Student currentRole;
   const CheckStudentRecordState(
       {required Enum stateName, required this.currentRole})
       : super(stateName: stateName);
-  CheckStudentRecordState copyChangingRole({required UserRole newUserRole}) {
+  CheckStudentRecordState copyChangingRole({required Student newUserRole}) {
     return CheckStudentRecordState(
         stateName: stateName, currentRole: newUserRole);
   }
@@ -41,11 +42,13 @@ class CheckStudentRecordState extends OperationState {
 // AUTORIZATION
 class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
   final IESUser currentIESUser;
+  final Student studentRole;
 
-  CheckStudentRecordUseCase({required this.currentIESUser})
+  CheckStudentRecordUseCase(
+      {required this.currentIESUser, required this.studentRole})
       : super(CheckStudentRecordState(
             stateName: CheckStudentRecordStateName.init,
-            currentRole: currentIESUser.getDefaultRole()));
+            currentRole: studentRole));
 }
 
 @immutable

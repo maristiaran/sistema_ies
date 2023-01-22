@@ -1,5 +1,6 @@
 import "package:firebase_core/firebase_core.dart";
 import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
@@ -34,7 +35,7 @@ class IESSystem extends Operation {
   UsersRepositoryPort? _usersRepository;
   SyllabusesRepositoryPort? _syllabusesRepository;
   RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
-  StudentRecordRepositoryPort? _studentRecordRepository;
+  StudentRepositoryPort? _studentRecordRepository;
 
   // Use cases
   late LoginUseCase loginUseCase;
@@ -74,9 +75,9 @@ class IESSystem extends Operation {
     return _rolesAndOperationsRepository!;
   }
 
-  StudentRecordRepositoryPort? getStudentRecordRepository() {
+  StudentRepositoryPort getStudentRecordRepository() {
     _studentRecordRepository ??= studentRecordFakeDatasource;
-    return _studentRecordRepository;
+    return _studentRecordRepository!;
   }
 
   // initializeStatesAndStateNotifier() {
@@ -89,10 +90,10 @@ class IESSystem extends Operation {
   //   });
   //   stateNotifier = newStateNotifier;
   // }
-  @override
-  OperationState initializeUseCase() {
-    return const OperationState(stateName: IESSystemStateName.login);
-  }
+  // @override
+  // OperationState initializeUseCase() {
+  //   return const OperationState(stateName: IESSystemStateName.login);
+  // }
 
   initializeIESSystem() async {
     await Firebase.initializeApp(
@@ -128,7 +129,8 @@ class IESSystem extends Operation {
         break;
       case UserRoleOperationName.checkStudentRecord:
         checkStudentRecordUseCase = CheckStudentRecordUseCase(
-            currentIESUser: homeUseCase.currentIESUser);
+            currentIESUser: homeUseCase.currentIESUser,
+            studentRole: homeUseCase.currentIESUser.defaultRole as Student);
 
         changeState(const OperationState(
             stateName: IESSystemStateName.checkStudentRecord));

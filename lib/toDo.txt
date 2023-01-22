@@ -1,0 +1,3 @@
+completar subclases de movement recod
+
+Implemen student record related repository methods

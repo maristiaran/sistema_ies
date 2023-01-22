@@ -21,6 +21,10 @@ class Syllabus {
       return null;
     }
   }
+
+  int subjectCount() {
+    return subjects.length;
+  }
 }
 
 enum SubjectType { module, workshop, professionalPractice, seminary }

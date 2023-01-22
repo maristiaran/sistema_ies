@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 // import 'package:sistema_ies/core/data/utils/iesuser_json_convertion.dart';
 import 'package:sistema_ies/core/domain/entities/course.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
@@ -78,7 +79,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
                 .fold((left) {
               return left;
             }, (right) {
-              roles.add(Student.forTesting(syllabus: right));
+              roles.add(Student(syllabus: right));
             });
 
             break;

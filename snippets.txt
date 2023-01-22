@@ -1,0 +1,47 @@
+enum MovementStudentRecordName {
+  finalExamApprovedByCertification,
+  // arpobado por equivalencia
+  courseRegistering,
+  // se inscribió a cursar
+  courseFailedNonFree,
+  // abandonó
+  courseFailedFree,
+  // cursó y quedó libre
+  courseApproved,
+  // cursado aprobado
+  courseApprovedWithAccreditation,
+  // aprobó con acreditación directa
+  finalExamApproved,
+  // final aprobado
+  finalExamNonApproved
+  // final no aprobado
+}
+
+
+class MovementStudentRecord {
+  //Type of student event
+  final MovementStudentRecordName eventName;
+  final Subject subject;
+  // Events's DDMMYYYY
+  final DateTime date;
+  // 0-9 grade
+  int? numericalGrade;
+  // approved-non approved grade
+  bool? approvedOrNotGrade;
+  // Institute (for finalExamApprovedByCertification), null = IES 9-010
+  Institute? certificationInstitute;
+  // Registering book number (for finalExams events)
+  int? bookNumber;
+  // Registering book page number (for finalExams events)
+  int? pageNumber;
+  // CertificationResolution(for finalExamApprovedByCertification)
+  String? certificationResolution;
+
+
+     {required this.subject,
+      required this.date,
+      required this.numericalGrade,
+      required this.certificationResolution,
+      this.certificationInstitute})
+      : eventName = MovementStudentRecordName.finalExamApprovedByCertification,
+        approvedOrNotGrade = true;
