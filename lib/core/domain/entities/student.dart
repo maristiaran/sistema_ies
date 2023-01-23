@@ -31,17 +31,17 @@ class SubjectSR {
   DateTime? finalExamApprovalDateIfAny;
   int? finalExamApprovalGradeIfAny;
   DateTime? courseApprovalDateIfAny;
-  DateTime? courseApprovalNumericalGrade;
-  bool? courseApprovalGradeBooleanGrade;
-
+  int? courseAcreditationNumericalGrade;
+  bool endCourseApproval = false;
+  bool coursing = false;
   SubjectSR(
       {required this.subjectId,
       required this.name,
       this.finalExamApprovalDateIfAny,
       this.finalExamApprovalGradeIfAny,
       this.courseApprovalDateIfAny,
-      this.courseApprovalGradeBooleanGrade,
-      this.courseApprovalNumericalGrade});
+      this.endCourseApproval = false,
+      this.courseAcreditationNumericalGrade});
 
   addMovement(MovementStudentRecord movementStudentRecord) {
     if (!movements.contains(movementStudentRecord)) {
@@ -60,10 +60,15 @@ class SubjectSR {
         numericalGrade: numericalGrade,
         bookNumber: bookNumber,
         pageNumber: pageNumber));
+
+    finalExamApprovalDateIfAny = date;
+    finalExamApprovalGradeIfAny = numericalGrade;
   }
 
   addMovCourseRegistering({required DateTime date}) {
     addMovement(MSRCourseRegistering(date: date));
+
+    coursing = true;
   }
 
   addMovCourseFailedNonFree({required DateTime date}) {
@@ -72,14 +77,24 @@ class SubjectSR {
 
   addMovCourseFailedFree({required DateTime date}) {
     addMovement(MSRCourseFailedFree(date: date));
+
+    courseApprovalDateIfAny = date;
+    endCourseApproval = false;
   }
 
   addMovCourseApproved({required DateTime date}) {
     addMovement(MSRCourseApproved(date: date));
+
+    courseApprovalDateIfAny = date;
+    endCourseApproval = true;
   }
 
   addMovCourseApprovedWithAccreditation(
       {required DateTime date, required int numericalGrade}) {
+    courseApprovalDateIfAny = date;
+    endCourseApproval = true;
+    courseAcreditationNumericalGrade = numericalGrade;
+
     addMovement(MSRCourseApprovedWithAccreditation(
         date: date, numericalGrade: numericalGrade));
   }
@@ -94,6 +109,9 @@ class SubjectSR {
         numericalGrade: numericalGrade,
         bookNumber: bookNumber,
         pageNumber: pageNumber));
+
+    finalExamApprovalDateIfAny = date;
+    finalExamApprovalGradeIfAny = numericalGrade;
   }
 
   addMovFinalExamNonApproved(
