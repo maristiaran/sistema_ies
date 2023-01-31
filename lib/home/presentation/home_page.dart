@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/check_student_record_page.dart';
+// import 'package:sistema_ies/checkStudentRecord/presentation/check_student_record_page.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,28 +17,28 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _homeStatesProvider =
+    final homeStatesProvider =
         ref.watch(IESSystem().homeUseCase.stateNotifierProvider);
 
     final userName = IESSystem().homeUseCase.currentIESUser.firstname;
 
-    final List<Widget> _widgetOptions = <Widget>[
+    final List<Widget> widgetOptions = <Widget>[
       const Text("Home"),
       const Text("StudentRecord"),
       const Text(
         'Index 2: Calendario',
       ),
       ListView.builder(
-          itemCount: _homeStatesProvider.getCurrentUserRoleOperations().length,
+          itemCount: homeStatesProvider.getCurrentUserRoleOperations().length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: TextButton(
                 onPressed: () async {
-                  IESSystem().onHomeSelectedOperation(_homeStatesProvider
-                      .getCurrentUserRoleOperations()[index]);
+                  IESSystem().onHomeSelectedOperation(
+                      homeStatesProvider.getCurrentUserRoleOperations()[index]);
                 },
                 child: Text(
-                  _homeStatesProvider
+                  homeStatesProvider
                       .getCurrentUserRoleOperations()[index]
                       .title,
                   style:
@@ -58,15 +58,15 @@ class HomePage extends ConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CircleAvatar(child: Text(userName[0]), maxRadius: 13),
+                  CircleAvatar(maxRadius: 13, child: Text(userName[0])),
                   const SizedBox(width: 10),
                   Flexible(
                     child: Text(
-                      "Hola $userName - ${IESSystem().getRolesAndOperationsRepository().getUserRoleType(_homeStatesProvider.currentRole.userRoleTypeName()).title}",
+                      "Hola $userName - ${IESSystem().getRolesAndOperationsRepository().getUserRoleType(homeStatesProvider.currentRole.userRoleTypeName()).title}",
                       overflow: TextOverflow.visible,
                       maxLines: 1,
                       softWrap: false,
-                      style: Theme.of(context).textTheme.headline3,
+                      style: Theme.of(context).textTheme.displaySmall,
                     ),
                   ),
                   Icon(
@@ -80,7 +80,7 @@ class HomePage extends ConsumerWidget {
           },
         ),
       ),
-      body: _widgetOptions.elementAt(ref.watch(_currentIndex)),
+      body: widgetOptions.elementAt(ref.watch(_currentIndex)),
       bottomNavigationBar: BottomNavigationBar(
           selectedIconTheme:
               const IconThemeData(color: Color.fromARGB(255, 108, 145, 199)),

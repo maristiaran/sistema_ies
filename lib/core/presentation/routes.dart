@@ -1,13 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/check_student_record_page.dart';
-import 'package:sistema_ies/core/domain/ies_system.dart';
+// import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/home/presentation/home_page.dart';
 import 'package:sistema_ies/login/presentation/login_page_main.dart';
 import 'package:sistema_ies/recoverypass/presentation/recovery_pass_page.dart';
 import 'package:sistema_ies/register_as_incoming_student/presentation/register_as_incoming_student_page.dart';
 import 'package:sistema_ies/registering/presentation/register_page.dart';
 
-late final systemRouter = GoRouter(
+final systemRouter = GoRouter(
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
@@ -44,28 +44,30 @@ late final systemRouter = GoRouter(
         ]),
   ],
 
-  redirect: (state) {
-    // print(IESSystem().currentIESUserIfAny());
-    // print(state.subloc);
-    // if (IESSystem().currentIESUserIfAny() == null) {
-    //   if ((state.subloc == state.namedLocation('login')) ||
-    //       (state.subloc == state.namedLocation('registering'))) {
-    //     return null;
-    //   } else {
-    //     return state.namedLocation('login');
-    //   }
-    // } else {
-    // print(IESSystem().currentState.stateName.name);
-    if (state.subloc ==
-        state.namedLocation(IESSystem().currentState.stateName.name)) {
-      return null;
-    } else {
-      return state.namedLocation(IESSystem().currentState.stateName.name);
-      // }
-    }
+  // redirect: (context, state) {
+  // print(IESSystem().currentIESUserIfAny());
+  // print(state.subloc);
+  // if (IESSystem().currentIESUserIfAny() == null) {
+  //   if ((state.subloc == state.namedLocation('login')) ||
+  //       (state.subloc == state.namedLocation('registering'))) {
+  //     return null;
+  //   } else {
+  //     return state.namedLocation('login');
+  //   }
+  // } else {
+  // print(IESSystem().currentState.stateName.name);
+  // if (state.subloc ==
+  //     GoRouter.of(context)
+  //         .namedLocation(IESSystem().currentState.stateName.name)) {
+  //   return null;
+  // } else {
+  //   return GoRouter.of(context)
+  //       .namedLocation(IESSystem().currentState.stateName.name);
+  //   // }
+  // }
 
-    // return null;
-  },
+  // return null;
+  // },
 
   // changes on the listenable will cause the router to refresh it's route
   // refreshListenable: loginInfo,

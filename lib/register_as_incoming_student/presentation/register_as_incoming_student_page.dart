@@ -10,7 +10,7 @@ class RegisterAsIncomingStudentPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _registeringAsIncomingStudentStatesProvider = ref.watch(
+    final registeringAsIncomingStudentStatesProvider = ref.watch(
         IESSystem().registeringAsIncomingStudentUseCase.stateNotifierProvider);
     return Scaffold(
       body: Container(
@@ -35,7 +35,7 @@ class RegisterAsIncomingStudentPage extends ConsumerWidget {
                       const SizedBox(height: 10),
                       DropdownButton<Syllabus>(
                           //  value: null,
-                          value: _registeringAsIncomingStudentStatesProvider
+                          value: registeringAsIncomingStudentStatesProvider
                               .selectedSyllabusIfAny,
                           items: IESSystem()
                               .registeringAsIncomingStudentUseCase

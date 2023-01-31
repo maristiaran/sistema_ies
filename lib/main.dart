@@ -14,11 +14,11 @@ class AdminIESApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _iesSystemStatesProvider =
+    final iesSystemStatesProvider =
         ref.watch(IESSystem().stateNotifierProvider);
     // print(_iesSystemStatesProvider.stateName.name);
     // systemRouter.goNamed(_iesSystemStatesProvider.stateName.name);
-    systemRouter.goNamed(_iesSystemStatesProvider.stateName.name);
+    systemRouter.goNamed(iesSystemStatesProvider.stateName.name);
 
     return MaterialApp.router(
       title: 'Flutter Authentication',

@@ -13,7 +13,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
 
   @override
   Future<Either<Failure, Success>> initRepositoryCaches() async {
-    _addCachedUserRoleType(
+    addCachedUserRoleType(
         {required UserRoleTypeName roleTypeName,
         required String title,
         required List<UserRoleOperationName> operationNames}) {
@@ -21,7 +21,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
           name: roleTypeName, title: title, operationNames: operationNames);
     }
 
-    _addAllUserRoleOperations() {
+    addAllUserRoleOperations() {
       <UserRoleOperationName, String>{
         UserRoleOperationName.registerAsIncomingStudent:
             'Inscripción a carrera',
@@ -51,19 +51,19 @@ class RolesAndOperationsRepositoryMemoryAdapter
       });
     }
 
-    _addAllRoleTypes() {
-      _addCachedUserRoleType(
+    addAllRoleTypes() {
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.guest,
           title: 'Invitado',
           operationNames: [UserRoleOperationName.registerAsIncomingStudent]);
-      _addCachedUserRoleType(
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.incomingStudent,
           title: 'Ingresante',
           operationNames: [
             UserRoleOperationName.registerAsIncomingStudent,
             UserRoleOperationName.registerForCourse,
           ]);
-      _addCachedUserRoleType(
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.student,
           title: 'Estudiante',
           operationNames: [
@@ -73,7 +73,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
             UserRoleOperationName.checkFinalExamsDates,
             UserRoleOperationName.checkStudentRecord,
           ]);
-      _addCachedUserRoleType(
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.teacher,
           title: 'Docente',
           operationNames: [
@@ -82,7 +82,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
             UserRoleOperationName.uploadFinalCourseGrades,
             UserRoleOperationName.uploadFinalExamGrades,
           ]);
-      _addCachedUserRoleType(
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.administrative,
           title: 'Administrativo',
           operationNames: [
@@ -93,11 +93,11 @@ class RolesAndOperationsRepositoryMemoryAdapter
             UserRoleOperationName.crudUsersAndRoles,
             UserRoleOperationName.adminStudentRecords
           ]);
-      _addCachedUserRoleType(
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.manager,
           title: 'Directivo',
           operationNames: [UserRoleOperationName.registerAsIncomingStudent]);
-      _addCachedUserRoleType(
+      addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.systemAdmin,
           title: 'Administrador de sistema',
           operationNames: [
@@ -109,9 +109,9 @@ class RolesAndOperationsRepositoryMemoryAdapter
     }
 
 //Adding all operations
-    _addAllUserRoleOperations();
+    addAllUserRoleOperations();
     //Adding all user types with  operations
-    _addAllRoleTypes();
+    addAllRoleTypes();
 
     return Right(Success('Ok'));
   }

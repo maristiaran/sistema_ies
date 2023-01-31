@@ -20,14 +20,14 @@ class RegisterPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _registeringStatesProvider =
-        ref.watch(IESSystem().registeringUseCase.stateNotifierProvider);
+    // final registeringStatesProvider =
+    //     ref.watch(IESSystem().registeringUseCase.stateNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
           'Registro',
-          style: Theme.of(context).textTheme.headline1,
+          style: Theme.of(context).textTheme.displayLarge,
         ),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 198, 198, 198),

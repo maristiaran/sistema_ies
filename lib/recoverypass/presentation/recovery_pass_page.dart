@@ -12,7 +12,7 @@ class RecoveryPassPage extends ConsumerWidget {
   final _emailTextController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _loginStatesProvider =
+    final loginStatesProvider =
         ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
     return Scaffold(
         appBar: AppBar(
@@ -21,7 +21,7 @@ class RecoveryPassPage extends ConsumerWidget {
               children: [
                 Text(
                   'Recuperar contraseña',
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).textTheme.displayLarge,
                 )
               ],
             ),
@@ -68,7 +68,7 @@ class RecoveryPassPage extends ConsumerWidget {
                                             content: Text(
                                                 "Coloca un correo electrónico correcto primero")));
                                   }
-                                  if (_loginStatesProvider.stateName ==
+                                  if (loginStatesProvider.stateName ==
                                       LoginStateName.failure) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(

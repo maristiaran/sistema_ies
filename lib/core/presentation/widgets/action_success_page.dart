@@ -25,7 +25,7 @@ Widget actionSuccessPage(context) {
           fit: FlexFit.loose,
           child: Text(
             "Se ha recuperado la contraseña.",
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
         const SizedBox(

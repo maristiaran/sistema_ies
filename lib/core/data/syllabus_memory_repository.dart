@@ -9,7 +9,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
 
   @override
   Future<Either<Failure, Success>> initRepositoryCaches() async {
-    Syllabus _buildSyllabusFromJson(Map<String, dynamic> json) {
+    Syllabus buildSyllabusFromJson(Map<String, dynamic> json) {
       Syllabus newSyllabus = Syllabus(
           name: json['name'],
           administrativeResolution: json['administrativeResolution']);
@@ -34,7 +34,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
       return newSyllabus;
     }
 
-    Syllabus _buildSyllabus490DGE19() {
+    Syllabus buildSyllabus490DGE19() {
       Map<String, dynamic> newJson = {
         'name': 'Tecnicatura Superior en Computación y Redes',
         'administrativeResolution': '490-DGE-19',
@@ -351,10 +351,10 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
           },
         ]
       };
-      return _buildSyllabusFromJson(newJson);
+      return buildSyllabusFromJson(newJson);
     }
 
-    Syllabus _buildSyllabus501DGE19() {
+    Syllabus buildSyllabus501DGE19() {
       Map<String, dynamic> newJson = {
         'name': 'Tecnicatura Superior en Desarrollo de Software',
         'administrativeResolution': '501-DGE-19',
@@ -661,13 +661,13 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
           },
         ]
       };
-      return _buildSyllabusFromJson(newJson);
+      return buildSyllabusFromJson(newJson);
     }
 
     if (_cachedSyllabuses == null) {
       _cachedSyllabuses = [];
-      _cachedSyllabuses!.add(_buildSyllabus490DGE19());
-      _cachedSyllabuses!.add(_buildSyllabus501DGE19());
+      _cachedSyllabuses!.add(buildSyllabus490DGE19());
+      _cachedSyllabuses!.add(buildSyllabus501DGE19());
     }
 
     return Right(Success('Ok'));

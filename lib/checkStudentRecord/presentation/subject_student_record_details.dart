@@ -4,7 +4,7 @@ import 'package:sistema_ies/checkStudentRecord/presentation/expanded_panel_sr_wi
 import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
-import 'package:sistema_ies/core/domain/ies_system.dart';
+// import 'package:sistema_ies/core/domain/ies_system.dart';
 
 class SubjectDetails extends ConsumerWidget {
   const SubjectDetails({Key? key, required this.iesUser, required this.event})
@@ -13,8 +13,8 @@ class SubjectDetails extends ConsumerWidget {
   final SubjectSR event;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _checkStudentRecordStatesProvider =
-        ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
+    // final checkStudentRecordStatesProvider =
+    //     ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
     // final subjectMovements =
     //     _checkStudentRecordStatesProvider.currentRole.studentEvents;
     return Scaffold(
@@ -23,7 +23,7 @@ class SubjectDetails extends ConsumerWidget {
         child: Column(
           children: [
             userInfoBar(iesUser, context),
-            Container(
+            SizedBox(
               width: (MediaQuery.of(context).size.width / 3) * 2,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

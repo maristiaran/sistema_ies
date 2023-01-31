@@ -15,28 +15,28 @@ mixin ThemeDataSW implements ThemeData {
         brightness: Brightness.light,
         seedColor: const Color.fromARGB(255, 81, 126, 240)),
     textTheme: const TextTheme(
-      headline1: TextStyle(
+      displayLarge: TextStyle(
           fontSize: 24.0,
           fontWeight: FontWeight.w800,
           fontFamily: 'Roboto',
           fontStyle: FontStyle.italic,
           color: Color.fromARGB(255, 63, 63, 63)),
-      headline2: TextStyle(
+      displayMedium: TextStyle(
           fontFamily: 'Roboto',
           fontSize: 24.0,
           fontStyle: FontStyle.italic,
           fontWeight: FontWeight.w800,
           color: Color.fromARGB(255, 81, 126, 240)),
-      headline3: TextStyle(
+      displaySmall: TextStyle(
           fontSize: 12.0,
           fontFamily: 'Roboto',
           color: Color.fromARGB(255, 255, 255, 255)),
-      bodyText1: TextStyle(
+      bodyLarge: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.w600,
           fontFamily: 'Roboto',
           color: Color.fromARGB(255, 28, 28, 28)),
-      bodyText2: TextStyle(fontSize: 14.0),
+      bodyMedium: TextStyle(fontSize: 14.0),
     ),
   );
 }

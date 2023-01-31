@@ -20,9 +20,9 @@ class LoginPage extends ConsumerWidget {
             children: [
               Text(
                 'Ver',
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
-              Text('App', style: Theme.of(context).textTheme.headline2)
+              Text('App', style: Theme.of(context).textTheme.displayMedium)
             ],
           ),
           centerTitle: true,
