@@ -17,16 +17,12 @@ class StudentFakeDatasource implements StudentRepositoryPort {
             subjectId: x, name: syllabus.getSubjectIfAnyByID(x)!.name))
         .toList();
 
-    srSubjects[0].addMovFinalExamApproved(
-        date: DateTime(2021, 12, 11),
-        numericalGrade: 10,
-        pageNumber: 1,
-        bookNumber: 36);
-    srSubjects[1].addMovFinalExamApproved(
-        date: DateTime(2021, 12, 9),
-        numericalGrade: 10,
-        pageNumber: 1,
-        bookNumber: 36);
+    srSubjects[0].addMovCourseFailedFree(
+      date: DateTime(2021, 12, 11),
+    );
+    srSubjects[1].addMovCourseRegistering(
+      date: DateTime(2021, 12, 9),
+    );
     srSubjects[2].addMovFinalExamApproved(
         date: DateTime(2021, 12, 9),
         numericalGrade: 10,

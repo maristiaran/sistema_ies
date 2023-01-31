@@ -24,6 +24,8 @@ class Student extends UserRole {
   }
 }
 
+enum SubjetState { approved, regular, dessaproved, coursing, nule }
+
 class SubjectSR {
   List<MovementStudentRecord> movements = [];
   String name;
@@ -34,6 +36,7 @@ class SubjectSR {
   int? courseAcreditationNumericalGrade;
   bool endCourseApproval = false;
   bool coursing = false;
+  Enum subjectState = SubjetState.nule;
   SubjectSR(
       {required this.subjectId,
       required this.name,
@@ -63,16 +66,19 @@ class SubjectSR {
 
     finalExamApprovalDateIfAny = date;
     finalExamApprovalGradeIfAny = numericalGrade;
+    changeSubjetState(SubjetState.approved);
   }
 
   addMovCourseRegistering({required DateTime date}) {
     addMovement(MSRCourseRegistering(date: date));
 
     coursing = true;
+    changeSubjetState(SubjetState.coursing);
   }
 
   addMovCourseFailedNonFree({required DateTime date}) {
     addMovement(MSRCourseFailedNonFree(date: date));
+    changeSubjetState(SubjetState.regular);
   }
 
   addMovCourseFailedFree({required DateTime date}) {
@@ -80,6 +86,7 @@ class SubjectSR {
 
     courseApprovalDateIfAny = date;
     endCourseApproval = false;
+    changeSubjetState(SubjetState.dessaproved);
   }
 
   addMovCourseApproved({required DateTime date}) {
@@ -87,6 +94,7 @@ class SubjectSR {
 
     courseApprovalDateIfAny = date;
     endCourseApproval = true;
+    changeSubjetState(SubjetState.approved);
   }
 
   addMovCourseApprovedWithAccreditation(
@@ -94,7 +102,7 @@ class SubjectSR {
     courseApprovalDateIfAny = date;
     endCourseApproval = true;
     courseAcreditationNumericalGrade = numericalGrade;
-
+    changeSubjetState(SubjetState.approved);
     addMovement(MSRCourseApprovedWithAccreditation(
         date: date, numericalGrade: numericalGrade));
   }
@@ -109,7 +117,7 @@ class SubjectSR {
         numericalGrade: numericalGrade,
         bookNumber: bookNumber,
         pageNumber: pageNumber));
-
+    changeSubjetState(SubjetState.approved);
     finalExamApprovalDateIfAny = date;
     finalExamApprovalGradeIfAny = numericalGrade;
   }
@@ -118,6 +126,11 @@ class SubjectSR {
       {required DateTime date, required int numericalGrade}) {
     addMovement(
         MSRFinalExamNonApproved(date: date, numericalGrade: numericalGrade));
+    changeSubjetState(SubjetState.regular);
+  }
+
+  changeSubjetState(SubjetState newState) {
+    subjectState = newState;
   }
 
   @override
