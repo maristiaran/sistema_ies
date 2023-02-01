@@ -8,7 +8,7 @@ import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
-import 'package:sistema_ies/checkStudentRecord/utils/generateSubjectItems.dart';
+import 'package:sistema_ies/checkStudentRecord/utils/generate_subject_items.dart';
 
 enum CheckStudentRecordStateName { init }
 
@@ -98,7 +98,7 @@ class SubjectItemCard {
 @immutable
 class SubjectState {
   final List<SubjectItemCard> subjects;
-  SubjectState({required this.subjects});
+  const SubjectState({required this.subjects});
 }
 
 class SubjectStateNotifier extends StateNotifier<SubjectState> {

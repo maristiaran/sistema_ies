@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/expanded_panel_sr_widget.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
@@ -10,7 +9,6 @@ class CheckStudentRecordPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var _data = ref.watch(subjectStateNotifier).subjects;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -23,8 +21,7 @@ class CheckStudentRecordPage extends ConsumerWidget {
         body: Center(
             child: Column(children: [
           userInfoBar(IESSystem().homeUseCase.currentIESUser, context),
-          Container(child: SubjectsItemSR())
+          const SubjectsItemSR()
         ])));
   }
 }
-
