@@ -32,47 +32,34 @@ class ExpandedPanelStudentRecord extends ConsumerWidget {
   }
 }
 
-StateNotifierProvider<PanelNotifier, PanelState> subjectCardNotifier =
-    StateNotifierProvider<PanelNotifier, PanelState>(
-        ((ref) => PanelNotifier().init(30)));
-
-class ExpandedPanelStudentRecordCard extends ConsumerWidget {
-  const ExpandedPanelStudentRecordCard({Key? key, required this.subjects})
-      : super(key: key);
-  final List<SubjectSR> subjects;
+class SubjectsItemSR extends ConsumerWidget {
+  const SubjectsItemSR({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ExpansionPanelList(
-      expansionCallback: (subjectCardNotifier, isExpanded) {
-        ref.read(panelStateNotifier.notifier).toggle(subjectCardNotifier);
-      },
-      children: subjects.map((SubjectSR value) {
-        return ExpansionPanel(
-            headerBuilder: (context, isExpanded) {
-              return Text("Cursado ${value.name} ");
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 500.0, minWidth: 300.0),
+          width: (MediaQuery.of(context).size.width / 3),
+          child: ExpansionPanelList(
+            expansionCallback: (index, isExpanded) {
+              ref.read(subjectStateNotifier.notifier).update(index);
             },
-            body: Column(
-              children: [
-                Text("Estado: ${value.coursing ? "Cursando" : "Nada"}"),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubjectDetails(
-                                  iesUser:
-                                      IESSystem().homeUseCase.currentIESUser,
-                                  event: filterSubjectsWhereThereAreMovements(
-                                      subjects)[subjects.indexOf(value)])));
-                    },
-                    child: const Text("Ver más"))
-              ],
-            ),
-            isExpanded: ref
-                .watch(panelStateNotifier)
-                .panelState[subjects.indexOf(value)]);
-      }).toList(),
+            children: ref
+                .watch(subjectStateNotifier)
+                .subjects
+                .map((SubjectItemCard value) {
+              return ExpansionPanel(
+                  headerBuilder: (context, isExpanded) {
+                    return Text(value.subjectSR.name);
+                  },
+                  body: Text("Cuerpo del item"),
+                  isExpanded: value.isExpanded);
+            }).toList(),
+          ),
+        ),
+      ),
     );
   }
 }

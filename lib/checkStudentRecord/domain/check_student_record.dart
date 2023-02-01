@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
@@ -7,6 +8,7 @@ import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
+import 'package:sistema_ies/checkStudentRecord/utils/generateSubjectItems.dart';
 
 enum CheckStudentRecordStateName { init }
 
@@ -86,3 +88,45 @@ class PanelNotifier extends StateNotifier<PanelState> {
 StateNotifierProvider<PanelNotifier, PanelState> panelStateNotifier =
     StateNotifierProvider<PanelNotifier, PanelState>(
         ((ref) => PanelNotifier()));
+
+class SubjectItemCard {
+  SubjectSR subjectSR;
+  bool isExpanded = false;
+  SubjectItemCard({required this.subjectSR});
+}
+
+@immutable
+class SubjectState {
+  final List<SubjectItemCard> subjects;
+  SubjectState({required this.subjects});
+}
+
+class SubjectStateNotifier extends StateNotifier<SubjectState> {
+  SubjectStateNotifier({required List<SubjectItemCard> subjects})
+      : super(SubjectState(subjects: subjects));
+
+  update(int index) {
+    var items = state.subjects;
+    for (var i = 0; i < state.subjects.length; i++) {
+      if (i == index) {
+        items[i].isExpanded = true;
+      } else {
+        items[i].isExpanded = false;
+      }
+    }
+
+    state = SubjectState(subjects: items);
+  }
+}
+
+final checkStudentRecordStatesProvider =
+    ((ref) => IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
+
+StateNotifierProvider<SubjectStateNotifier, SubjectState> subjectStateNotifier =
+    StateNotifierProvider<SubjectStateNotifier, SubjectState>(((ref) =>
+        SubjectStateNotifier(
+            subjects: generateSubjectItems(IESSystem()
+                .checkStudentRecordUseCase
+                .currentState
+                .currentRole
+                .srSubjects))));
