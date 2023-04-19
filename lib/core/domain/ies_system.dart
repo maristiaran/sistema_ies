@@ -24,7 +24,8 @@ enum IESSystemStateName {
   registeringAsIncomingStudent,
   checkStudentRecord,
   recoverypass,
-  studentRecord
+  studentRecord,
+  crudUserRoles
 }
 
 class IESSystem extends Operation {
@@ -45,6 +46,7 @@ class IESSystem extends Operation {
   late CRUDRoleUseCase crudRolesUseCase;
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
   late CheckStudentRecordUseCase checkStudentRecordUseCase;
+  late CRUDRoleUseCase crudRoleUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -134,6 +136,12 @@ class IESSystem extends Operation {
 
         changeState(const OperationState(
             stateName: IESSystemStateName.checkStudentRecord));
+        break;
+      case UserRoleOperationName.crudUsersAndRoles:
+        crudRoleUseCase = CRUDRoleUseCase();
+
+        changeState(
+            const OperationState(stateName: IESSystemStateName.crudUserRoles));
         break;
 
       default:
