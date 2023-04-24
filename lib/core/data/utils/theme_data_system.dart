@@ -15,6 +15,11 @@ mixin ThemeDataSW implements ThemeData {
         brightness: Brightness.light,
         seedColor: const Color.fromARGB(255, 81, 126, 240)),
     textTheme: const TextTheme(
+      labelMedium: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Roboto',
+          color: Color.fromARGB(255, 63, 63, 63)),
       displayLarge: TextStyle(
           fontSize: 24.0,
           fontWeight: FontWeight.w800,

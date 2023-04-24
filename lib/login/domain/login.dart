@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 // import 'package:sistema_ies/core/domain/entities/student.dart';
@@ -117,5 +118,22 @@ class LoginUseCase extends Operation<LoginState> {
 
   returnToLogin() {
     changeState(currentState.copyChangingState(newState: LoginStateName.init));
+  }
+}
+
+class PasswordVisibilityHandler {
+  PasswordVisibilityHandler(this.visibility);
+  final bool visibility;
+}
+
+class PasswordVisibilityHandlerNotifier extends StateNotifier<PasswordVisibilityHandler> {
+  PasswordVisibilityHandlerNotifier() : super(PasswordVisibilityHandler(false));
+
+  bool passState() {
+    return state.visibility;
+  }
+
+  void switchState() {
+    state = PasswordVisibilityHandler(!passState());
   }
 }

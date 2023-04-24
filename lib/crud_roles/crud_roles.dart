@@ -24,7 +24,7 @@ class CRUDRoleUseCase extends Operation {
   late Syllabus currentSyllabus;
 
 //Auth Use Case initialization
-  CRUDRoleUseCase({required Operation parentOperation})
+  CRUDRoleUseCase()
       : super(const OperationState(stateName: CRUDRoleState.initial));
 
   // @override

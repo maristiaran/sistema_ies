@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/core/presentation/widgets/fields.dart';
+import 'package:sistema_ies/login/presentation/widgets/field_password.dart';
+import '../../core/presentation/widgets/fields/field_email_dni.dart';
+import '../../core/presentation/widgets/fields/field_names.dart';
 
 class LoginPage extends ConsumerWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -46,18 +48,18 @@ class LoginPage extends ConsumerWidget {
                     spacing: 10,
                     children: [
                       fieldEmailDNI(
-                          _emailTextController, "Email o DNI", false, context),
+                          _emailTextController, "Email o DNI", context),
                       const SizedBox(height: 10),
-                      fieldPassword(
-                          _passwordTextController, "Contraseña", true, context),
+                      FieldLoginPass(
+                          _passwordTextController, Fields.password, context),
                       const SizedBox(height: 60),
                       Container(
                         width: MediaQuery.of(context).size.width / 0.5,
                         height: 50,
-                        decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 36, 110, 221),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                                const BorderRadius.all(Radius.circular(10))),
                         child: TextButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {

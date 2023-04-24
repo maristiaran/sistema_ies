@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/core/presentation/widgets/fields.dart';
 import 'package:sistema_ies/login/domain/login.dart';
+
+import '../../core/presentation/widgets/fields/field_email_dni.dart';
 
 class RecoveryPassPage extends ConsumerWidget {
   RecoveryPassPage({Key? key}) : super(key: key);
@@ -42,18 +43,18 @@ class RecoveryPassPage extends ConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        fieldEmailDNI(_emailTextController, "Email o DNI",
-                            false, context),
+                        fieldEmailDNI(
+                            _emailTextController, "Email o DNI", context),
                         const SizedBox(height: 10),
                         Column(
                           children: [
                             Container(
                               width: MediaQuery.of(context).size.width / 0.5,
                               height: 50,
-                              decoration: const BoxDecoration(
-                                  color: Color.fromARGB(255, 36, 110, 221),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
                               child: TextButton(
                                 onPressed: () async {
                                   if (_formRecoveryPassKey.currentState!
@@ -76,9 +77,10 @@ class RecoveryPassPage extends ConsumerWidget {
                                                 "Ha ocurrido un error. Por favor intentelo de nuevo más tarde")));
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
                                   'Recuperar contraseña',
-                                  style: TextStyle(color: Colors.white),
+                                  style:
+                                      Theme.of(context).textTheme.displaySmall,
                                 ),
                               ),
                             ),

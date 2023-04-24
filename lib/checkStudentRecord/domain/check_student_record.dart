@@ -109,7 +109,7 @@ class SubjectStateNotifier extends StateNotifier<SubjectState> {
     var items = state.subjects;
     for (var i = 0; i < state.subjects.length; i++) {
       if (i == index) {
-        items[i].isExpanded = true;
+        items[i].isExpanded = !items[i].isExpanded;
       } else {
         items[i].isExpanded = false;
       }
