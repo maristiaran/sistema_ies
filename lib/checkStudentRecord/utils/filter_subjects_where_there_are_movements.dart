@@ -1,9 +1,10 @@
-import 'package:sistema_ies/core/domain/entities/student.dart';
+import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
 
-List<SubjectSR> filterSubjectsWhereThereAreMovements(List<SubjectSR> subjects) {
-  final List<SubjectSR> subjectsFilter = [];
+List<SubjectItemCard> filterSubjectsWhereThereAreMovements(
+    List<SubjectItemCard> subjects) {
+  final List<SubjectItemCard> subjectsFilter = [];
   for (var element in subjects) {
-    if (element.movements.isNotEmpty) {
+    if (element.subjectSR.movements.isNotEmpty) {
       subjectsFilter.add(element);
     }
   }

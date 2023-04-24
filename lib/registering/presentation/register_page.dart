@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/datetime.dart';
-import 'package:sistema_ies/core/domain/utils/value_objects.dart';
-import 'package:sistema_ies/core/presentation/widgets/fields.dart';
+import '../../core/domain/utils/operation_utils.dart';
+import '../../core/presentation/widgets/fields/field_birthday.dart';
+import '../../core/presentation/widgets/fields/field_confirm_password.dart';
+import '../../core/presentation/widgets/fields/field_generic_register.dart';
+import '../../core/presentation/widgets/fields/field_names.dart';
+import '../../core/presentation/widgets/fields/field_password.dart';
+import '../domain/registering.dart';
 
 class RegisterPage extends ConsumerWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -20,8 +25,24 @@ class RegisterPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final registeringStatesProvider =
-    //     ref.watch(IESSystem().registeringUseCase.stateNotifierProvider);
+    ref.listen<OperationState>(
+        IESSystem().registeringUseCase.stateNotifierProvider, (previous, next) {
+      if (previous!.stateName == RegisteringStateName.failure) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text("Ha ocurrido un error, inténtelo de nuevo más tarde")));
+      } else if (next.stateName == RegisteringStateName.success) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            content: const Text("Registro con éxito")));
+        IESSystem().registeringUseCase.returnToLogin();
+      } else if (next.stateName == RegisteringStateName.verificationEmailSent) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            content: const Text(
+                "Registro con éxito. Revise su bandeja de correo electrónico")));
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -74,14 +95,13 @@ class RegisterPage extends ConsumerWidget {
                           _dniTextController, Fields.dni, false, context),
                       fieldBirthday(
                           _birthDateTextController, Fields.birthday, context),
-                      fieldRegister(_passwordTextController, Fields.password,
-                          true, context),
-                      fieldConfirmPassword(
+                      PasswordField(
+                          _passwordTextController, Fields.password, context),
+                      ConfirmPasswordField(
                           _confirmPasswordTextController,
                           Fields.confirmPassword,
-                          _passwordTextController,
-                          true,
-                          context),
+                          context,
+                          _passwordTextController),
                       const SizedBox(height: 40),
                       Container(
                         width: MediaQuery.of(context).size.width / 1,
@@ -93,6 +113,7 @@ class RegisterPage extends ConsumerWidget {
                         child: TextButton(
                           onPressed: () async {
                             if (_registerFormKey.currentState!.validate()) {
+                              print('registrando');
                               IESSystem()
                                   .registeringUseCase
                                   .registerAsIncomingUser(

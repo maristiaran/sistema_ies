@@ -1,83 +1,92 @@
 import 'package:either_dart/either.dart';
 
-enum FailureName { unknown }
+import '../../presentation/widgets/fields/field_names.dart';
 
-enum Fields { name, lastname, birthday, dni, email, password, confirmPassword }
+enum FailureName { unknown }
 
 class Validator {
   //***************** VALIDATORS FOR LOGIN **********************//
 
   static Either<String, bool> validateEmailDNI(String valueEmailDNI) {
-    bool hasOnlyNumbers = RegExp('^[0-9]*\$').hasMatch(valueEmailDNI);
+    bool hasOnlyNumbers = RegExp('^[0-9]*\$').hasMatch(
+        valueEmailDNI); // First we verified if the input is Email or DNI
     if (hasOnlyNumbers) {
-      // should be a DNI, so:
-      bool isItCorrect = validateByDNI(valueEmailDNI);
-      if (isItCorrect) {
-        return Right(isItCorrect);
+      // if it has just numbers it should be a DNI so:
+      bool isDocumentCorrect = RegExp('^[0-9]*^.{5,12}\$').hasMatch(
+          valueEmailDNI); // we verified if the document meets the requirements
+      if (isDocumentCorrect) {
+        // if it meets the requirements, we'll response with true in Right side, else response with error in Left side
+        return Right(isDocumentCorrect);
       } else {
         return const Left("El DNI ingresado no es correcto");
       }
     } else {
-      bool isItCorrect = validateByEmail(valueEmailDNI);
-      if (isItCorrect) {
-        return Right(isItCorrect);
+      bool isEmailCorrect = RegExp(
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+") // if input is Email, we verified it meets the format, example:'name@email.com'
+          .hasMatch(valueEmailDNI);
+      if (isEmailCorrect) {
+        // if email is correct, we'll response with true in Right side, else response with error in Left side
+        return Right(isEmailCorrect);
       } else {
         return const Left("El email ingresado no es correcto");
       }
     }
   }
 
-  static bool validateByDNI(String valueDNI) {
-    bool itIsCorrect = RegExp('^[0-9]*^.{5,12}\$').hasMatch(valueDNI);
-
-    return itIsCorrect;
-  }
-
-  static bool validateByEmail(String valueEmail) {
-    return RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(valueEmail);
-  }
   //***************** VALIDATORS FOR REGISTER **********************//
 
   static Either<String, bool> validateRegisterForm(String value, Enum type) {
     switch (type) {
+      // NAME
       case Fields.name:
-        bool isItCorrect =
+        bool isNameCorrect =
             RegExp(r'[^!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value);
-        if (isItCorrect) {
-          return Right(isItCorrect);
+        if (isNameCorrect) {
+          return Right(isNameCorrect);
         } else {
-          return const Left("Ingrese un nombre correcto");
+          return const Left("El nombre no es válido");
         }
+      // LASTNAME
       case Fields.lastname:
-        bool isItCorrect =
+        bool isLastnameCorrect =
             RegExp(r'[^!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value);
-        if (isItCorrect) {
-          return Right(isItCorrect);
+        if (isLastnameCorrect) {
+          return Right(isLastnameCorrect);
         } else {
-          return const Left(
-              "El apellido no es válido. Intente ingresarlo correctamente");
+          return const Left("El apellido no es válido");
         }
+      // DNI
       case Fields.dni:
         return validateEmailDNI(value);
+      // EMAIL
       case Fields.email:
         return validateEmailDNI(value);
+      /* // BIRTHDAY
       case Fields.birthday:
-        return const Right(true);
+        return const Right(true); */
+      // PASSWORD
       case Fields.password:
-        bool isItCorrect = RegExp(
-                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-            .hasMatch(value);
-        if (isItCorrect) {
-          return Right(isItCorrect);
+        if (RegExp(r'\s').hasMatch(value)) {
+          return const Left('La contraseña no puede contener espacios');
         } else {
-          // return const Right(true);
-
-          return const Left("La contraseña no es válida. Pruebe con otra");
+          if (RegExp(
+                  r'^(?=.*\d)(?=^\S+$)(?=.+[0-9])(?=.+[@"#%&/\(\)=¿*$?¡\-_!])(?=.*[a-z])(?=.*[A-Z])(?=.+[a-zA-Z]).{8,}$')
+              .hasMatch(value)) {
+            return const Right(true);
+          } else {
+            return const Left("La contraseña no es válida. Pruebe con otra");
+          }
         }
       default:
         return const Left("Algo ha salido mal");
+    }
+  }
+
+  static Either<String, bool> confirmPassword(String value, password) {
+    if (value == password.text) {
+      return Right(value == password);
+    } else {
+      return const Left("Las contraseñas no coinciden");
     }
   }
 
@@ -96,14 +105,6 @@ class Validator {
       return Right(isOlder);
     } else {
       return const Left("Tienes que ser mayor de 17 años para inscribirte");
-    }
-  }
-
-  static Either<String, bool> confirmPassword(String value, password) {
-    if (value == password.text) {
-      return Right(value == password);
-    } else {
-      return const Left("Las contraseñas no coinciden");
     }
   }
 }
