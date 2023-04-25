@@ -1,20 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/login/domain/login.dart';
-
-import '../../core/presentation/widgets/fields/field_email_dni.dart';
+import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
+import 'package:sistema_ies/recoverypass/presentation/recovery_pass_form.dart';
+import '../domain/recoverypass.dart';
 
 class RecoveryPassPage extends ConsumerWidget {
   RecoveryPassPage({Key? key}) : super(key: key);
   static String nameRoute = 'recoverypass';
   static String pathRoute = 'recoverypass';
-  final _formRecoveryPassKey = GlobalKey<FormState>();
-  final _emailTextController = TextEditingController();
+  final Map<Enum, Widget> _widgetElements = {
+    RecoveryStateName.init: RecoveryPassForm(),
+    RecoveryStateName.loading: const Center(
+      child: CircularProgressIndicator(),
+    ),
+    RecoveryStateName.passwordResetSent: const Center()
+  };
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginStatesProvider =
-        ref.watch(IESSystem().loginUseCase.stateNotifierProvider);
+    ref.listen<OperationState>(
+        IESSystem().recoveryPassUseCase.stateNotifierProvider,
+        (previous, next) {
+      if (next.stateName == RecoveryStateName.failure) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text("Ha ocurrido un error, inténtelo de nuevo más tarde")));
+      } else if (next.stateName == RecoveryStateName.passwordResetSent) {
+        IESSystem().recoveryPassUseCase.returnToLogin() <
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                content: const Text(
+                    "Se ha enviado a tu correo un email para que puedas recurperar tu contraseña")));
+      }
+    });
+
+    final body = _widgetElements.keys.firstWhere((element) =>
+        element ==
+        ref
+            .watch(IESSystem().recoveryPassUseCase.stateNotifierProvider)
+            .stateName);
     return Scaffold(
         appBar: AppBar(
             title: Row(
@@ -28,70 +53,6 @@ class RecoveryPassPage extends ConsumerWidget {
             ),
             centerTitle: true,
             backgroundColor: const Color.fromARGB(255, 198, 198, 198)),
-        body: Container(
-            decoration:
-                const BoxDecoration(color: Color.fromARGB(255, 255, 255, 255)),
-            child: Center(
-                child: Container(
-              constraints: const BoxConstraints(maxWidth: 420),
-              width: MediaQuery.of(context).size.width / 0.5,
-              child: Form(
-                  key: _formRecoveryPassKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 150),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        fieldEmailDNI(
-                            _emailTextController, "Email o DNI", context),
-                        const SizedBox(height: 10),
-                        Column(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 0.5,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10))),
-                              child: TextButton(
-                                onPressed: () async {
-                                  if (_formRecoveryPassKey.currentState!
-                                      .validate()) {
-                                    IESSystem()
-                                        .recoveryPassUseCase
-                                        .changePassword(
-                                            _emailTextController.text.trim());
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Coloca un correo electrónico correcto primero")));
-                                  }
-                                  if (loginStatesProvider.stateName ==
-                                      LoginStateName.failure) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                "Ha ocurrido un error. Por favor intentelo de nuevo más tarde")));
-                                  }
-                                },
-                                child: Text(
-                                  'Recuperar contraseña',
-                                  style:
-                                      Theme.of(context).textTheme.displaySmall,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                                onPressed: () => IESSystem().restartLogin(),
-                                child: const Text("Cancelar"))
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
-            ))));
+        body: _widgetElements[body]);
   }
 }

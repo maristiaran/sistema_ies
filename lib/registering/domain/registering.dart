@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:either_dart/either.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
 
-import '../presentation/register_form.dart';
 
 enum RegisteringStateName {
   init,
