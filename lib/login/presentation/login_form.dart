@@ -5,8 +5,8 @@ import 'package:sistema_ies/login/presentation/widgets/field_password.dart';
 import '../../core/presentation/widgets/fields/field_email_dni.dart';
 import '../../core/presentation/widgets/fields/field_names.dart';
 
-class LoginPage extends ConsumerWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginForm extends ConsumerWidget {
+  LoginForm({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 

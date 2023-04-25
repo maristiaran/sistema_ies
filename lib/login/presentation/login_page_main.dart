@@ -3,12 +3,21 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/login/domain/login.dart';
-import 'package:sistema_ies/login/presentation/login_page.dart';
+import 'package:sistema_ies/login/presentation/widgets/failure.dart';
+import 'package:sistema_ies/login/presentation/login_form.dart';
 
 class LoginPageMain extends ConsumerWidget {
   const LoginPageMain({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Map<Enum, Widget> _widgetElements = {
+      LoginStateName.init: LoginForm(),
+      LoginStateName.failure: const FlailureLoginPage(),
+      LoginStateName.successfullySignIn: const Center(),
+      LoginStateName.loading: const Center(
+        child: CircularProgressIndicator(),
+      )
+    };
     ref.listen<OperationState>(IESSystem().loginUseCase.stateNotifierProvider,
         (previous, next) {
       if (previous!.stateName == LoginStateName.failure) {
@@ -21,9 +30,9 @@ class LoginPageMain extends ConsumerWidget {
                 "Su email no ha sido verificado aún. Revise si casilla de correos por favor")));
       }
     });
-    return Scaffold(
-      body:
-          LoginPage() /* _widgetOptions.elementAt(_elements[_loginStatesProvider.stateName]!) */,
-    );
+    final body = _widgetElements.keys.firstWhere((element) =>
+        element ==
+        ref.watch(IESSystem().loginUseCase.stateNotifierProvider).stateName);
+    return Scaffold(body: _widgetElements[body]);
   }
 }
