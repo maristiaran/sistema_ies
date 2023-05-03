@@ -17,6 +17,7 @@ class RecoveryPassUseCase extends Operation {
       : super(const OperationState(stateName: RecoveryStateName.init));
 
   Future changePassword(String email) async {
+    changeState(const OperationState(stateName: RecoveryStateName.loading));
     Either<Failure, Success> response =
         await IESSystem().getUsersRepository().resetPasswordEmail(email: email);
     response.fold(
@@ -26,5 +27,9 @@ class RecoveryPassUseCase extends Operation {
       changeState(
           const OperationState(stateName: RecoveryStateName.passwordResetSent));
     });
+  }
+
+  returnToLogin() {
+    IESSystem().restartLogin();
   }
 }

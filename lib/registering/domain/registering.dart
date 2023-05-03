@@ -6,11 +6,13 @@ import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
 
+
 enum RegisteringStateName {
   init,
   failure,
   registeredWaitingEmailValidation,
   verificationEmailSent,
+  loading,
   success
 }
 
@@ -42,7 +44,7 @@ class RegisteringUseCase extends Operation {
     //             birthdate: birthdate,
     //             dni: dni,
     //             email: email);
-
+    changeState(const OperationState(stateName: RegisteringStateName.loading));
     IESSystem()
         .getUsersRepository()
         .registerNewIESUser(
@@ -53,9 +55,8 @@ class RegisteringUseCase extends Operation {
             surname: surname,
             birthdate: birthdate)
         .then((registerResponse) => registerResponse.fold(
-                (failure) => changeState(
-                    const OperationState(stateName: RegisteringStateName.failure
-                        )), (iesUser) {
+                (failure) => changeState(const OperationState(
+                    stateName: RegisteringStateName.failure)), (iesUser) {
               _timer = Timer.periodic(const Duration(seconds: 3),
                   (timer) => restartLoginIUserEmailVerified());
               changeState(const OperationState(
@@ -100,6 +101,7 @@ class RegisteringUseCase extends Operation {
   }
 }
 
+// Pasword Handler
 class PasswordHandler {
   PasswordHandler(
       this.passwordFieldVisibility,
@@ -249,3 +251,4 @@ class PasswordHandlerNotifier extends StateNotifier<PasswordHandler> {
             false);
   }
 }
+
