@@ -10,7 +10,7 @@ class LoginPageMain extends ConsumerWidget {
   const LoginPageMain({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Map<Enum, Widget> _widgetElements = {
+    final Map<Enum, Widget> widgetElements = {
       LoginStateName.init: LoginForm(),
       LoginStateName.failure: const FlailureLoginPage(),
       LoginStateName.successfullySignIn: const Center(),
@@ -30,9 +30,9 @@ class LoginPageMain extends ConsumerWidget {
                 "Su email no ha sido verificado aún. Revise si casilla de correos por favor")));
       }
     });
-    final body = _widgetElements.keys.firstWhere((element) =>
+    final body = widgetElements.keys.firstWhere((element) =>
         element ==
         ref.watch(IESSystem().loginUseCase.stateNotifierProvider).stateName);
-    return Scaffold(body: _widgetElements[body]);
+    return Scaffold(body: widgetElements[body]);
   }
 }

@@ -3,7 +3,7 @@ import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 
 class Student extends UserRole {
   Syllabus syllabus;
-  List<SubjectSR> srSubjects = [];
+  List<StudentRecordSubject> srSubjects = [];
   // List<MovementStudentRecord> studentEvents = [];
 
   Student({required this.syllabus});
@@ -17,7 +17,7 @@ class Student extends UserRole {
   //   studentEvents.add(studentEvent);
   // }
 
-  addSubjects(SubjectSR subject) {
+  addSubjects(StudentRecordSubject subject) {
     if (!srSubjects.contains(subject)) {
       srSubjects = [...srSubjects, subject];
     }
@@ -26,7 +26,8 @@ class Student extends UserRole {
 
 enum SubjetState { approved, regular, dessaproved, coursing, nule }
 
-class SubjectSR {
+// Student Record subject
+class StudentRecordSubject {
   List<MovementStudentRecord> movements = [];
   String name;
   int subjectId;
@@ -37,7 +38,7 @@ class SubjectSR {
   bool endCourseApproval = false;
   bool coursing = false;
   Enum subjectState = SubjetState.nule;
-  SubjectSR(
+  StudentRecordSubject(
       {required this.subjectId,
       required this.name,
       this.finalExamApprovalDateIfAny,
@@ -46,9 +47,48 @@ class SubjectSR {
       this.endCourseApproval = false,
       this.courseAcreditationNumericalGrade});
 
-  addMovement(MovementStudentRecord movementStudentRecord) {
+  addMovementToStudentRecord(MovementStudentRecord movementStudentRecord) {
     if (!movements.contains(movementStudentRecord)) {
       movements = [...movements, movementStudentRecord];
+    }
+  }
+  fromMapToObject(Map<String, dynamic> movement) {
+    switch (movement['name']) {
+      case 'finalExamApprovedByCertification':
+        addMovFinalExamApprovedByCertification(
+            bookNumber: movement['bookNumber'],
+            certificationResolution: movement['certificationResolution'],
+            date: movement['date'],
+            numericalGrade: movement['numericalGrade'],
+            pageNumber: movement['pageNumber']);
+        break;
+      case 'courseRegistering':
+        addMovCourseRegistering(date: movement['date']);
+        break;
+      case 'courseFailedNonFree':
+        addMovCourseFailedNonFree(date: movement['date']);
+        break;
+      case 'courseFailedFree':
+        addMovCourseFailedFree(date: movement['date']);
+        break;
+      case 'courseApproved':
+        addMovCourseApproved(date: movement['date']);
+        break;
+      case 'courseApprovedWithAccreditation':
+        addMovCourseApprovedWithAccreditation(
+            date: movement['date'], numericalGrade: movement['numericalGrade']);
+        break;
+      case 'finalExamApproved':
+        addMovFinalExamApproved(
+            date: movement['date'],
+            numericalGrade: movement['numericalGrade'],
+            bookNumber: movement['bookNumber'],
+            pageNumber: movement['pageNumber']);
+        break;
+      case 'finalExamNonApproved':
+       addMovFinalExamNonApproved(date: movement['date'], numericalGrade: movement['numericalGrade']);
+        break;
+      default:
     }
   }
 
@@ -58,7 +98,7 @@ class SubjectSR {
       required int bookNumber,
       required int pageNumber,
       required String certificationResolution}) {
-    addMovement(MSRFinalExamApprovedByCertification(
+    addMovementToStudentRecord(MSRFinalExamApprovedByCertification(
         date: date,
         numericalGrade: numericalGrade,
         bookNumber: bookNumber,
@@ -70,19 +110,19 @@ class SubjectSR {
   }
 
   addMovCourseRegistering({required DateTime date}) {
-    addMovement(MSRCourseRegistering(date: date));
+    addMovementToStudentRecord(MSRCourseRegistering(date: date));
 
     coursing = true;
     changeSubjetState(SubjetState.coursing);
   }
 
   addMovCourseFailedNonFree({required DateTime date}) {
-    addMovement(MSRCourseFailedNonFree(date: date));
+    addMovementToStudentRecord(MSRCourseFailedNonFree(date: date));
     changeSubjetState(SubjetState.regular);
   }
 
   addMovCourseFailedFree({required DateTime date}) {
-    addMovement(MSRCourseFailedFree(date: date));
+    addMovementToStudentRecord(MSRCourseFailedFree(date: date));
 
     courseApprovalDateIfAny = date;
     endCourseApproval = false;
@@ -90,7 +130,7 @@ class SubjectSR {
   }
 
   addMovCourseApproved({required DateTime date}) {
-    addMovement(MSRCourseApproved(date: date));
+    addMovementToStudentRecord(MSRCourseApproved(date: date));
 
     courseApprovalDateIfAny = date;
     endCourseApproval = true;
@@ -103,7 +143,7 @@ class SubjectSR {
     endCourseApproval = true;
     courseAcreditationNumericalGrade = numericalGrade;
     changeSubjetState(SubjetState.approved);
-    addMovement(MSRCourseApprovedWithAccreditation(
+    addMovementToStudentRecord(MSRCourseApprovedWithAccreditation(
         date: date, numericalGrade: numericalGrade));
   }
 
@@ -112,7 +152,7 @@ class SubjectSR {
       required int numericalGrade,
       required int bookNumber,
       required int pageNumber}) {
-    addMovement(MSRFinalExamApproved(
+    addMovementToStudentRecord(MSRFinalExamApproved(
         date: date,
         numericalGrade: numericalGrade,
         bookNumber: bookNumber,
@@ -124,7 +164,7 @@ class SubjectSR {
 
   addMovFinalExamNonApproved(
       {required DateTime date, required int numericalGrade}) {
-    addMovement(
+    addMovementToStudentRecord(
         MSRFinalExamNonApproved(date: date, numericalGrade: numericalGrade));
     changeSubjetState(SubjetState.regular);
   }
@@ -172,18 +212,6 @@ class MovementStudentRecord {
   String toString() {
     return " MovementStudentRecord";
   }
-
-  //   @override
-  // String toString() {
-  //   String eName;
-  //   if (movementName == MovementStudentRecordName.finalExamApproved) {
-  //     eName = 'Examen';
-  //   } else {
-  //     eName = 'Equivalencia';
-  //   }
-
-  //   return "$eName (${date.day}-${date.month}-${date.year})  ";
-  // }
 
   String numericalGradeString() {
     return '???';

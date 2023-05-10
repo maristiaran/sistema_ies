@@ -10,7 +10,7 @@ class SubjectDetails extends ConsumerWidget {
   const SubjectDetails({Key? key, required this.iesUser, required this.event})
       : super(key: key);
   final IESUser iesUser;
-  final SubjectSR event;
+  final StudentRecordSubject event;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final checkStudentRecordStatesProvider =

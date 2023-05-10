@@ -1,3 +1,4 @@
+import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,7 +11,7 @@ import 'package:sistema_ies/core/domain/repositories/roles_and_operations_reposi
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/checkStudentRecord/utils/generate_subject_items.dart';
 
-enum CheckStudentRecordStateName { init }
+enum CheckStudentRecordStateName { init, success, loading, failure }
 
 class CheckStudentRecordState extends OperationState {
   // final IESUser currentUser;
@@ -51,6 +52,28 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
       : super(CheckStudentRecordState(
             stateName: CheckStudentRecordStateName.init,
             currentRole: studentRole));
+
+  void getStudentRecords() async {
+    changeState(currentState.copyChangingState(
+        newState: CheckStudentRecordStateName.loading));
+    await IESSystem()
+        .getStudentRecordRepository()
+        .getStudentRecord(
+            idUser: IESSystem().homeUseCase.currentIESUser.id,
+            syllabus:
+                (IESSystem().homeUseCase.currentIESUser.defaultRole as Student)
+                    .syllabus
+                    .administrativeResolution)
+        .fold((left) {
+      changeState(currentState.copyChangingState(
+          newState: CheckStudentRecordStateName.failure));
+      print(left.failureName);
+    }, (right) {
+      studentRole.srSubjects = right;
+      changeState(currentState.copyChangingState(
+          newState: CheckStudentRecordStateName.success));
+    });
+  }
 }
 
 @immutable
@@ -90,7 +113,7 @@ StateNotifierProvider<PanelNotifier, PanelState> panelStateNotifier =
         ((ref) => PanelNotifier()));
 
 class SubjectItemCard {
-  SubjectSR subjectSR;
+  StudentRecordSubject subjectSR;
   bool isExpanded = false;
   SubjectItemCard({required this.subjectSR});
 }
@@ -119,14 +142,15 @@ class SubjectStateNotifier extends StateNotifier<SubjectState> {
   }
 }
 
-final checkStudentRecordStatesProvider =
-    ((ref) => IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
+final syllabuses = IESSystem().checkStudentRecordUseCase.getStudentRecords();
+
+/* final checkStudentRecordStatesProvider =
+    ((ref) => IESSystem().checkStudentRecordUseCase.stateNotifierProvider); */
 
 StateNotifierProvider<SubjectStateNotifier, SubjectState> subjectStateNotifier =
     StateNotifierProvider<SubjectStateNotifier, SubjectState>(((ref) =>
         SubjectStateNotifier(
             subjects: generateSubjectItems(IESSystem()
                 .checkStudentRecordUseCase
-                .currentState
-                .currentRole
+                .studentRole
                 .srSubjects))));
