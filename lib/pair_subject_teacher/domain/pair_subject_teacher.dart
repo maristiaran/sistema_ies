@@ -1,6 +1,10 @@
+import 'package:either_dart/either.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
+import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 enum PairSubjectTeacherStateName {
   init,
@@ -47,10 +51,25 @@ class PairSubjectTeacherUseCase extends Operation<PairSubjectTeacherState> {
             stateName: PairSubjectTeacherStateName.init));
 
   Future pairSubjectTeacher(
-      IESUser teacher, Subject subject, DateTime date) async {}
+      IESUser teacher, Subject subject, DateTime date) async {
+    IESSystem()
+        .getTeachersRepository()
+        .pairSubjectTeacher(teacher, subject, date)
+        .then((errorOrSuccess) => errorOrSuccess.fold((failure) {
+              //fallo
+            }, (succes) {
+              //      exito
+            }));
+  }
 
   Future unpairSubjectTeacher(
-      IESUser teacher, Subject subject, DateTime date) async {}
+      IESUser teacher, Subject subject, DateTime date) async {
+    Either<Failure, Success> response = await IESSystem()
+        .getTeachersRepository()
+        .pairSubjectTeacher(teacher, subject, date);
+    response.fold((left) => changeState(), (right) => changeState());
+  }
+
   Future changeCurrentSyllabus(Syllabus syllabus) async {}
   Future searchTeachers(String lastnameFirstLetters) async {}
 }
