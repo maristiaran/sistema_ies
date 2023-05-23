@@ -74,6 +74,21 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
           newState: CheckStudentRecordStateName.success));
     });
   }
+
+  List<MovementStudentRecord> getStudentRecordMovements(
+      int subjectId) {
+    List<MovementStudentRecord> movements = [];
+    IESSystem()
+        .getStudentRecordRepository()
+        .getStudentRecordMovements(
+            idUser: IESSystem().homeUseCase.currentIESUser.id,
+            syllabusId:
+                (IESSystem().homeUseCase.currentIESUser.defaultRole as Student)
+                    .syllabus
+                    .administrativeResolution,
+            subjectId: subjectId).then((value) => movements = value);
+    return movements;
+  }
 }
 
 @immutable

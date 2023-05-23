@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
+import 'package:sistema_ies/core/data/utils/string_to_movement_name.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
-import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
+
+import '../domain/utils/datetime.dart';
 
 class StudentDatasource implements StudentRepositoryPort {
   @override
@@ -82,8 +85,8 @@ class StudentDatasource implements StudentRepositoryPort {
   Future<List<MovementStudentRecord>> getStudentRecordMovements(
       {required String idUser,
       required String syllabusId,
-      required int subjectID}) async {
-    List<MovementStudentRecord> movements = [];
+      required int subjectId}) async {
+        List<MovementStudentRecord> movements = [];
     List<Map<String, dynamic>> studentRecordsDocs = [];
     studentRecordsDocs = ((await firestoreInstance
             .collection("iesUsers")
@@ -91,8 +94,8 @@ class StudentDatasource implements StudentRepositoryPort {
             .collection('roles')
             .doc(await getSyllabusId(idUser: idUser, syllabus: syllabusId))
             .collection("subjects")
-            .doc(await getSubjectId(
-                subjectID: subjectID, syllabusID: syllabusId, userID: idUser))
+            // I should review the function that get subjectId
+            .doc("0NTl6E4AJOeLVpLmv5IJ")
             .collection('movements')
             .get())
         .docs
@@ -100,7 +103,7 @@ class StudentDatasource implements StudentRepositoryPort {
         .toList());
     movements = studentRecordsDocs
         .map((e) =>
-            MovementStudentRecord(movementName: e['name'], date: e['date']))
+            MovementStudentRecord(movementName: stringToSRMovementName(e['name']), date: timestampToDate(e['date'])))
         .toList();
     return movements;
   }

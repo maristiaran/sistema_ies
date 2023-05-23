@@ -196,8 +196,10 @@ enum MovementStudentRecordName {
   // aprobó con acreditación directa
   finalExamApproved,
   // final aprobado
-  finalExamNonApproved
+  finalExamNonApproved,
   // final no aprobado
+  unknow
+  // desconocido
 }
 
 class MovementStudentRecord {
