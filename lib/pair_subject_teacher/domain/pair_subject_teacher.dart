@@ -67,7 +67,7 @@ class PairSubjectTeacherUseCase extends Operation<PairSubjectTeacherState> {
     Either<Failure, Success> response = await IESSystem()
         .getTeachersRepository()
         .pairSubjectTeacher(teacher, subject, date);
-    response.fold((left) => changeState(), (right) => changeState());
+    response.fold((left) => changeState, (right) => changeState);
   }
 
   Future changeCurrentSyllabus(Syllabus syllabus) async {}
