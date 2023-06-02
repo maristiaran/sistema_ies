@@ -85,7 +85,7 @@ class IESSystem extends Operation {
   }
 
   StudentRepositoryPort getStudentRecordRepository() {
-    _studentRecordRepository ??= studentRecordFakeDatasource;
+    _studentRecordRepository ??= studentRecordDatasource;
     return _studentRecordRepository!;
   }
 
@@ -140,7 +140,7 @@ class IESSystem extends Operation {
         checkStudentRecordUseCase = CheckStudentRecordUseCase(
             currentIESUser: homeUseCase.currentIESUser,
             studentRole: homeUseCase.currentIESUser.defaultRole as Student);
-
+        checkStudentRecordUseCase.getStudentRecords();
         changeState(const OperationState(
             stateName: IESSystemStateName.checkStudentRecord));
         break;

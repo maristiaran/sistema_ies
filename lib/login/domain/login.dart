@@ -81,13 +81,9 @@ class LoginUseCase extends Operation<LoginState> {
       if ((signInUser!.defaultRole != null) &&
           (signInUser!.defaultRole!.userRoleTypeName() ==
               UserRoleTypeName.student)) {
-        await IESSystem()
-            .getStudentRecordRepository()
-            .getStudentRecord(student: (signInUser!.defaultRole as Student))
-            .fold(
-                (left) => {},
-                (right) =>
-                    {(signInUser!.defaultRole! as Student).srSubjects = right});
+        await IESSystem().getStudentRecordRepository().getStudentRecord(
+            idUser: signInUser!.id,
+            syllabus: (signInUser!.defaultRole as Student).syllabus.administrativeResolution);
       }
 
       changeState(LoginState(
@@ -126,7 +122,8 @@ class PasswordVisibilityHandler {
   final bool visibility;
 }
 
-class PasswordVisibilityHandlerNotifier extends StateNotifier<PasswordVisibilityHandler> {
+class PasswordVisibilityHandlerNotifier
+    extends StateNotifier<PasswordVisibilityHandler> {
   PasswordVisibilityHandlerNotifier() : super(PasswordVisibilityHandler(false));
 
   bool passState() {
