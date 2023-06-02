@@ -15,5 +15,12 @@ class RegistrationManagementState extends OperationState {
   List<Object?> get props => [];
 }
 
+class InitRegistrationManagementState extends RegistrationManagementState {}
+
+class FailureRegistrationManagementState extends RegistrationManagementState {}
+
 class RegistrationManagementUseCase
-    extends Operation<RegistrationManagementState> {}
+    extends Operation<RegistrationManagementState> {
+  RegistrationManagementUseCase(RegistrationManagementState initialState)
+      : super(initialState);
+}
