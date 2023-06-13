@@ -29,26 +29,3 @@ class StudentRecordCardExpanded extends ConsumerWidget {
     return Scaffold(appBar: AppBar(), body: widgetElements[currentBody]);
   }
 }
-
-
-// Llamar la función acá dentro ya que le paso el  objeto de la materia, va a tener el Id. Entonces uso el when para que cuando tenga los datos los muestre, sino, muestre un progress bar
-
-/*
-ref.watch(studentRecordMovements).isNotEmpty
-            ? Center(
-                child: ListView.builder(
-                    itemCount: ref.watch(studentRecordMovements).length,
-                    itemBuilder: (context, index) => Text(ref
-                        .watch(studentRecordMovements)[index]
-                        .movementName
-                        .toString())))
-            : Center(
-                child: Column(children: [
-                  const CircularProgressIndicator(),
-                  TextButton(
-                      onPressed: () {
-                        //print(ref.watch(studentRecordMovements));
-                      },
-                      child: const Text("data"))
-                ]),
-              ) */
