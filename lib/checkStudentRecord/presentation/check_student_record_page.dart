@@ -10,8 +10,18 @@ class CheckStudentRecordPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final studentRecordProvider =
-        ref.watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider);
+    Map<Enum, Widget> widgetElements = {
+      CheckStudentRecordStateName.success: const StudentRecordExpandedList(),
+      CheckStudentRecordStateName.loading: const CenterCircleProgressBar(),
+      CheckStudentRecordStateName.studentRecordExtended:
+          const StudentRecordExpandedList()
+    };
+
+    final currentBody = widgetElements.keys.firstWhere((element) =>
+        element ==
+        ref
+            .watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider)
+            .stateName);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -21,29 +31,46 @@ class CheckStudentRecordPage extends ConsumerWidget {
           ),
           automaticallyImplyLeading: false,
         ),
-        body: studentRecordProvider.stateName !=
-                CheckStudentRecordStateName.loading
-            ? Center(
-                child: Column(children: [
-                userInfoBar(IESSystem().homeUseCase.currentIESUser, context),
-                Expanded(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: IESSystem()
-                          .checkStudentRecordUseCase
-                          .studentRole
-                          .srSubjects
-                          .length,
-                      itemBuilder: (context, index) {
-                        return StudentRecordCard(IESSystem()
-                            .checkStudentRecordUseCase
-                            .studentRole
-                            .srSubjects[index]);
-                      }),
-                )
-              ]))
-            : const Center(
-                child: CircularProgressIndicator(),
-              ));
+        body: widgetElements[currentBody]);
+  }
+}
+
+class StudentRecordExpandedList extends StatelessWidget {
+  const StudentRecordExpandedList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Column(children: [
+      userInfoBar(IESSystem().homeUseCase.currentIESUser, context),
+      Expanded(
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: IESSystem()
+                .checkStudentRecordUseCase
+                .studentRole
+                .srSubjects
+                .length,
+            itemBuilder: (context, index) {
+              return StudentRecordCard(IESSystem()
+                  .checkStudentRecordUseCase
+                  .studentRole
+                  .srSubjects[index]);
+            }),
+      )
+    ]));
+  }
+}
+
+class CenterCircleProgressBar extends StatelessWidget {
+  const CenterCircleProgressBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator());
   }
 }

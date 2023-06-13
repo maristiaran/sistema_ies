@@ -30,9 +30,9 @@ class LoginPageMain extends ConsumerWidget {
                 "Su email no ha sido verificado aún. Revise si casilla de correos por favor")));
       }
     });
-    final body = widgetElements.keys.firstWhere((element) =>
+    final currentBody = widgetElements.keys.firstWhere((element) =>
         element ==
         ref.watch(IESSystem().loginUseCase.stateNotifierProvider).stateName);
-    return Scaffold(body: widgetElements[body]);
+    return Scaffold(body: widgetElements[currentBody]);
   }
 }

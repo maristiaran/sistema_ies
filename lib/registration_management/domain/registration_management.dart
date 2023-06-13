@@ -1,7 +1,4 @@
-import 'package:sistema_ies/core/domain/entities/syllabus.dart';
-import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum RegistrationManagementStateName {

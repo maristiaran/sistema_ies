@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/data/utils/string_to_movement_name.dart';
@@ -37,7 +36,7 @@ class StudentDatasource implements StudentRepositoryPort {
       {required String userID,
       required String syllabusID,
       required int subjectID}) async {
-    return await firestoreInstance
+    return firestoreInstance
         .collection("iesUsers")
         .doc(userID)
         .collection('roles')
@@ -77,7 +76,14 @@ class StudentDatasource implements StudentRepositoryPort {
     srSubjects = studentRecordsDocs
         .map((e) => StudentRecordSubject(subjectId: e['id'], name: "name"))
         .toList();
-
+    // Get student record movements
+    /* for (var studentRecord in srSubjects) {
+      List<MovementStudentRecord> movements = await getStudentRecordMovements(
+          idUser: idUser,
+          subjectId: studentRecord.subjectId,
+          syllabusId: syllabus);
+      studentRecord.movements = movements;
+    } */
     return Right(srSubjects);
   }
 
@@ -86,7 +92,7 @@ class StudentDatasource implements StudentRepositoryPort {
       {required String idUser,
       required String syllabusId,
       required int subjectId}) async {
-        List<MovementStudentRecord> movements = [];
+    List<MovementStudentRecord> movements = [];
     List<Map<String, dynamic>> studentRecordsDocs = [];
     studentRecordsDocs = ((await firestoreInstance
             .collection("iesUsers")
@@ -94,17 +100,23 @@ class StudentDatasource implements StudentRepositoryPort {
             .collection('roles')
             .doc(await getSyllabusId(idUser: idUser, syllabus: syllabusId))
             .collection("subjects")
-            // I should review the function that get subjectId
-            .doc("0NTl6E4AJOeLVpLmv5IJ")
+            .doc(await getSubjectId(
+                subjectID: subjectId,
+                syllabusID:
+                    await getSyllabusId(idUser: idUser, syllabus: syllabusId),
+                userID: idUser))
             .collection('movements')
             .get())
         .docs
         .map((e) => e.data())
         .toList());
+
     movements = studentRecordsDocs
-        .map((e) =>
-            MovementStudentRecord(movementName: stringToSRMovementName(e['name']), date: timestampToDate(e['date'])))
+        .map((e) => MovementStudentRecord(
+            movementName: stringToSRMovementName(e['name']),
+            date: timestampToDate(e['date'])))
         .toList();
+
     return movements;
   }
 }

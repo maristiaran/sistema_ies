@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card_expanded.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
+import '../check_student_record_page.dart';
+
 class StudentRecordCard extends StatelessWidget {
   final StudentRecordSubject studentRecordSubject;
+
   const StudentRecordCard(this.studentRecordSubject, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      // horizontal).
-
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(
@@ -41,10 +43,14 @@ class StudentRecordCard extends StatelessWidget {
                   trailing: TextButton(
                       onPressed: () {
                         // How change to other page related with this item?
-                        print(IESSystem()
+                        IESSystem()
                             .checkStudentRecordUseCase
-                            .getStudentRecordMovements(
-                                studentRecordSubject.subjectId));
+                            .getStudentRecordMovements(studentRecordSubject);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StudentRecordCardExpanded(
+                                    studentRecordSubject)));
                       },
                       child: const Text("Ver movimientos")),
                   title: Text(studentRecordSubject.name),

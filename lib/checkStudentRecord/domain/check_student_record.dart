@@ -11,7 +11,13 @@ import 'package:sistema_ies/core/domain/repositories/roles_and_operations_reposi
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/checkStudentRecord/utils/generate_subject_items.dart';
 
-enum CheckStudentRecordStateName { init, success, loading, failure }
+enum CheckStudentRecordStateName {
+  init,
+  success,
+  loading,
+  failure,
+  studentRecordExtended
+}
 
 class CheckStudentRecordState extends OperationState {
   // final IESUser currentUser;
@@ -70,15 +76,18 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
       print(left.failureName);
     }, (right) {
       studentRole.srSubjects = right;
+
       changeState(currentState.copyChangingState(
           newState: CheckStudentRecordStateName.success));
     });
   }
 
-  List<MovementStudentRecord> getStudentRecordMovements(
-      int subjectId) {
+  void getStudentRecordMovements(
+      StudentRecordSubject studentRecordSubject) async {
+    changeState(currentState.copyChangingState(
+        newState: CheckStudentRecordStateName.loading));
     List<MovementStudentRecord> movements = [];
-    IESSystem()
+    await IESSystem()
         .getStudentRecordRepository()
         .getStudentRecordMovements(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
@@ -86,8 +95,11 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
                 (IESSystem().homeUseCase.currentIESUser.defaultRole as Student)
                     .syllabus
                     .administrativeResolution,
-            subjectId: subjectId).then((value) => movements = value);
-    return movements;
+            subjectId: studentRecordSubject.subjectId)
+        .then((value) => studentRecordSubject.movements = value);
+    print(studentRecordSubject.movements);
+    changeState(currentState.copyChangingState(
+        newState: CheckStudentRecordStateName.studentRecordExtended));
   }
 }
 
