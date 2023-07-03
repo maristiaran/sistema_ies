@@ -5,6 +5,8 @@ import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
 import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card.dart';
 
+import 'widget/center_circle_progress_bar.dart';
+
 class CheckStudentRecordPage extends ConsumerWidget {
   const CheckStudentRecordPage({Key? key}) : super(key: key);
 
@@ -61,16 +63,5 @@ class StudentRecordExpandedList extends StatelessWidget {
             }),
       )
     ]));
-  }
-}
-
-class CenterCircleProgressBar extends StatelessWidget {
-  const CenterCircleProgressBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
   }
 }

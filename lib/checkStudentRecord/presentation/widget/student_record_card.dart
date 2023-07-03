@@ -3,8 +3,6 @@ import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_recor
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
-import '../check_student_record_page.dart';
-
 class StudentRecordCard extends StatelessWidget {
   final StudentRecordSubject studentRecordSubject;
 

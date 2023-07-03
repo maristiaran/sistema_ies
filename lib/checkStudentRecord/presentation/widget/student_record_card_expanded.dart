@@ -4,7 +4,8 @@ import 'package:sistema_ies/core/domain/entities/student.dart';
 
 import '../../../core/domain/ies_system.dart';
 import '../../domain/check_student_record.dart';
-import '../check_student_record_page.dart';
+import 'center_circle_progress_bar.dart';
+import 'details_student_record.dart';
 
 class StudentRecordCardExpanded extends ConsumerWidget {
   StudentRecordSubject studentRecordSubject;
@@ -16,9 +17,8 @@ class StudentRecordCardExpanded extends ConsumerWidget {
       CheckStudentRecordStateName.studentRecordExtended: Center(
           child: ListView.builder(
               itemCount: studentRecordSubject.movements.length,
-              itemBuilder: (context, index) => Text(studentRecordSubject
-                  .movements[index].movementName
-                  .toString()))),
+              itemBuilder: (context, index) => DetailsStudentRecordCard(
+                  studentRecordSubject.movements[index]))),
       CheckStudentRecordStateName.loading: const CenterCircleProgressBar()
     };
     final currentBody = widgetElements.keys.firstWhere((element) =>
