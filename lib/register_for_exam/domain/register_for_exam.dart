@@ -156,9 +156,88 @@ StateNotifierProvider<SubjectStateNotifier, SubjectState> subjectStateNotifier =
                 .currentRole
                 .srSubjects))));
 
-// Register Provider
+// El estado de nuestro StateNotifier debe ser inmutable.
+// También podríamos usar paquetes como Freezed para ayudar con la implementación.
 @immutable
 class Register {
-  final List<bool> subjects;
-  const Register({required this.subjects});
+  const Register({required this.id, required this.name, required this.check});
+
+  // Todas las propiedades deben ser `final` en nuestra clase.
+  final int id;
+  final String name;
+  final bool check;
+
+  // Como `Register` es inmutable, implementamos un método que permite clonar el
+  // `Register` con un contenido ligeramente diferente.
+  Register copyWith({int? id, String? name, bool? check}) {
+    return Register(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      check: check ?? this.check,
+    );
+  }
 }
+
+// La clase StateNotifier que se pasará a nuestro StateNotifierProvider.
+// Esta clase no debe exponer el estado fuera de su propiedad "estado", lo que significa
+// ¡sin getters/propiedades públicas!
+// Los métodos públicos en esta clase serán los que permitirán
+// que la interfaz de usuario modifique el estado.
+class RegisterNotifier extends StateNotifier<List<Register>> {
+  // Inicializamos la lista de `Registers` como una lista vacía
+  RegisterNotifier() : super([]);
+
+  // Permitamos que la interfaz de usuario agregue todos.
+  void addRegister(Register register) {
+    // Ya que nuestro estado es inmutable, no podemos hacer `state.add(register)`.
+    // En su lugar, debemos crear una nueva lista de registers que contenga la anterior
+    // elementos y el nuevo.
+    // ¡Usar el spread operator de Dart aquí es útil!
+    state = [...state, register];
+    // No es necesario llamar a "notifyListeners" o algo similar. Llamando a "state ="
+    // reconstruirá automáticamente la interfaz de usuario cuando sea necesario.
+  }
+
+  void completeRegisters() {
+    for (final si
+        in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
+      addRegister(Register(id: si.id, name: si.name, check: false));
+    }
+  }
+
+  // Permitamos eliminar `registers`
+  void removeRegister(int registerId) {
+    // Nuevamente, nuestro estado es inmutable. Así que estamos haciendo
+    // una nueva lista en lugar de cambiar la lista existente.
+    state = [
+      for (final register in state)
+        if (register.id != registerId) register,
+    ];
+  }
+
+  // Marcamos una `register` como completada
+  void toggle(int registerId) {
+    state = [
+      for (final register in state)
+        // Estamos marcando solo el `register` coincidente como completada
+        if (register.id == registerId)
+          // Una vez más, dado que nuestro estado es inmutable, necesitamos hacer una copia
+          // del `register`. Estamos usando nuestro método `copyWith` implementado antes
+          // para ayudar con eso.
+          register.copyWith(check: !register.check)
+        else
+          // otros `registers` no se modifican
+          register,
+    ];
+  }
+}
+
+var si = RegisterNotifier().completeRegisters();
+// Finalmente, estamos usando StateNotifierProvider para permitir que la
+// interfaz de usuario interactúe con nuestra clase RegisterNotifier.
+final registersProvider =
+    StateNotifierProvider<RegisterNotifier, List<Register>>((ref) {
+  var reg = RegisterNotifier();
+  reg.completeRegisters();
+  return reg;
+});
