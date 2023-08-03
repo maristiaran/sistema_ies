@@ -3,11 +3,13 @@ import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart'
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/repositories/log_repository_fake.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
+import 'package:sistema_ies/crud_log/domain/crud_log.dart';
 import 'package:sistema_ies/crud_roles/crud_roles.dart';
 import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
@@ -25,7 +27,8 @@ enum IESSystemStateName {
   checkStudentRecord,
   recoverypass,
   studentRecord,
-  crudUserRoles
+  crudUserRoles,
+  crudLogs
 }
 
 class IESSystem extends Operation {
@@ -37,6 +40,7 @@ class IESSystem extends Operation {
   SyllabusesRepositoryPort? _syllabusesRepository;
   RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
   StudentRepositoryPort? _studentRecordRepository;
+  LogRepositoyFakePort? _logRepository;
 
   // Use cases
   late LoginUseCase loginUseCase;
@@ -47,6 +51,7 @@ class IESSystem extends Operation {
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
   late CheckStudentRecordUseCase checkStudentRecordUseCase;
   late CRUDRoleUseCase crudRoleUseCase;
+  late LogUseCase logUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -66,6 +71,14 @@ class IESSystem extends Operation {
       _syllabusesRepository!.initRepositoryCaches();
     }
     return _syllabusesRepository!;
+  }
+
+  LogRepositoyFakePort getLogsRepository() {
+    if (_logRepository == null) {
+      _logRepository = logsRepository;
+      _logRepository!.initRepositoryCaches();
+    }
+    return _logRepository!;
   }
 
   RolesAndOperationsRepositoryPort getRolesAndOperationsRepository() {
@@ -143,6 +156,13 @@ class IESSystem extends Operation {
         changeState(
             const OperationState(stateName: IESSystemStateName.crudUserRoles));
         break;
+      case UserRoleOperationName.checkLog:
+        logUseCase = LogUseCase(currentIESUser: homeUseCase.currentIESUser);
+        changeState(
+            const OperationState(stateName: IESSystemStateName.crudLogs));
+        getLogsRepository();
+        logUseCase.getLogsAsync();
+        break;
 
       default:
     }
@@ -163,6 +183,11 @@ class IESSystem extends Operation {
   restartLogin() {
     changeState(const OperationState(stateName: IESSystemStateName.login));
     // loginUseCase.initLogin();
+  }
+
+  intLogs() {
+    getLogsRepository();
+    logUseCase = LogUseCase(currentIESUser: homeUseCase.currentIESUser);
   }
 
   onCurrentUserLogout() {}

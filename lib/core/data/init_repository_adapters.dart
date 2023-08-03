@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sistema_ies/core/data/log_repository_fake.dart';
 import 'package:sistema_ies/core/data/roles_and_operations_repository.dart';
 import 'package:sistema_ies/core/data/studentrecord_datasource.dart';
 
@@ -15,3 +16,4 @@ final RolesAndOperationsRepositoryPort rolesAndOperationsRepository =
     RolesAndOperationsRepositoryMemoryAdapter();
 
 final studentRecordDatasource = StudentDatasource();
+final logsRepository = LogRepositoryFakeAdapter();
