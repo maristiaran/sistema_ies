@@ -32,7 +32,7 @@ class LogRepositoryFakeAdapter implements LogRepositoyFakePort {
             'modifiedUserDNI': 11111,
             'rol': "Administrativo",
             'modifiedUsername': "Pedro",
-            'description': "Se elimino el rol de Pedro"
+            'description': "Se elimino el rol de Estudiante"
           },
           {
             'datetime': DateTime(2023, 8, 5, 17, 30),
@@ -40,7 +40,7 @@ class LogRepositoryFakeAdapter implements LogRepositoyFakePort {
             'modifiedUserDNI': 11111,
             'rol': "Administrativo",
             'modifiedUsername': "Brian",
-            'description': "Se actualizo el nombre de usuario"
+            'description': "Se actualizo el nombre de Brayan"
           },
           {
             'datetime': DateTime(2023, 7, 5, 17, 30),

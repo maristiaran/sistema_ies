@@ -1,6 +1,6 @@
 enum LogsActions {
   deleteUserRol,
-  changeUserRole,
+  changeUserRol,
   addUserRol,
   addSubject,
   updateSubject,
