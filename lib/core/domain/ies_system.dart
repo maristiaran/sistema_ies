@@ -16,6 +16,7 @@ import 'package:sistema_ies/home/domain/home.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 import 'package:sistema_ies/register_as_incoming_student/domain/registering_as_incoming_user.dart';
 import 'package:sistema_ies/recoverypass/domain/recoverypass.dart';
+import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
 
 enum IESSystemStateName {
@@ -26,7 +27,8 @@ enum IESSystemStateName {
   checkStudentRecord,
   recoverypass,
   studentRecord,
-  crudUserRoles
+  crudUserRoles,
+  registerForExamUseCase
 }
 
 class IESSystem extends Operation {
@@ -49,6 +51,7 @@ class IESSystem extends Operation {
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
   late CheckStudentRecordUseCase checkStudentRecordUseCase;
   late CRUDRoleUseCase crudRoleUseCase;
+  late RegisterForExamUseCase registerForExamUseCase;
 
   // IESSystem as a Singleton
   factory IESSystem() {
@@ -146,6 +149,15 @@ class IESSystem extends Operation {
         break;
       case UserRoleOperationName.crudUsersAndRoles:
         crudRoleUseCase = CRUDRoleUseCase();
+
+        changeState(
+            const OperationState(stateName: IESSystemStateName.crudUserRoles));
+        break;
+      case UserRoleOperationName.registerForExamUseCase:
+        registerForExamUseCase = RegisterForExamUseCase(
+            currentIESUser: homeUseCase.currentIESUser,
+            studentRole:
+                homeUseCase.currentIESUser.getDefaultRole() as Student);
 
         changeState(
             const OperationState(stateName: IESSystemStateName.crudUserRoles));

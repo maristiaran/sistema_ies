@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
 // import 'package:sistema_ies/checkStudentRecord/presentation/check_student_record_page.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
@@ -86,9 +85,6 @@ class HomePage extends ConsumerWidget {
               const IconThemeData(color: Color.fromARGB(255, 108, 145, 199)),
           selectedItemColor: const Color.fromARGB(255, 108, 145, 199),
           onTap: (int value) {
-            if (value == 3) {
-              ref.read(panelStateNotifier.notifier).init(32);
-            }
             ref.read(_currentIndex.notifier).state = value;
           },
           backgroundColor: Colors.white,
@@ -113,6 +109,5 @@ class HomePage extends ConsumerWidget {
                     color: Color.fromARGB(255, 108, 145, 199)))
           ]),
     );
-    // body: Text(IESSystem().currentIESUserIfAny()!.firstname));
   }
 }

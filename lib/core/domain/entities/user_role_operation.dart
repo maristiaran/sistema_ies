@@ -8,6 +8,7 @@ enum UserRoleOperationName {
   checkFinalExamsDates,
   crudUsersAndRoles,
   resetAndSaveLogs,
+  registerForExamUseCase,
   checkLog,
   adminCourse,
   adminFinalExamsAndInstances,
