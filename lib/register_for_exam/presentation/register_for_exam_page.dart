@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card.dart';
 import 'package:sistema_ies/core/data/utils/theme_data_system.dart';
-// import 'package:sistema_ies/core/domain/entities/student.dart';
-// import 'package:sistema_ies/checkStudentRecord/presentation/expanded_panel_sr_widget.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
-// import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
 
 class RegisterForExamPage extends ConsumerWidget {
   // final StudentRecordSubject studentRecordSubject;

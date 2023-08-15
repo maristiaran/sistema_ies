@@ -6,6 +6,7 @@ import 'package:sistema_ies/home/presentation/home_page.dart';
 import 'package:sistema_ies/login/presentation/login_page_main.dart';
 import 'package:sistema_ies/recoverypass/presentation/recovery_pass_page.dart';
 import 'package:sistema_ies/register_as_incoming_student/presentation/register_as_incoming_student_page.dart';
+import 'package:sistema_ies/register_for_exam/presentation/register_for_exam_page.dart';
 import 'package:sistema_ies/registering/presentation/register_page_main.dart';
 
 final systemRouter = GoRouter(
@@ -25,6 +26,11 @@ final systemRouter = GoRouter(
             name: 'checkStudentRecord',
             path: 'checkStudentRecord',
             builder: (context, state) => const CheckStudentRecordPage(),
+          ),
+          GoRoute(
+            name: 'registerForExam',
+            path: 'registerForExam',
+            builder: (context, state) => const RegisterForExamPage(),
           ),
           GoRoute(
             name: 'crudUserRoles',
