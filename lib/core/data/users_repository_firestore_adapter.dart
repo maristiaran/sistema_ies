@@ -365,4 +365,10 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
           message: 'Error desconocido en la creación del nuevo estudiante'));
     }
   }
+  
+  @override
+  Future<List<IESUser>> getAllTeacherBySyllabus({required Syllabus syllabus}) {
+    // TODO: implement getAllTeacherBySyllabus
+    throw UnimplementedError();
+  }
 }
