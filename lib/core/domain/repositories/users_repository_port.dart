@@ -47,4 +47,5 @@ abstract class UsersRepositoryPort extends RepositoryPort {
       IESUser student, Syllabus syllabus, List<Course> updatedCourses);
   Future<Either<Failure, Success>> registerAsIncomingStudent(
       {required IESUser iesUser, required Syllabus syllabus});
+  Future<List<IESUser>> getAllTeacherBySyllabus({required Syllabus syllabus});
 }

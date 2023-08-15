@@ -5,6 +5,7 @@ import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
+import 'package:sistema_ies/core/domain/repositories/teachers_repository.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
@@ -39,6 +40,7 @@ class IESSystem extends Operation {
   SyllabusesRepositoryPort? _syllabusesRepository;
   RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
   StudentRepositoryPort? _studentRecordRepository;
+  TeachersRepositoryPort? _teachersRepository;
 
   // Use cases
   late LoginUseCase loginUseCase;
@@ -61,6 +63,11 @@ class IESSystem extends Operation {
   UsersRepositoryPort getUsersRepository() {
     _usersRepository ??= usersRepository;
     return _usersRepository!;
+  }
+
+  TeachersRepositoryPort getTeachersRepository() {
+    _teachersRepository ??= _teachersRepository;
+    return _teachersRepository!;
   }
 
   SyllabusesRepositoryPort getSyllabusesRepository() {
