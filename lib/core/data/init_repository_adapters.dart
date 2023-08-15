@@ -15,9 +15,4 @@ final syllabusesRepository = SyllabusesRepositoryMemoryAdapter();
 final RolesAndOperationsRepositoryPort rolesAndOperationsRepository =
     RolesAndOperationsRepositoryMemoryAdapter();
 
-<<<<<<< HEAD
-final studentRecordFakeDatasource = StudentFakeDatasource();
-final teachersRepository = TeachersMemoryRepositoryAdapter();
-=======
 final studentRecordDatasource = StudentDatasource();
->>>>>>> 5865aa3446fe3215178900963350da9055017c6f

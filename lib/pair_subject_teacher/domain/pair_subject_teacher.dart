@@ -1,5 +1,4 @@
 import 'package:either_dart/either.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
@@ -70,6 +69,11 @@ class PairSubjectTeacherUseCase extends Operation<PairSubjectTeacherState> {
     response.fold((left) => changeState, (right) => changeState);
   }
 
-  Future changeCurrentSyllabus(Syllabus syllabus) async {}
-  Future searchTeachers(String lastnameFirstLetters) async {}
+  Future changeCurrentSyllabus(Syllabus syllabus) async {
+    return IESSystem().getSyllabusesRepository().getAllSyllabuses();
+  }
+
+  Future searchTeachers(String lastnameFirstLetters) async {
+    return IESSystem().getTeachersRepository();
+  }
 }

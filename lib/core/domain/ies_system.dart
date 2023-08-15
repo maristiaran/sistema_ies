@@ -63,7 +63,7 @@ class IESSystem extends Operation {
   }
 
   TeachersRepositoryPort getTeachersRepository() {
-    _teachersRepository ??= teachersRepository;
+    _teachersRepository ??= _teachersRepository;
     return _teachersRepository!;
   }
 
