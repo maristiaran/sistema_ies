@@ -33,7 +33,7 @@ class RegistrationManagementUseCase
       : super(const InitRegistrationManagementState());
 }
 
-// Proveedores de estado
+// Proveedores de estadoooo
 final registrationManagementUseCaseProvider =
     Provider<RegistrationManagementUseCase>((ref) {
   return RegistrationManagementUseCase();
