@@ -30,7 +30,8 @@ class IESUser {
     Documents.vaccinationCertificate: false
   };
   List<UserRole> roles = [];
-  UserRole? defaultRole;
+  // UserRole? defaultRole;
+  int currentRoleIndex = 0;
 
   IESUser(
       {required this.id,
@@ -40,13 +41,13 @@ class IESUser {
       required this.birthdate,
       required this.email,
       required this.roles,
-      required this.defaultRole});
+      this.currentRoleIndex = 0});
 
   addRole(UserRole newRole) {
     if ((roles.length == 1) &&
         (roles.first.userRoleTypeName() == UserRoleTypeName.guest)) {
       roles.removeAt(0);
-      defaultRole = newRole;
+      // defaultRole = newRole;
     }
     roles.add(newRole);
   }
@@ -74,7 +75,16 @@ class IESUser {
         .toList();
   }
 
-  UserRole getDefaultRole() {
-    return defaultRole ?? roles[0];
+  UserRole getCurrentRole() {
+    return roles[currentRoleIndex];
+  }
+
+  UserRole changeToNextRole() {
+    if (roles.length == (currentRoleIndex + 1)) {
+      currentRoleIndex = 0;
+    } else {
+      currentRoleIndex += 1;
+    }
+    return roles[currentRoleIndex];
   }
 }

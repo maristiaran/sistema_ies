@@ -49,36 +49,42 @@ class HomePage extends ConsumerWidget {
     ];
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 160,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return TextButton(
-              onPressed: () {},
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(maxRadius: 13, child: Text(userName[0])),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Text(
-                      "Hola $userName - ${IESSystem().getRolesAndOperationsRepository().getUserRoleType(homeStatesProvider.currentRole.userRoleTypeName()).title}",
-                      overflow: TextOverflow.visible,
-                      maxLines: 1,
-                      softWrap: false,
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 15,
-                    color: Theme.of(context).colorScheme.background,
-                  )
-                ],
+          // leadingWidth: 160,
+          leading: CircleAvatar(
+              // maxRadius: 13,
+              child: Text(userName[0])),
+          title: Row(
+            children: [
+              const SizedBox(
+                width: 10,
               ),
-            );
-          },
-        ),
-      ),
+              Text(
+                "Hola $userName",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              const Spacer(),
+              Text(
+                IESSystem()
+                    .getRolesAndOperationsRepository()
+                    .getUserRoleType(
+                        homeStatesProvider.currentRole.userRoleTypeName())
+                    .title,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.change_circle_rounded),
+              tooltip: 'Cambiar rol',
+              onPressed: () {
+                IESSystem().homeUseCase.startSelectingUserRole();
+              },
+            ), //IconButton
+            //IconButton
+          ]),
       body: widgetOptions.elementAt(ref.watch(_currentIndex)),
       bottomNavigationBar: BottomNavigationBar(
           selectedIconTheme:

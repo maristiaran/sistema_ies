@@ -62,10 +62,10 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
         .getStudentRecordRepository()
         .getStudentRecord(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
-            syllabus:
-                (IESSystem().homeUseCase.currentIESUser.defaultRole as Student)
-                    .syllabus
-                    .administrativeResolution)
+            syllabus: (IESSystem().homeUseCase.currentIESUser.getCurrentRole()
+                    as Student)
+                .syllabus
+                .administrativeResolution)
         .fold((left) {
       changeState(currentState.copyChangingState(
           newState: CheckStudentRecordStateName.failure));
@@ -87,10 +87,10 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
         .getStudentRecordRepository()
         .getStudentRecordMovements(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
-            syllabusId:
-                (IESSystem().homeUseCase.currentIESUser.defaultRole as Student)
-                    .syllabus
-                    .administrativeResolution,
+            syllabusId: (IESSystem().homeUseCase.currentIESUser.getCurrentRole()
+                    as Student)
+                .syllabus
+                .administrativeResolution,
             subjectId: studentRecordSubject.subjectId)
         .then((value) => studentRecordSubject.movements = value);
     print(studentRecordSubject.movements);
@@ -98,6 +98,3 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
         newState: CheckStudentRecordStateName.studentRecordExtended));
   }
 }
-
-
-

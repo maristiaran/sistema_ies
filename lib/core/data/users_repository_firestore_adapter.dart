@@ -108,14 +108,15 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
       }
     }
     return Right(IESUser(
-        id: idUser,
-        firstname: userDoc.get('firstname'),
-        surname: userDoc.get('surname'),
-        birthdate: stringToDate(userDoc.get('birthdate')),
-        dni: userDoc.get('dni'),
-        email: userDoc.get('email'),
-        roles: roles,
-        defaultRole: defaultRoleIfAny ?? roles.first));
+      id: idUser,
+      firstname: userDoc.get('firstname'),
+      surname: userDoc.get('surname'),
+      birthdate: stringToDate(userDoc.get('birthdate')),
+      dni: userDoc.get('dni'),
+      email: userDoc.get('email'),
+      roles: roles,
+      // defaultRole: defaultRoleIfAny ?? roles.first
+    ));
   }
 
   // return Left(Failure(failureName: FailureName.unknown));
@@ -234,14 +235,15 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
           Guest guestRole = Guest();
 
           return Right(IESUser(
-              id: docRef.id,
-              firstname: firstname,
-              surname: surname,
-              birthdate: birthdate,
-              dni: dni,
-              email: email,
-              roles: [guestRole],
-              defaultRole: guestRole));
+            id: docRef.id,
+            firstname: firstname,
+            surname: surname,
+            birthdate: birthdate,
+            dni: dni,
+            email: email,
+            roles: [guestRole],
+            // defaultRole: guestRole)
+          ));
         } catch (e) {
           Left(Failure(
               failureName: UsersRepositoryFailureName.unknown,
@@ -365,7 +367,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
           message: 'Error desconocido en la creación del nuevo estudiante'));
     }
   }
-  
+
   @override
   Future<List<IESUser>> getAllTeacherBySyllabus({required Syllabus syllabus}) {
     // TODO: implement getAllTeacherBySyllabus

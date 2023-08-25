@@ -64,10 +64,10 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
         .getStudentRecordRepository()
         .getStudentRecordMovements(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
-            syllabusId:
-                (IESSystem().homeUseCase.currentIESUser.defaultRole as Student)
-                    .syllabus
-                    .administrativeResolution,
+            syllabusId: (IESSystem().homeUseCase.currentIESUser.getCurrentRole()
+                    as Student)
+                .syllabus
+                .administrativeResolution,
             subjectId: subjectId)
         .then((value) => movements = value);
     movements.sort((a, b) => a.date.isBefore(b.date) ? 1 : -1);

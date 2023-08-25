@@ -15,6 +15,10 @@ class HomeState extends OperationState {
   final UserRole currentRole;
   const HomeState({required Enum stateName, required this.currentRole})
       : super(stateName: stateName);
+
+  @override
+  List<Object?> get props => [stateName, currentRole];
+
   HomeState copyChangingRole({required UserRole newUserRole}) {
     return HomeState(stateName: stateName, currentRole: newUserRole);
   }
@@ -43,11 +47,15 @@ class HomeUseCase extends Operation<HomeState> {
   HomeUseCase({required this.currentIESUser})
       : super(HomeState(
             stateName: HomeStateName.init,
-            currentRole: currentIESUser.getDefaultRole()));
+            currentRole: currentIESUser.getCurrentRole()));
 
   void startSelectingUserRole() async {
-    changeState(
-        currentState.copyChangingState(newState: HomeStateName.selectingRole));
+    changeState(HomeState(
+        stateName: HomeStateName.init,
+        currentRole: currentIESUser.changeToNextRole()));
+
+    // changeState(
+    //     currentState.copyChangingState(newState: HomeStateName.selectingRole));
   }
 
   void startSelectingUserRoleOperation() async {

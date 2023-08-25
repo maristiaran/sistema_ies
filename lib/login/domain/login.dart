@@ -78,12 +78,13 @@ class LoginUseCase extends Operation<LoginState> {
               }));
     }
     if (successfullyLogin) {
-      if ((signInUser!.defaultRole != null) &&
-          (signInUser!.defaultRole!.userRoleTypeName() ==
-              UserRoleTypeName.student)) {
+      if ((signInUser!.getCurrentRole().userRoleTypeName() ==
+          UserRoleTypeName.student)) {
         await IESSystem().getStudentRecordRepository().getStudentRecord(
             idUser: signInUser!.id,
-            syllabus: (signInUser!.defaultRole as Student).syllabus.administrativeResolution);
+            syllabus: (signInUser!.getCurrentRole() as Student)
+                .syllabus
+                .administrativeResolution);
       }
 
       changeState(LoginState(

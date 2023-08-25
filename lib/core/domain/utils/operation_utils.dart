@@ -9,7 +9,7 @@ class OperationState extends Equatable {
   const OperationState({required this.stateName});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [stateName];
 }
 
 class OperationStateNotifier<T extends OperationState>

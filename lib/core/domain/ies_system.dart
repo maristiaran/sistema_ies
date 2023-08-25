@@ -142,7 +142,8 @@ class IESSystem extends Operation {
       case UserRoleOperationName.checkStudentRecord:
         checkStudentRecordUseCase = CheckStudentRecordUseCase(
             currentIESUser: homeUseCase.currentIESUser,
-            studentRole: homeUseCase.currentIESUser.defaultRole as Student);
+            studentRole:
+                homeUseCase.currentIESUser.getCurrentRole() as Student);
         checkStudentRecordUseCase.getStudentRecords();
         changeState(const OperationState(
             stateName: IESSystemStateName.checkStudentRecord));
@@ -157,7 +158,7 @@ class IESSystem extends Operation {
         registerForExamUseCase = RegisterForExamUseCase(
             currentIESUser: homeUseCase.currentIESUser,
             studentRole:
-                homeUseCase.currentIESUser.getDefaultRole() as Student);
+                homeUseCase.currentIESUser.getCurrentRole() as Student);
 
         changeState(
             const OperationState(stateName: IESSystemStateName.crudUserRoles));
