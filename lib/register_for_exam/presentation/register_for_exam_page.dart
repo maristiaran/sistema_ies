@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/data/utils/theme_data_system.dart';
+import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
 
@@ -11,6 +12,18 @@ class RegisterForExamPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Register> registers = ref.watch(registersProvider);
+    List<Subject> getSubjectsToRegister =
+        IESSystem().registerForExamUseCase.getSubjectsToRegister();
+    // List registereds = IESSystem().registerForExamUseCase.registereds();
+    // int indexed = 0;
+    // for (dynamic s in subjects) {
+    //   bool checked =
+    //       registereds.where((element) => element.contains(s.name)).isNotEmpty;
+    //   if (checked) {
+    //     ref.read(registersProvider.notifier).toggle(registers[indexed].id);
+    //   }
+    //   indexed++;
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -33,40 +46,21 @@ class RegisterForExamPage extends ConsumerWidget {
           child: Column(children: [
         Text(
             '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
-        // Expanded(
-        //   child: ListView.builder(
-        //       shrinkWrap: true,
-        //       itemCount: IESSystem()
-        //           .registerForExamUseCase
-        //           .getSubjectsToRegister()
-        //           .length,
-        //       itemBuilder: (context, index) {
-        //         return Column(children: [
-        //           Text(
-        //               "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}:\n  Año: ${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index].courseYear}, Aprobadas para poder rendir: ${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index].examNeededForExamination}\n")
-        //         ]);
-        //       }),
-        // ),
         Expanded(
             child: ListView.builder(
           shrinkWrap: true,
-          itemCount:
-              IESSystem().registerForExamUseCase.getSubjectsToRegister().length,
+          itemCount: getSubjectsToRegister.length,
           itemBuilder: (context, index) {
-            // bool? varue = ref.watch(IESSystem()
-            //     .registerForExamUseCase
-            //     .stateNotifierProvider as ProviderListenable<bool?>);
-            // bool? varue = false;
             return CheckboxListTile(
-                title: Text(
-                    "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}"),
+                title: Text("${getSubjectsToRegister[index]}"),
                 subtitle: Text(
-                    "Año: ${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index].courseYear}, Aprobadas para poder rendir: ${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index].examNeededForExamination}"),
+                    "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
                 value: registers[index].check,
                 onChanged: (bool? newValue) {
                   ref
                       .read(registersProvider.notifier)
                       .toggle(registers[index].id);
+                  // ref.read(registersProvider.notifier).completeRegisters();
                   // print(
                   //   "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}: $newValue $index",
                   // );
@@ -98,6 +92,9 @@ class RegisterForExamPage extends ConsumerWidget {
               }
             }
             print(registereds);
+            IESSystem().registerForExamUseCase.submitRegister(registereds);
+            print("Submit succefull");
+            ref.read(registersProvider.notifier).update();
             print(") :skcehC");
           },
           icon: const Icon(Icons.check)),
@@ -105,36 +102,41 @@ class RegisterForExamPage extends ConsumerWidget {
   }
 }
 
-class RegisterListView extends ConsumerWidget {
-  const RegisterListView({Key? key}) : super(key: key);
+// class RegisterListView extends ConsumerWidget {
+//   const RegisterListView({Key? key}) : super(key: key);
 
-  // const RegisterListView({super.key});
+//   // const RegisterListView({super.key});
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Reconstruir el widget cuando cambia la lista de `Registers`
-    List<Register> todos = ref.watch(registersProvider);
-    for (final si
-        in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
-      print("RLV pass");
-      ref
-          .read(registersProvider.notifier)
-          .addRegister(Register(id: si.id, name: si.name, check: false));
-    }
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     // Reconstruir el widget cuando cambia la lista de `Registers`
+//     // List<Register> todos = ref.watch(registersProvider);
+//     // List registereds = IESSystem().registerForExamUseCase.registereds();
+//     for (final si
+//         in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
+//       print("RLV pass");
 
-    // Vamos a representar los `todos` en un ListView
-    // return ListView(
-    //   children: [
-    //     for (final todo in todos)
-    //       CheckboxListTile(
-    //         value: todo.check,
-    //         // Al tocar un `todo`, cambie su estado a completado
-    //         onChanged: (value) =>
-    //             ref.read(registersProvider.notifier).toggle(todo.id),
-    //         title: Text(todo.name),
-    //       ),
-    //   ],
-    // );
-    return const Text("");
-  }
-}
+//       // bool checked =
+//       //     registereds.where((element) => element.contains(si.name)).isNotEmpty;
+//       // print("${si.name}: $checked");
+//       // ref
+//       //     .read(registersProvider.notifier)
+//       //     .addRegister(Register(id: si.id, name: si.name, check: checked));
+//     }
+
+//     // Vamos a representar los `todos` en un ListView
+//     // return ListView(
+//     //   children: [
+//     //     for (final todo in todos)
+//     //       CheckboxListTile(
+//     //         value: todo.check,
+//     //         // Al tocar un `todo`, cambie su estado a completado
+//     //         onChanged: (value) =>
+//     //             ref.read(registersProvider.notifier).toggle(todo.id),
+//     //         title: Text(todo.name),
+//     //       ),
+//     //   ],
+//     // );
+//     return const Text("");
+//   }
+// }
