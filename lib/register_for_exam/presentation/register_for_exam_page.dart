@@ -88,7 +88,7 @@ class RegisterForExamPage extends ConsumerWidget {
             for (var reg in registers) {
               if (reg.check) {
                 // print(reg.name);
-                registereds.add(reg.name);
+                registereds.add(reg.id);
               }
             }
             print(registereds);

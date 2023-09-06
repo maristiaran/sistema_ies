@@ -154,8 +154,11 @@ class RegisterNotifier extends StateNotifier<List<Register>> {
     print("completing...");
     for (final si
         in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
-      bool checked =
-          registereds.where((element) => element.contains(si.name)).isNotEmpty;
+      bool checked = false;
+      // registereds.where((element) => element.contains(si.name)).isNotEmpty;
+      for (final regs in registereds) {
+        if (si.id.toString() == regs) checked = true;
+      }
       if (checked) {
         print("${si.name}: checked");
       }
@@ -188,11 +191,14 @@ class RegisterNotifier extends StateNotifier<List<Register>> {
     List registereds = await IESSystem().registerForExamUseCase.registereds();
     state = [
       for (final register in state)
-        if (registereds.contains(register.name))
+        if (registereds.contains(register.id.toString()))
           register.copyWith(check: true)
         else
           register.copyWith(check: false)
     ];
+    for (final s in state) {
+      if (s.check) print("update: ${s.name}, ${s.id}");
+    }
   }
 }
 
