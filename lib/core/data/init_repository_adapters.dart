@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sistema_ies/core/data/roles_and_operations_repository.dart';
 import 'package:sistema_ies/core/data/studentrecord_datasource.dart';
+import 'package:sistema_ies/core/data/studentregister_firestore_repository.dart';
 
 import 'package:sistema_ies/core/data/syllabus_memory_repository.dart';
 // import 'package:sistema_ies/core/data/teachers_memory_repository.dart';
@@ -16,3 +17,5 @@ final RolesAndOperationsRepositoryPort rolesAndOperationsRepository =
     RolesAndOperationsRepositoryMemoryAdapter();
 
 final studentRecordDatasource = StudentDatasource();
+
+final registerExamDatasource = StudentsRegister();

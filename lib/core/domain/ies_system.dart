@@ -1,5 +1,6 @@
 import "package:firebase_core/firebase_core.dart";
 import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
+import 'package:sistema_ies/core/data/studentregister_firestore_repository.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
@@ -29,7 +30,7 @@ enum IESSystemStateName {
   recoverypass,
   studentRecord,
   crudUserRoles,
-  registerForExamUseCase
+  registerForExam
 }
 
 class IESSystem extends Operation {
@@ -41,6 +42,7 @@ class IESSystem extends Operation {
   SyllabusesRepositoryPort? _syllabusesRepository;
   RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
   StudentRepositoryPort? _studentRecordRepository;
+  StudentsRegister? _studentRegisterExam;
   TeachersRepositoryPort? _teachersRepository;
 
   // Use cases
@@ -91,6 +93,11 @@ class IESSystem extends Operation {
   StudentRepositoryPort getStudentRecordRepository() {
     _studentRecordRepository ??= studentRecordDatasource;
     return _studentRecordRepository!;
+  }
+
+  StudentsRegister getStudentsRepository() {
+    _studentRegisterExam ??= registerExamDatasource;
+    return _studentRegisterExam!;
   }
 
   // initializeStatesAndStateNotifier() {
@@ -155,14 +162,14 @@ class IESSystem extends Operation {
         changeState(
             const OperationState(stateName: IESSystemStateName.crudUserRoles));
         break;
-      case UserRoleOperationName.registerForExamUseCase:
+      case UserRoleOperationName.registerForExam:
         registerForExamUseCase = RegisterForExamUseCase(
             currentIESUser: homeUseCase.currentIESUser,
             studentRole:
                 homeUseCase.currentIESUser.getCurrentRole() as Student);
 
-        changeState(
-            const OperationState(stateName: IESSystemStateName.crudUserRoles));
+        changeState(const OperationState(
+            stateName: IESSystemStateName.registerForExam));
         break;
 
       default:
