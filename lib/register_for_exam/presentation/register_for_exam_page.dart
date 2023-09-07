@@ -70,34 +70,29 @@ class RegisterForExamPage extends ConsumerWidget {
                   //     .movementName);
                 });
           },
-        ))
-      ])),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: IconButton(
-          color: const Color.fromARGB(255, 0, 0, 255),
-          onPressed: () {
-            // for (final si
-            //     in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
-            //   print("Tick pass");
-            //   ref.read(registersProvider.notifier).addRegister(
-            //       Register(id: si.id, name: si.name, check: false));
-            // }
-            print("Checks: (");
-            // print(registers);
-            List registereds = [];
-            for (var reg in registers) {
-              if (reg.check) {
-                // print(reg.name);
-                registereds.add(reg.id);
+        )),
+        MaterialButton(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            color: Colors.blue,
+            minWidth: MediaQuery.of(context).size.width / 0.5,
+            onPressed: () {
+              print("Checks: (");
+              // print(registers);
+              List registereds = [];
+              for (var reg in registers) {
+                if (reg.check) {
+                  // print(reg.name);
+                  registereds.add(reg.id);
+                }
               }
-            }
-            print(registereds);
-            IESSystem().registerForExamUseCase.submitRegister(registereds);
-            print("Submit succefull");
-            ref.read(registersProvider.notifier).update();
-            print(") :skcehC");
-          },
-          icon: const Icon(Icons.check)),
+              print(registereds);
+              IESSystem().registerForExamUseCase.submitRegister(registereds);
+              print("Submit succefull");
+              ref.read(registersProvider.notifier).update();
+              print(") :skcehC");
+            },
+            child: const Text("Inscribirse"))
+      ])),
     );
   }
 }

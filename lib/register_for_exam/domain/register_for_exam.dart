@@ -12,6 +12,14 @@ import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
 enum RegisterForExamStateName { init, failure, loading, loadnull }
 
+// final Map<Enum, Widget> widgetElements = {
+//       RegisterForExamStateName.init: RegisterForm(),
+//       RegisterForExamStateName.failure: const FailureRegisterPage(),
+//       RegisterForExamStateName.loading: const Center(
+//         child: CircularProgressIndicator(),
+//       )
+//     };
+
 class RegisterForExamState extends OperationState {
   // final IESUser currentUser;
   final Student currentRole;
