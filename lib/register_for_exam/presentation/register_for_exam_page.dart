@@ -43,56 +43,69 @@ class RegisterForExamPage extends ConsumerWidget {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-          child: Column(children: [
-        Text(
-            '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
-        Expanded(
-            child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: getSubjectsToRegister.length,
-          itemBuilder: (context, index) {
-            return CheckboxListTile(
-                title: Text("${getSubjectsToRegister[index]}"),
-                subtitle: Text(
-                    "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
-                value: registers[index].check,
-                onChanged: (bool? newValue) {
-                  ref
-                      .read(registersProvider.notifier)
-                      .toggle(registers[index].id);
-                  // ref.read(registersProvider.notifier).completeRegisters();
-                  // print(
-                  //   "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}: $newValue $index",
-                  // );
-                  // print(IESSystem()
-                  //     .registerForExamUseCase
-                  //     .getStudentRecordMovements(index)[0]
-                  //     .movementName);
-                });
-          },
-        )),
-        MaterialButton(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            color: Colors.blue,
-            minWidth: MediaQuery.of(context).size.width / 0.5,
-            onPressed: () {
-              print("Checks: (");
-              // print(registers);
-              List registereds = [];
-              for (var reg in registers) {
-                if (reg.check) {
-                  // print(reg.name);
-                  registereds.add(reg.id);
-                }
-              }
-              print(registereds);
-              IESSystem().registerForExamUseCase.submitRegister(registereds);
-              print("Submit succefull");
-              ref.read(registersProvider.notifier).update();
-              print(") :skcehC");
+          child: Container(
+        constraints: const BoxConstraints(maxWidth: 420),
+        width: MediaQuery.of(context).size.width / 0.5,
+        child: Column(children: [
+          Text(
+              '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
+          Expanded(
+              child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: getSubjectsToRegister.length,
+            itemBuilder: (context, index) {
+              return CheckboxListTile(
+                  title: Text("${getSubjectsToRegister[index]}"),
+                  subtitle: Text(
+                      "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
+                  value: registers[index].check,
+                  onChanged: (bool? newValue) {
+                    ref
+                        .read(registersProvider.notifier)
+                        .toggle(registers[index].id);
+                    // ref.read(registersProvider.notifier).completeRegisters();
+                    // print(
+                    //   "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}: $newValue $index",
+                    // );
+                    // print(IESSystem()
+                    //     .registerForExamUseCase
+                    //     .getStudentRecordMovements(index)[0]
+                    //     .movementName);
+                  });
             },
-            child: const Text("Inscribirse"))
-      ])),
+          )),
+          Container(
+            width: MediaQuery.of(context).size.width / 0.5,
+            height: 50,
+            decoration: const BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: TextButton(
+                onPressed: () {
+                  print("Checks: (");
+                  // print(registers);
+                  List registereds = [];
+                  for (var reg in registers) {
+                    if (reg.check) {
+                      // print(reg.name);
+                      registereds.add(reg.id);
+                    }
+                  }
+                  print(registereds);
+                  IESSystem()
+                      .registerForExamUseCase
+                      .submitRegister(registereds);
+                  print("Submit succefull");
+                  ref.read(registersProvider.notifier).update();
+                  print(") :skcehC");
+                },
+                child: const Text(
+                  "Inscribirse",
+                  style: TextStyle(color: Colors.white),
+                )),
+          )
+        ]),
+      )),
     );
   }
 }
