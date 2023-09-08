@@ -65,6 +65,12 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
     return registerSubjects;
   }
 
+  void ManualChangeState(RegisterForExamStateName state) {
+    if (state == RegisterForExamStateName.init)
+      changeState(currentState.copyChangingState(
+          newState: RegisterForExamStateName.init));
+  }
+
   Future<List> registereds() async {
     // List subjects = [
     //   IESSystem().registerForExamUseCase.studentRole.syllabus.subjects[0].name,
@@ -86,6 +92,8 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
     // if (subjectsf.isNotEmpty) {
     //   return subjectsf;
     // }
+    changeState(currentState.copyChangingState(
+        newState: RegisterForExamStateName.init));
     return subjectsf;
   }
 
@@ -99,7 +107,7 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
     changeState(currentState.copyChangingState(
         newState: RegisterForExamStateName.loading));
     // bool res = false;
-    return await IESSystem()
+    var res = IESSystem()
         .getStudentsRepository()
         .setRegistersForExam(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
@@ -109,6 +117,9 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
                 .administrativeResolution,
             registereds: registereds)
         .then((value) => value.isRight);
+    changeState(currentState.copyChangingState(
+        newState: RegisterForExamStateName.init));
+    return res;
     // return res;
   }
 
