@@ -34,7 +34,9 @@ class RolesAndOperationsRepositoryMemoryAdapter
         UserRoleOperationName.uploadFinalExamGrades:
             'Cargar notas de mesa final',
         UserRoleOperationName.checkFinalExamsDates: 'Consultar mesas finales',
-        UserRoleOperationName.crudUsersAndRoles: 'Editar usuarios y roles',
+        UserRoleOperationName.crudTeachersAndStudents:
+            'Editar docentes y estudiantes',
+        UserRoleOperationName.crudAll: 'Editar usuarios y roles',
         UserRoleOperationName.resetAndSaveLogs:
             'Resguardar y borrar registro de operaciones',
         UserRoleOperationName.checkLog: 'Consultar registro de operaciones',
@@ -90,7 +92,8 @@ class RolesAndOperationsRepositoryMemoryAdapter
             UserRoleOperationName.adminCourse,
             UserRoleOperationName.adminFinalExamsAndInstances,
             UserRoleOperationName.adminSyllabuses,
-            UserRoleOperationName.crudUsersAndRoles,
+            UserRoleOperationName.crudTeachersAndStudents,
+            UserRoleOperationName.crudAll,
             UserRoleOperationName.adminStudentRecords
           ]);
       addCachedUserRoleType(
@@ -104,7 +107,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
             UserRoleOperationName.registerAsIncomingStudent,
             UserRoleOperationName.checkLog,
             UserRoleOperationName.resetAndSaveLogs,
-            UserRoleOperationName.crudUsersAndRoles
+            UserRoleOperationName.crudAll
           ]);
     }
 

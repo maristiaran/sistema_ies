@@ -6,6 +6,7 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 enum FailureName { unknown }
 
+//TODO: revisar si pertenece a un administrativo o a los profesores
 abstract class TeachersRepositoryPort extends RepositoryPort {
   // Future<Either<Failure, List<Syllabus>>> getActiveSyllabuses();
   Future<Either<Failure, Success>> pairSubjectTeacher(

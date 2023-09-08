@@ -20,14 +20,21 @@ class CRUDRolesPage extends ConsumerWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                  Row(
-                    children: [
-                      const Text('Usuario: '),
-                      DropdownButton<String>(items: const [
-                        DropdownMenuItem(child: Text('rol1')),
-                        DropdownMenuItem(child: Text('rol2'))
-                      ], onChanged: (value) => value)
-                    ],
+                  SizedBox(
+                    height: 50,
+                    width: 150,
+                    child: Row(
+                      children: [
+                        const Text('Usuario: '),
+                        DropdownButton<String>(
+                            isExpanded: true,
+                            items: const [
+                              DropdownMenuItem(child: Text('rol1')),
+                              DropdownMenuItem(child: Text('rol2'))
+                            ],
+                            onChanged: (value) => value)
+                      ],
+                    ),
                   )
                 ]))));
   }

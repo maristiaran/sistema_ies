@@ -53,7 +53,8 @@ class IESSystem extends Operation {
   late CRUDRoleUseCase crudRolesUseCase;
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
   late CheckStudentRecordUseCase checkStudentRecordUseCase;
-  late CRUDRoleUseCase crudRoleUseCase;
+  late CRUDRoleUseCase crudTeachersAndStudentsUseCase;
+  late CRUDRoleUseCase crudAllUseCase;
   late RegisterForExamUseCase registerForExamUseCase;
   late RegistrationManagementUseCase registrationManagementUseCase;
   // IESSystem as a Singleton
@@ -156,8 +157,8 @@ class IESSystem extends Operation {
         changeState(const OperationState(
             stateName: IESSystemStateName.checkStudentRecord));
         break;
-      case UserRoleOperationName.crudUsersAndRoles:
-        crudRoleUseCase = CRUDRoleUseCase();
+      case UserRoleOperationName.crudTeachersAndStudents:
+        crudTeachersAndStudentsUseCase = CRUDRoleUseCase();
 
         changeState(
             const OperationState(stateName: IESSystemStateName.crudUserRoles));
