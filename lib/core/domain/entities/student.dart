@@ -13,6 +13,10 @@ class Student extends UserRole {
     return UserRoleTypeName.student;
   }
 
+  @override
+  String toString() {
+    return 'Estudiante';
+  }
   // addEvent(MovementStudentRecord studentEvent) {
   //   studentEvents.add(studentEvent);
   // }
@@ -52,6 +56,7 @@ class StudentRecordSubject {
       movements = [...movements, movementStudentRecord];
     }
   }
+
   fromMapToObject(Map<String, dynamic> movement) {
     switch (movement['name']) {
       case 'finalExamApprovedByCertification':
@@ -86,7 +91,8 @@ class StudentRecordSubject {
             pageNumber: movement['pageNumber']);
         break;
       case 'finalExamNonApproved':
-       addMovFinalExamNonApproved(date: movement['date'], numericalGrade: movement['numericalGrade']);
+        addMovFinalExamNonApproved(
+            date: movement['date'], numericalGrade: movement['numericalGrade']);
         break;
       default:
     }

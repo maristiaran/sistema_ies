@@ -83,7 +83,7 @@ class CRUDRolesPage extends ConsumerWidget {
                                     children: [
                                       Container(
                                         constraints: const BoxConstraints(
-                                            maxWidth: 170, minWidth: 100),
+                                            maxWidth: 200, minWidth: 100),
                                         width:
                                             MediaQuery.of(context).size.width /
                                                 6.5,
@@ -99,7 +99,7 @@ class CRUDRolesPage extends ConsumerWidget {
                                       ),
                                       Container(
                                         constraints: const BoxConstraints(
-                                            maxWidth: 170, minWidth: 100),
+                                            maxWidth: 200, minWidth: 100),
                                         width:
                                             MediaQuery.of(context).size.width /
                                                 6.5,
@@ -116,9 +116,9 @@ class CRUDRolesPage extends ConsumerWidget {
                                     ]),
                                 Container(
                                   constraints: const BoxConstraints(
-                                      maxWidth: 170, minWidth: 100),
+                                      maxWidth: 400, minWidth: 100),
                                   width:
-                                      MediaQuery.of(context).size.width / 6.5,
+                                      MediaQuery.of(context).size.width / 3.0,
                                   height: 40,
                                   // color: Theme.of(context).colorScheme.tertiary,
                                   child: Text(crudStatesProvider.selectedUser ==
@@ -128,9 +128,9 @@ class CRUDRolesPage extends ConsumerWidget {
                                 ),
                                 Container(
                                   constraints: const BoxConstraints(
-                                      maxWidth: 170, minWidth: 100),
+                                      maxWidth: 400, minWidth: 100),
                                   width:
-                                      MediaQuery.of(context).size.width / 6.5,
+                                      MediaQuery.of(context).size.width / 3.0,
                                   height: 40,
                                   // color: Theme.of(context).colorScheme.tertiary,
                                   child: Text(crudStatesProvider.selectedUser ==
@@ -141,7 +141,7 @@ class CRUDRolesPage extends ConsumerWidget {
                                 const SizedBox(height: 50),
                                 SizedBox(
                                     height: 50,
-                                    width: 150,
+                                    width: 400,
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: IESSystem()

@@ -57,6 +57,11 @@ class Guest extends UserRole {
   UserRoleTypeName userRoleTypeName() {
     return UserRoleTypeName.guest;
   }
+
+  @override
+  String toString() {
+    return 'Invitado';
+  }
 }
 
 class IncomingStudent extends UserRole {
@@ -65,6 +70,11 @@ class IncomingStudent extends UserRole {
   @override
   UserRoleTypeName userRoleTypeName() {
     return UserRoleTypeName.incomingStudent;
+  }
+
+  @override
+  String toString() {
+    return 'Ingresante';
   }
 }
 
@@ -77,6 +87,11 @@ class Teacher extends UserRole {
   UserRoleTypeName userRoleTypeName() {
     return UserRoleTypeName.teacher;
   }
+
+  @override
+  String toString() {
+    return 'Docente';
+  }
 }
 
 class Administrative extends UserRole {
@@ -88,6 +103,11 @@ class Administrative extends UserRole {
   UserRoleTypeName userRoleTypeName() {
     return UserRoleTypeName.administrative;
   }
+
+  @override
+  String toString() {
+    return 'Administrativo';
+  }
 }
 
 class Manager extends UserRole {
@@ -95,11 +115,21 @@ class Manager extends UserRole {
   UserRoleTypeName userRoleTypeName() {
     return UserRoleTypeName.manager;
   }
+
+  @override
+  String toString() {
+    return 'Directivo';
+  }
 }
 
 class SystemAdmin extends UserRole {
   @override
   UserRoleTypeName userRoleTypeName() {
     return UserRoleTypeName.systemAdmin;
+  }
+
+  @override
+  String toString() {
+    return 'Administrador de sistemas';
   }
 }
