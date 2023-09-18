@@ -3,6 +3,7 @@ import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart'
 import 'package:sistema_ies/core/data/studentregister_firestore_repository.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
@@ -10,7 +11,7 @@ import 'package:sistema_ies/core/domain/repositories/teachers_repository.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
 import 'package:sistema_ies/core/domain/repositories/users_repository_port.dart';
-import 'package:sistema_ies/crud_roles/crud_roles.dart';
+import 'package:sistema_ies/crud_roles/domain/crud_roles.dart';
 import 'package:sistema_ies/firebase_options.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/home/domain/home.dart';
@@ -29,7 +30,8 @@ enum IESSystemStateName {
   checkStudentRecord,
   recoverypass,
   studentRecord,
-  crudUserRoles,
+  crudTeacherAndStudents,
+  crudAllUsers,
   registerForExam
 }
 
@@ -50,7 +52,6 @@ class IESSystem extends Operation {
   late HomeUseCase homeUseCase;
   late RegisteringUseCase registeringUseCase;
   late RecoveryPassUseCase recoveryPassUseCase;
-  late CRUDRoleUseCase crudRolesUseCase;
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
   late CheckStudentRecordUseCase checkStudentRecordUseCase;
   late CRUDRoleUseCase crudTeachersAndStudentsUseCase;
@@ -158,11 +159,32 @@ class IESSystem extends Operation {
             stateName: IESSystemStateName.checkStudentRecord));
         break;
       case UserRoleOperationName.crudTeachersAndStudents:
-        crudTeachersAndStudentsUseCase = CRUDRoleUseCase();
+        crudTeachersAndStudentsUseCase =
+            CRUDRoleUseCase(allowedUserRoleTypeNames: [
+          UserRoleTypeName.incomingStudent,
+          UserRoleTypeName.student,
+          UserRoleTypeName.teacher
+        ]);
+
+        changeState(const OperationState(
+            stateName: IESSystemStateName.crudTeacherAndStudents));
+        break;
+
+      case UserRoleOperationName.crudAll:
+        crudTeachersAndStudentsUseCase =
+            CRUDRoleUseCase(allowedUserRoleTypeNames: [
+          UserRoleTypeName.incomingStudent,
+          UserRoleTypeName.student,
+          UserRoleTypeName.teacher,
+          UserRoleTypeName.guest,
+          UserRoleTypeName.administrative,
+          UserRoleTypeName.manager
+        ]);
 
         changeState(
-            const OperationState(stateName: IESSystemStateName.crudUserRoles));
+            const OperationState(stateName: IESSystemStateName.crudAllUsers));
         break;
+
       case UserRoleOperationName.registerForExam:
         registerForExamUseCase = RegisterForExamUseCase(
             currentIESUser: homeUseCase.currentIESUser,

@@ -30,6 +30,24 @@ class UserRoleType {
   // }
 }
 
+// UserRoleType userRoleTypeNamed(UserRoleTypeName userRoleTypeName){
+//  switch( userRoleTypeName) {
+//    case UserRoleTypeName.administrative: {
+//       // statements;
+//    }
+//    break;
+
+//    case constant_expr2: {
+//       //statements;
+//    }
+//    break;
+
+//    default: {
+//       //statements;
+//    }
+//    break;
+// }
+// }
 abstract class UserRole {
   UserRoleTypeName userRoleTypeName();
 }

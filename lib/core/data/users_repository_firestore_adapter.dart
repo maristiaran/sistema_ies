@@ -42,7 +42,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     //   return Left(Failure(failureName: UsersRepositoryFailureName.userExists));
     // }
 
-    UserRole? defaultRoleIfAny;
+    // UserRole? defaultRoleIfAny;
     List<UserRole> roles = [];
 
     // final DocumentSnapshot userDoc =
@@ -66,7 +66,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
     if (docRoles.isEmpty) {
       Guest guestRole = Guest();
-      defaultRoleIfAny = guestRole;
+      // defaultRoleIfAny = guestRole;
       roles = [guestRole];
     } else {
       for (Map<String, dynamic> docRole in docRoles) {
@@ -155,6 +155,30 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     } else {
       return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
     }
+  }
+
+  @override
+  Future<List<IESUser>> getIESUsersByFullName(
+      {required String surname, String? firstName}) async {
+    List<IESUser> newIESUsers = [];
+    await firestoreInstance
+        .collection('iesUsers')
+        .where('surname', isGreaterThanOrEqualTo: surname)
+        .limit(10)
+        .get()
+        .then((querySnapshot) {
+      for (var iesUserDoc in querySnapshot.docs) {
+        newIESUsers.add(IESUser(
+            id: 1,
+            firstname: iesUserDoc['firstname'],
+            surname: iesUserDoc['surname'],
+            dni: iesUserDoc['dni'],
+            birthdate: stringToDate(iesUserDoc['birthdate']),
+            email: iesUserDoc['email'],
+            roles: []));
+      }
+    });
+    return newIESUsers;
   }
 
   @override
@@ -297,7 +321,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
   @override
   Future<Either<Failure, Success>> addUserRole(
-      {required IESUser user, required UserRoleType userRole}) async {
+      {required IESUser user, required UserRole userRole}) async {
     List<DocumentSnapshot> documentList;
     final DocumentReference<Map<String, dynamic>> roleDoc;
     final Map<String, dynamic> json;
@@ -314,7 +338,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     }
 
     try {
-      switch (userRole.name) {
+      switch (userRole.userRoleTypeName()) {
         case UserRoleTypeName.student:
           Student studentRole = userRole as Student;
           json = {'syllabus': studentRole.syllabus};
@@ -335,7 +359,7 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
   @override
   Future<Either<Failure, Success>> removeUserRole(
-      {required IESUser user, required UserRoleType userRole}) async {
+      {required IESUser user, required UserRole userRole}) async {
     return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
   }
 

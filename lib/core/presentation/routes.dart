@@ -33,10 +33,15 @@ final systemRouter = GoRouter(
             builder: (context, state) => const RegisterForExamPage(),
           ),
           GoRoute(
-            name: 'crudUserRoles',
-            path: 'crudUserRoles',
+            name: 'crudAllUsers',
+            path: 'crudAllUsers',
             builder: (context, state) => const CRUDRolesPage(),
-          )
+          ),
+          GoRoute(
+            name: 'crudTeacherAndStudents',
+            path: 'crudTeacherAndStudents',
+            builder: (context, state) => const CRUDRolesPage(),
+          ),
         ]),
     GoRoute(
         name: 'login',

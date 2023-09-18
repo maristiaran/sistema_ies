@@ -22,6 +22,10 @@ abstract class UsersRepositoryPort extends RepositoryPort {
   Future<Either<Failure, IESUser>> getIESUserByDNI({required int dni});
   Future<Either<Failure, IESUser>> getIESUserByEmail({required String email});
   Future<Either<Failure, Success>> resetPasswordEmail({required String email});
+
+  Future<List<IESUser>> getIESUsersByFullName(
+      {required String surname, String? firstName});
+
   // Future<Either<Failure, String>> getUserEmail({required int dni});
   Future<Either<Failure, IESUser>> signInUsingEmailAndPassword(
       {String email, String password});
@@ -38,10 +42,10 @@ abstract class UsersRepositoryPort extends RepositoryPort {
       {UserRoleType userRole});
 
   Future<Either<Failure, Success>> addUserRole(
-      {required IESUser user, required UserRoleType userRole});
+      {required IESUser user, required UserRole userRole});
 
   Future<Either<Failure, Success>> removeUserRole(
-      {required IESUser user, required UserRoleType userRole});
+      {required IESUser user, required UserRole userRole});
 
   Either<Failure, Success> updateStudentEducationalRecord(
       IESUser student, Syllabus syllabus, List<Course> updatedCourses);
