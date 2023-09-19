@@ -9,6 +9,7 @@ import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
+import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
 enum RegisterForExamStateName { init, failure, loading, loadnull }
 
@@ -65,12 +66,6 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
     return registerSubjects;
   }
 
-  void ManualChangeState(RegisterForExamStateName state) {
-    if (state == RegisterForExamStateName.init)
-      changeState(currentState.copyChangingState(
-          newState: RegisterForExamStateName.init));
-  }
-
   Future<List> registereds() async {
     // List subjects = [
     //   IESSystem().registerForExamUseCase.studentRole.syllabus.subjects[0].name,
@@ -88,7 +83,7 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
                 .syllabus
                 .administrativeResolution)
         .then((value) => subjectsf = value.right);
-    print("recibido $subjectsf");
+    prints("recibido $subjectsf");
     // if (subjectsf.isNotEmpty) {
     //   return subjectsf;
     // }
@@ -170,7 +165,7 @@ class RegisterNotifier extends StateNotifier<List<Register>> {
 
   void completeRegisters() async {
     List registereds = await IESSystem().registerForExamUseCase.registereds();
-    print("completing...");
+    prints("completing...");
     for (final si
         in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
       bool checked = false;
@@ -179,7 +174,7 @@ class RegisterNotifier extends StateNotifier<List<Register>> {
         if (si.id.toString() == regs) checked = true;
       }
       if (checked) {
-        print("${si.name}: checked");
+        prints("${si.name}: checked");
       }
       addRegister(Register(id: si.id, name: si.name, check: checked));
     }
@@ -216,7 +211,7 @@ class RegisterNotifier extends StateNotifier<List<Register>> {
           register.copyWith(check: false)
     ];
     for (final s in state) {
-      if (s.check) print("update: ${s.name}, ${s.id}");
+      if (s.check) prints("update: ${s.name}, ${s.id}");
     }
   }
 }

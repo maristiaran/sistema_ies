@@ -5,6 +5,7 @@ import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
+import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
 class RegisterForExamPage extends ConsumerWidget {
   // final StudentRecordSubject studentRecordSubject;
@@ -106,10 +107,10 @@ class RegisterForm extends ConsumerWidget {
                       .read(registersProvider.notifier)
                       .toggle(registers[index].id);
                   // ref.read(registersProvider.notifier).completeRegisters();
-                  // print(
+                  // prints(
                   //   "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}: $newValue $index",
                   // );
-                  // print(IESSystem()
+                  // prints(IESSystem()
                   //     .registerForExamUseCase
                   //     .getStudentRecordMovements(index)[0]
                   //     .movementName);
@@ -124,20 +125,20 @@ class RegisterForm extends ConsumerWidget {
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: TextButton(
               onPressed: () {
-                print("Checks: (");
-                // print(registers);
+                prints("Checks: (");
+                // prints(registers);
                 List registereds = [];
                 for (var reg in registers) {
                   if (reg.check) {
-                    // print(reg.name);
+                    // prints(reg.name);
                     registereds.add(reg.id);
                   }
                 }
-                print(registereds);
+                prints(registereds);
                 IESSystem().registerForExamUseCase.submitRegister(registereds);
-                print("Submit succefull");
+                prints("Submit succefull");
                 ref.read(registersProvider.notifier).update();
-                print(") :skcehC");
+                prints(") :skcehC");
               },
               child: const Text(
                 "Inscribirse",
