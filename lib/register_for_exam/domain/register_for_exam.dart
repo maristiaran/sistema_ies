@@ -1,6 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
@@ -11,7 +8,7 @@ import 'package:sistema_ies/core/domain/repositories/roles_and_operations_reposi
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
-enum RegisterForExamStateName { init, failure, loading, loadnull }
+enum RegisterForExamStateName { init, failure, loading, loadnull, success }
 
 // final Map<Enum, Widget> widgetElements = {
 //       RegisterForExamStateName.init: RegisterForm(),
@@ -22,11 +19,27 @@ enum RegisterForExamStateName { init, failure, loading, loadnull }
 //     };
 
 class RegisterForExamState extends OperationState {
+  const RegisterForExamState(
+      {required Enum stateName, required Student currentRole})
+      : super(stateName: stateName);
+
+  @override
+  List<Object?> get props => [stateName];
+}
+
+class RegisterForExamInitialState extends RegisterForExamState {
   // final IESUser currentUser;
   final Student currentRole;
-  const RegisterForExamState(
-      {required Enum stateName, required this.currentRole})
-      : super(stateName: stateName);
+  final List registereds;
+  const RegisterForExamInitialState(
+      {required Enum stateName,
+      required this.currentRole,
+      required this.registereds})
+      : super(stateName: stateName, currentRole: currentRole);
+
+  @override
+  List<Object?> get props => [stateName, registereds];
+
   RegisterForExamState copyChangingRole({required Student newUserRole}) {
     return RegisterForExamState(stateName: stateName, currentRole: newUserRole);
   }
@@ -48,16 +61,30 @@ class RegisterForExamState extends OperationState {
   }
 }
 
+// class RegisterForExamInitialState extends RegisterForExamState {
+//   final registereds;
+//   const RegisterForExamInitialState(this.registereds,
+//       {required Enum stateName, required Student currentRole})
+//       : super(stateName: stateName, currentRole: currentRole);
+// }
+
 // AUTORIZATION
-class RegisterForExamUseCase extends Operation<RegisterForExamState> {
+class RegisterForExamUseCase extends Operation<OperationState> {
   final IESUser currentIESUser;
   final Student studentRole;
+  List regs = [];
 
   RegisterForExamUseCase(
       {required this.currentIESUser, required this.studentRole})
       : super(RegisterForExamState(
             stateName: RegisterForExamStateName.init,
-            currentRole: studentRole));
+            currentRole: studentRole)) {
+    registereds();
+  }
+
+  // copyChangingState({newState}) {
+  //   RegisterForExamState(stateName: newState, currentRole: studentRole);
+  // }
 
   List<Subject> getSubjectsToRegister() {
     List<Subject> registerSubjects =
@@ -66,14 +93,13 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
     return registerSubjects;
   }
 
-  Future<List> registereds() async {
+  Future<void> registereds() async {
     // List subjects = [
     //   IESSystem().registerForExamUseCase.studentRole.syllabus.subjects[0].name,
     //   IESSystem().registerForExamUseCase.studentRole.syllabus.subjects[7].name
     // ];
-    changeState(currentState.copyChangingState(
-        newState: RegisterForExamStateName.loading));
-    List subjectsf = [];
+    changeState(
+        const OperationState(stateName: RegisterForExamStateName.loading));
     await IESSystem()
         .getStudentsRepository()
         .getRegistersForExam(
@@ -82,14 +108,15 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
                     as Student)
                 .syllabus
                 .administrativeResolution)
-        .then((value) => subjectsf = value.right);
-    prints("recibido $subjectsf");
+        .then((value) => regs = value.right);
+    prints("recibido $regs");
     // if (subjectsf.isNotEmpty) {
     //   return subjectsf;
     // }
-    changeState(currentState.copyChangingState(
-        newState: RegisterForExamStateName.init));
-    return subjectsf;
+    changeState(RegisterForExamInitialState(
+        stateName: RegisterForExamStateName.init,
+        currentRole: studentRole,
+        registereds: regs));
   }
 
   // void updateRegisters(WidgetRef ref) {
@@ -98,9 +125,37 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
   //   ref.read(registersProvider.notifier).update();
   // }
 
+  // Future<void> completeRegisters() async {
+  //   // changeState(
+  //   //     const OperationState(stateName: RegisterForExamStateName.loading));
+  //   List getted = (await registereds());
+  //   changeState(
+  //       const OperationState(stateName: RegisterForExamStateName.loading));
+  //   for (String r in getted) {
+  //     toogleRegister(r);
+  //   }
+  //   changeState(RegisterForExamInitialState(
+  //       stateName: RegisterForExamStateName.init,
+  //       currentRole: studentRole,
+  //       registereds: regs));
+  // }
+
+  void toogleRegister(String registerId) {
+    if (regs.contains(registerId)) {
+      regs.remove(registerId);
+    } else {
+      regs.add(registerId);
+    }
+    print("regs toogle: $regs");
+    changeState(RegisterForExamInitialState(
+        stateName: RegisterForExamStateName.init,
+        currentRole: studentRole,
+        registereds: regs));
+  }
+
   Future<bool> submitRegister(List registereds) async {
-    changeState(currentState.copyChangingState(
-        newState: RegisterForExamStateName.loading));
+    changeState(
+        const OperationState(stateName: RegisterForExamStateName.loading));
     // bool res = false;
     var res = IESSystem()
         .getStudentsRepository()
@@ -112,8 +167,12 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
                 .administrativeResolution,
             registereds: registereds)
         .then((value) => value.isRight);
-    changeState(currentState.copyChangingState(
-        newState: RegisterForExamStateName.init));
+    changeState(
+        const OperationState(stateName: RegisterForExamStateName.success));
+    changeState(RegisterForExamInitialState(
+        stateName: RegisterForExamStateName.init,
+        currentRole: studentRole,
+        registereds: regs));
     return res;
     // return res;
   }
@@ -134,94 +193,3 @@ class RegisterForExamUseCase extends Operation<RegisterForExamState> {
     return movements;
   }
 }
-
-// StateNotifier
-@immutable
-class Register {
-  const Register({required this.id, required this.name, required this.check});
-
-  final int id;
-  final String name;
-  final bool check;
-
-  Register copyWith({int? id, String? name, bool? check}) {
-    return Register(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      check: check ?? this.check,
-    );
-  }
-}
-
-// StateNotifierProvider
-class RegisterNotifier extends StateNotifier<List<Register>> {
-  RegisterNotifier() : super([]);
-
-  void addRegister(Register register) {
-    // Make a new list appending the new register
-    state = [...state, register];
-    // Note: changing "state" will rebuild the interface on the fly
-  }
-
-  void completeRegisters() async {
-    List registereds = await IESSystem().registerForExamUseCase.registereds();
-    prints("completing...");
-    for (final si
-        in IESSystem().registerForExamUseCase.getSubjectsToRegister()) {
-      bool checked = false;
-      // registereds.where((element) => element.contains(si.name)).isNotEmpty;
-      for (final regs in registereds) {
-        if (si.id.toString() == regs) checked = true;
-      }
-      if (checked) {
-        prints("${si.name}: checked");
-      }
-      addRegister(Register(id: si.id, name: si.name, check: checked));
-    }
-  }
-
-  // Delete`registers`
-  void removeRegister(int registerId) {
-    state = [
-      for (final register in state)
-        if (register.id != registerId) register,
-    ];
-  }
-
-  // Toggle the check status of a register
-  void toggle(int registerId) {
-    state = [
-      for (final register in state)
-        if (register.id == registerId)
-          register.copyWith(check: !register.check)
-        else
-          // other `registers` won't change
-          register,
-    ];
-  }
-
-  // Rebuild the state with the new changes from firestore
-  void update() async {
-    List registereds = await IESSystem().registerForExamUseCase.registereds();
-    state = [
-      for (final register in state)
-        if (registereds.contains(register.id.toString()))
-          register.copyWith(check: true)
-        else
-          register.copyWith(check: false)
-    ];
-    for (final s in state) {
-      if (s.check) prints("update: ${s.name}, ${s.id}");
-    }
-  }
-}
-
-var si = RegisterNotifier().completeRegisters();
-// Finalmente, estamos usando StateNotifierProvider para permitir que la
-// interfaz de usuario interactúe con nuestra clase RegisterNotifier.
-final registersProvider =
-    StateNotifierProvider<RegisterNotifier, List<Register>>((ref) {
-  var reg = RegisterNotifier();
-  reg.completeRegisters();
-  return reg;
-});

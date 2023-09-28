@@ -3,7 +3,6 @@ import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/domain/repositories/studentregister_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
-import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
 import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
 class StudentsRegister implements StudentsRepositoryPort {
@@ -56,7 +55,7 @@ class StudentsRegister implements StudentsRepositoryPort {
           .toList();
       prints("ifTrue");
     } else {
-      Left(Failure(failureName: RegisterForExamStateName.loadnull));
+      Left(Failure(failureName: FailureName.unknown));
     }
     prints("regsExam: $regsExam");
     prints("String?? ${regsExam[0] is String}");
@@ -83,8 +82,7 @@ class StudentsRegister implements StudentsRepositoryPort {
       return Right(Success("Ok"));
     } catch (e) {
       prints("Error al subir los datos de inscripción: $e");
-      return Left(Failure(
-          failureName: RegisterForExamStateName.failure, message: "$e"));
+      return Left(Failure(failureName: FailureName.unknown, message: "$e"));
     }
   }
 }

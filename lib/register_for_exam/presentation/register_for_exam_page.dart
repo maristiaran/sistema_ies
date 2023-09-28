@@ -15,10 +15,14 @@ class RegisterForExamPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Subject> getSubjectsToRegister =
         IESSystem().registerForExamUseCase.getSubjectsToRegister();
-    List<Register> registers = ref.watch(registersProvider);
+    List regs = ref
+        .watch(IESSystem().registerForExamUseCase.stateNotifierProvider)
+        .props;
+    // IESSystem().registerForExamUseCase.completeRegisters();
+
     final Map<Enum, Widget> widgetElements = {
       RegisterForExamStateName.init: RegisterForm(
-          getSubjectsToRegister: getSubjectsToRegister, registers: registers),
+          getSubjectsToRegister: getSubjectsToRegister, registers: regs[1]),
       // RegisterForExamStateName.failure: const FailureRegisterPage(),
       RegisterForExamStateName.loading: const Center(
         child: CircularProgressIndicator(),
@@ -35,6 +39,10 @@ class RegisterForExamPage extends ConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
             content: const Text("Falló al cargar las materias")));
+      } else if (next.stateName == RegisterForExamStateName.success) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            content: const Text("Inscripto correctamente")));
       }
     });
     // List registereds = IESSystem().registerForExamUseCase.registereds();
@@ -81,7 +89,8 @@ class RegisterForm extends ConsumerWidget {
   }) : super(key: key);
 
   final List<Subject> getSubjectsToRegister;
-  final List<Register> registers;
+  final List registers;
+  // void completeRegs = IESSystem().registerForExamUseCase.completeRegisters();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -101,11 +110,11 @@ class RegisterForm extends ConsumerWidget {
                 title: Text("${getSubjectsToRegister[index]}"),
                 subtitle: Text(
                     "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
-                value: registers[index].check,
+                value: registers
+                    .contains(getSubjectsToRegister[index].id.toString()),
                 onChanged: (bool? newValue) {
-                  ref
-                      .read(registersProvider.notifier)
-                      .toggle(registers[index].id);
+                  IESSystem().registerForExamUseCase.toogleRegister(
+                      getSubjectsToRegister[index].id.toString());
                   // ref.read(registersProvider.notifier).completeRegisters();
                   // prints(
                   //   "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}: $newValue $index",
@@ -128,16 +137,15 @@ class RegisterForm extends ConsumerWidget {
                 prints("Checks: (");
                 // prints(registers);
                 List registereds = [];
-                for (var reg in registers) {
-                  if (reg.check) {
-                    // prints(reg.name);
-                    registereds.add(reg.id);
-                  }
-                }
+                // for (var reg in registers[1]) {
+                //   if (reg.check) {
+                //     // prints(reg.name);
+                //     registereds.add(reg.id);
+                //   }
+                // }
                 prints(registereds);
-                IESSystem().registerForExamUseCase.submitRegister(registereds);
+                IESSystem().registerForExamUseCase.submitRegister(registers);
                 prints("Submit succefull");
-                ref.read(registersProvider.notifier).update();
                 prints(") :skcehC");
               },
               child: const Text(
