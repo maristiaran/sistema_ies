@@ -11,8 +11,10 @@ class CRUDRolesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final crudStatesProvider = ref.watch(
         IESSystem().crudTeachersAndStudentsUseCase.stateNotifierProvider);
+    // final SearchController _searchController = SearchController();
     if (crudStatesProvider.stateName == CRUDRoleStateName.initial) {
       crudStatesProvider as CRUDRoleInitialState;
+      print("crudstate ${crudStatesProvider.searchedUsers}");
       return Scaffold(
           appBar: AppBar(
             title: const Text('Asignación de roles'),
@@ -26,19 +28,23 @@ class CRUDRolesPage extends ConsumerWidget {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SearchAnchor(builder: (BuildContext context,
-                              SearchController controller) {
+                          SearchAnchor(
+                              // searchController: _searchController,
+                              builder: (BuildContext context,
+                                  SearchController controller) {
                             return SearchBar(
                               controller: controller,
                               padding:
                                   const MaterialStatePropertyAll<EdgeInsets>(
                                       EdgeInsets.symmetric(horizontal: 16.0)),
-                              onTap: () {
-                                controller.openView();
-                              },
-                              onChanged: (_) {
-                                controller.openView();
-                              },
+                              // onTap: () {
+                              //   controller.openView();
+                              // },
+                              // onChanged: (val) {
+
+                              //   print("onChanged: $val");
+                              //   controller.openView();
+                              // },
                               // leading: const Icon(Icons.search),
                               trailing: <Widget>[
                                 Tooltip(
@@ -54,11 +60,9 @@ class CRUDRolesPage extends ConsumerWidget {
                               ],
                             );
                           }, suggestionsBuilder: (BuildContext context,
-                              SearchController controller) {
-                            return IESSystem()
-                                .getUsersRepository()
-                                .getIESUsersByFullName(surname: '')
-                                .then((value) => value.map((e) => ListTile(
+                                  SearchController controller) {
+                            return crudStatesProvider.searchedUsers
+                                .map((e) => ListTile(
                                       title:
                                           Text("${e.surname} , ${e.firstname}"),
                                       onTap: () {
@@ -69,7 +73,8 @@ class CRUDRolesPage extends ConsumerWidget {
                                             "${e.surname} , ${e.firstname}");
                                         // });
                                       },
-                                    )));
+                                    ))
+                                .toList();
                           }),
                           const SizedBox(height: 50),
                           Column(
@@ -150,11 +155,18 @@ class CRUDRolesPage extends ConsumerWidget {
                                           .roles
                                           .length,
                                       itemBuilder: (context, index) => ListTile(
-                                          title: Text(IESSystem()
-                                              .homeUseCase
-                                              .currentIESUser
-                                              .roles[index]
-                                              .toString())),
+                                        title: Text(IESSystem()
+                                            .homeUseCase
+                                            .currentIESUser
+                                            .roles[index]
+                                            .toString()),
+                                        subtitle: Text(IESSystem()
+                                            .homeUseCase
+                                            .currentIESUser
+                                            .roles
+                                            .length
+                                            .toString()),
+                                      ),
                                     )),
                               ])
                         ]))),

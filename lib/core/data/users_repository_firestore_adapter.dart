@@ -35,24 +35,69 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     return Right(Success(''));
   }
 
+  // Future<IESUser> _IESUserFromJSON(Map<String, dynamic> json) async {
+  //   List<UserRole> roles = [];
+  //   List<Map<String, dynamic>> docRoles = json['roles'];
+
+  //   if (docRoles.isEmpty) {
+  //     Guest guestRole = Guest();
+  //     // defaultRoleIfAny = guestRole;
+  //     roles = [guestRole];
+  //   } else {
+  //     for (Map<String, dynamic> docRole in docRoles) {
+  //       switch (docRole['role']) {
+  //         case 'student':
+  //           await IESSystem()
+  //               .getSyllabusesRepository()
+  //               .getSyllabusByAdministrativeResolution(
+  //                   administrativeResolution: docRole['syllabus'])
+  //               .fold((left) {
+  //             return left;
+  //           }, (right) {
+  //             roles.add(Student(syllabus: right));
+  //           });
+
+  //           break;
+  //         case 'teacher':
+  //           roles.add(Teacher(subjects: docRole['subject']));
+  //           break;
+  //         case 'administrative':
+  //           await IESSystem()
+  //               .getSyllabusesRepository()
+  //               .getSyllabusByAdministrativeResolution(
+  //                   administrativeResolution: docRole['syllabus'])
+  //               .fold((left) {
+  //             return left;
+  //           }, (right) {
+  //             roles.add(Administrative(syllabus: right));
+  //           });
+
+  //           break;
+  //         case 'systemadmin':
+  //           roles.add(SystemAdmin());
+  //           break;
+  //         default:
+  //           roles.add(Manager());
+  //           break;
+  //       }
+  //     }
+  //   }
+  //   return IESUser(
+  //     id: json['id'],
+  //     firstname: json['firstname'],
+  //     surname: json['surname'],
+  //     birthdate: stringToDate(json['birthdate']),
+  //     dni: json['dni'],
+  //     email: json['email'],
+  //     roles: roles,
+  //     // defaultRole: defaultRoleIfAny ?? roles.first
+  //   );
+  // }
+
   @override
   Future<Either<Failure, IESUser>> getIESUserByID(
       {required String idUser}) async {
-    // Either<Failure, IESUser> _handleError() {
-    //   return Left(Failure(failureName: UsersRepositoryFailureName.userExists));
-    // }
-
-    // UserRole? defaultRoleIfAny;
     List<UserRole> roles = [];
-
-    // final DocumentSnapshot userDoc =
-    //     await (firestoreInstance.collection("iesUsers").doc(idUser).get());
-    // QuerySnapshot<Map<String, dynamic>> docRoles = await (firestoreInstance
-    //     .collection("iesUsers")
-    //     .doc(idUser)
-    //     .collection('roles')
-    //     .get()).docs.map((e) => e.data()).toList();
-
     List<Map<String, dynamic>> docRoles = ((await firestoreInstance
             .collection("iesUsers")
             .doc(idUser)
@@ -161,23 +206,28 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   Future<List<IESUser>> getIESUsersByFullName(
       {required String surname, String? firstName}) async {
     List<IESUser> newIESUsers = [];
+    print("surname: $surname, firstname: $firstName");
     await firestoreInstance
         .collection('iesUsers')
-        .where('surname', isGreaterThanOrEqualTo: surname)
-        .limit(10)
+        // .orderBy('surname')
+        // .startAt([surname])
+        // .endAt(["${surname}z"])
+        // .where('surname', isGreaterThanOrEqualTo: surname)
+        .where('surname', isEqualTo: surname.trim())
+        .limit(8)
         .get()
-        .then((querySnapshot) {
-      for (var iesUserDoc in querySnapshot.docs) {
-        newIESUsers.add(IESUser(
-            id: 1,
-            firstname: iesUserDoc['firstname'],
-            surname: iesUserDoc['surname'],
-            dni: iesUserDoc['dni'],
-            birthdate: stringToDate(iesUserDoc['birthdate']),
-            email: iesUserDoc['email'],
-            roles: []));
+        .then((qs) async {
+      for (var qsDoc in qs.docs) {
+        // print("qsDoc ${qsDoc.id}");
+
+        await getIESUserByID(idUser: qsDoc.id).mapRight((newIESUser) {
+          print("qsDoc ${newIESUser.surname}");
+          newIESUsers.add(newIESUser);
+        });
+//
       }
     });
+    print("newUsers: $newIESUsers");
     return newIESUsers;
   }
 

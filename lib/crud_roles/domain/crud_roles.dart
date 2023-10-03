@@ -24,24 +24,33 @@ class CRUDRoleState extends OperationState {
 }
 
 class CRUDRoleInitialState extends CRUDRoleState {
+  final List<IESUser> searchedUsers;
   final IESUser? selectedUser;
   final List<UserRole> roles;
   final UserRole? currentRole;
   const CRUDRoleInitialState(
-      {this.selectedUser, this.currentRole, required this.roles})
+      {required this.searchedUsers,
+      this.selectedUser,
+      this.currentRole,
+      required this.roles})
       : super(stateName: CRUDRoleStateName.initial);
 
   @override
-  List<Object?> get props => [stateName, currentRole];
+  List<Object?> get props => [stateName, currentRole, roles, searchedUsers];
 
   CRUDRoleInitialState copyChangingIESUser({required IESUser selectedIESUser}) {
     return CRUDRoleInitialState(
-        selectedUser: selectedIESUser, roles: selectedIESUser.roles);
+        selectedUser: selectedIESUser,
+        roles: selectedIESUser.roles,
+        searchedUsers: searchedUsers);
   }
 
   CRUDRoleInitialState copyChangingSelectedRole(
       {required UserRole selectedUserRole}) {
-    return CRUDRoleInitialState(currentRole: selectedUserRole, roles: roles);
+    return CRUDRoleInitialState(
+        currentRole: selectedUserRole,
+        roles: roles,
+        searchedUsers: searchedUsers);
   }
 }
 
@@ -51,25 +60,37 @@ class CRUDRoleUseCase extends Operation<OperationState> {
   late LoginUseCase loginUseCase;
   late RegisteringUseCase registeringUseCase;
   IESUser? currentUser;
+
   //Accessors
+  List<IESUser> searchedUsers = [];
   late List<Syllabus> syllabuses;
   late Syllabus currentSyllabus;
   //allowedUserRoleTypes
   List<UserRoleTypeName> allowedUserRoleTypeNames;
 //Auth Use Case initialization
   CRUDRoleUseCase({required this.allowedUserRoleTypeNames})
-      : super(const CRUDRoleInitialState(roles: []));
+      : super(const CRUDRoleInitialState(roles: [], searchedUsers: []));
 
-  // @override
-  // OperationState initializeUseCase() {
-  //   return const OperationState(stateName: CRUDRoleState.initial);
-  // }
+  Future searchUser({required String userDescription}) async {
+    searchedUsers = await IESSystem()
+        .getUsersRepository()
+        .getIESUsersByFullName(surname: userDescription);
+
+    changeState(CRUDRoleInitialState(
+        selectedUser: searchedUsers.isNotEmpty ? searchedUsers[0] : null,
+        roles: const [],
+        searchedUsers: searchedUsers));
+  }
 
   Future selectUser({required IESUser user}) async {
     currentUser = user;
+    // print(user.surname);
+    // print(user.roles);
 
-    changeState(
-        CRUDRoleInitialState(selectedUser: currentUser, roles: user.roles));
+    changeState(CRUDRoleInitialState(
+        selectedUser: currentUser,
+        roles: user.roles,
+        searchedUsers: searchedUsers));
   }
 
   Future addRoleToUser(
@@ -84,8 +105,10 @@ class CRUDRoleUseCase extends Operation<OperationState> {
                 // changes: {'failure': failure.message}
                 )), (success) {
       user.addRole(userRole);
-      changeState(
-          CRUDRoleInitialState(selectedUser: currentUser, roles: user.roles));
+      changeState(CRUDRoleInitialState(
+          selectedUser: currentUser,
+          roles: user.roles,
+          searchedUsers: const []));
       // changeState(const OperationState(stateName: LoginStateName.init));
     });
   }
