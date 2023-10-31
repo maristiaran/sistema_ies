@@ -8,7 +8,6 @@ import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
 import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
 class RegisterForExamPage extends ConsumerWidget {
-  // final StudentRecordSubject studentRecordSubject;
   const RegisterForExamPage({Key? key}) : super(key: key);
 
   @override
@@ -18,11 +17,10 @@ class RegisterForExamPage extends ConsumerWidget {
     List regs = ref
         .watch(IESSystem().registerForExamUseCase.stateNotifierProvider)
         .props;
-    // IESSystem().registerForExamUseCase.completeRegisters();
 
     final Map<Enum, Widget> widgetElements = {
       RegisterForExamStateName.init: RegisterForm(
-          getSubjectsToRegister: getSubjectsToRegister, registers: regs[1]),
+          getSubjectsToRegister: getSubjectsToRegister, registers: regs),
       // RegisterForExamStateName.failure: const FailureRegisterPage(),
       RegisterForExamStateName.loading: const Center(
         child: CircularProgressIndicator(),
@@ -45,16 +43,6 @@ class RegisterForExamPage extends ConsumerWidget {
             content: const Text("Inscripto correctamente")));
       }
     });
-    // List registereds = IESSystem().registerForExamUseCase.registereds();
-    // int indexed = 0;
-    // for (dynamic s in subjects) {
-    //   bool checked =
-    //       registereds.where((element) => element.contains(s.name)).isNotEmpty;
-    //   if (checked) {
-    //     ref.read(registersProvider.notifier).toggle(registers[indexed].id);
-    //   }
-    //   indexed++;
-    // }
     final currentBody = widgetElements.keys.firstWhere((element) =>
         element ==
         ref
@@ -72,6 +60,7 @@ class RegisterForExamPage extends ConsumerWidget {
               'Inscripción a mesas - ${IESSystem().homeUseCase.currentIESUser.firstname} ${IESSystem().homeUseCase.currentIESUser.surname}',
               style: TextStyle(
                   color: ThemeDataSW.themeDataSW.textTheme.titleLarge?.color),
+              // style: ThemeDataSW.themeDataSW.appBarTheme.titleTextStyle,
               textAlign: TextAlign.justify,
             ),
           ]),
@@ -90,70 +79,61 @@ class RegisterForm extends ConsumerWidget {
 
   final List<Subject> getSubjectsToRegister;
   final List registers;
-  // void completeRegs = IESSystem().registerForExamUseCase.completeRegisters();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-        child: Container(
-      constraints: const BoxConstraints(maxWidth: 420),
-      width: MediaQuery.of(context).size.width / 0.5,
-      child: Column(children: [
-        Text(
-            '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
-        Expanded(
-            child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: getSubjectsToRegister.length,
-          itemBuilder: (context, index) {
-            return CheckboxListTile(
-                title: Text("${getSubjectsToRegister[index]}"),
-                subtitle: Text(
-                    "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
-                value: registers
-                    .contains(getSubjectsToRegister[index].id.toString()),
-                onChanged: (bool? newValue) {
-                  IESSystem().registerForExamUseCase.toogleRegister(
-                      getSubjectsToRegister[index].id.toString());
-                  // ref.read(registersProvider.notifier).completeRegisters();
-                  // prints(
-                  //   "${IESSystem().registerForExamUseCase.getSubjectsToRegister()[index]}: $newValue $index",
-                  // );
-                  // prints(IESSystem()
-                  //     .registerForExamUseCase
-                  //     .getStudentRecordMovements(index)[0]
-                  //     .movementName);
-                });
-          },
-        )),
-        Container(
+    return Consumer(builder: (context, ref, child) {
+      if (registers.length > 1) {
+        return Center(
+            child: Container(
+          constraints: const BoxConstraints(maxWidth: 420),
           width: MediaQuery.of(context).size.width / 0.5,
-          height: 50,
-          decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: TextButton(
-              onPressed: () {
-                prints("Checks: (");
-                // prints(registers);
-                List registereds = [];
-                // for (var reg in registers[1]) {
-                //   if (reg.check) {
-                //     // prints(reg.name);
-                //     registereds.add(reg.id);
-                //   }
-                // }
-                prints(registereds);
-                IESSystem().registerForExamUseCase.submitRegister(registers);
-                prints("Submit succefull");
-                prints(") :skcehC");
+          child: Column(children: [
+            Text(
+                '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
+            Expanded(
+                child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: getSubjectsToRegister.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                    title: Text("${getSubjectsToRegister[index]}"),
+                    subtitle: Text(
+                        "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
+                    value:
+                        registers[1].contains(getSubjectsToRegister[index].id),
+                    onChanged: (bool? newValue) {
+                      IESSystem()
+                          .registerForExamUseCase
+                          .toogleRegister(getSubjectsToRegister[index].id);
+                    });
               },
-              child: const Text(
-                "Inscribirse",
-                style: TextStyle(color: Colors.white),
-              )),
-        )
-      ]),
-    ));
+            )),
+            Container(
+              width: MediaQuery.of(context).size.width / 0.5,
+              height: 50,
+              decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: TextButton(
+                  onPressed: () {
+                    prints("Checks: (");
+                    IESSystem()
+                        .registerForExamUseCase
+                        .submitRegister(registers[1]);
+                    prints("Submit succefull");
+                    prints(") :skcehC");
+                  },
+                  child: const Text(
+                    "Inscribirse",
+                    style: TextStyle(color: Colors.white),
+                  )),
+            )
+          ]),
+        ));
+      } else {
+        return const CircularProgressIndicator();
+      }
+    });
   }
 }

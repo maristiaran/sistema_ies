@@ -51,14 +51,14 @@ class StudentsRegister implements StudentsRepositoryPort {
     if (regDocsExists) {
       regsExam = studentRegisterDocs
           .get("registeredForExams")
-          .map((item) => item.toString())
+          .map((item) => item)
           .toList();
       prints("ifTrue");
     } else {
       Left(Failure(failureName: FailureName.unknown));
     }
     prints("regsExam: $regsExam");
-    prints("String?? ${regsExam[0] is String}");
+    prints("int?? ${regsExam[0] is int}");
     return Right(regsExam);
   }
 

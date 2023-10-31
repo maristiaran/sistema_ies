@@ -93,7 +93,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
             UserRoleOperationName.adminFinalExamsAndInstances,
             UserRoleOperationName.adminSyllabuses,
             UserRoleOperationName.crudTeachersAndStudents,
-            UserRoleOperationName.crudAll,
+            // UserRoleOperationName.crudAll,
             UserRoleOperationName.adminStudentRecords
           ]);
       addCachedUserRoleType(
