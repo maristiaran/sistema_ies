@@ -26,6 +26,11 @@ class Student extends UserRole {
       srSubjects = [...srSubjects, subject];
     }
   }
+
+  @override
+  String subtitle() {
+    return syllabus.name;
+  }
 }
 
 enum SubjetState { approved, regular, dessaproved, coursing, nule }

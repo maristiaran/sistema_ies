@@ -50,6 +50,9 @@ class UserRoleType {
 // }
 abstract class UserRole {
   UserRoleTypeName userRoleTypeName();
+  String subtitle() {
+    return '';
+  }
 }
 
 class Guest extends UserRole {
@@ -107,6 +110,11 @@ class Administrative extends UserRole {
   @override
   String toString() {
     return 'Administrativo';
+  }
+
+  @override
+  String subtitle() {
+    return syllabus.name;
   }
 }
 

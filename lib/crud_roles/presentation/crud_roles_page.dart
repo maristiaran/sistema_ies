@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
+import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/crud_roles/domain/crud_roles.dart';
-// import 'package:sistema_ies/core/domain/ies_system.dart';
+import 'package:sistema_ies/crud_roles/presentation/add_student_dialog.dart';
+import 'package:sistema_ies/crud_roles/presentation/add_teacher_dialog.dart';
+// import 'package:sistema_ies/crud_roles/presentation/adding_role_dialog.dart';
 
 class CRUDRolesPage extends ConsumerWidget {
   const CRUDRolesPage({Key? key}) : super(key: key);
@@ -14,12 +18,52 @@ class CRUDRolesPage extends ConsumerWidget {
     // final SearchController _searchController = SearchController();
     if (crudStatesProvider.stateName == CRUDRoleStateName.initial) {
       crudStatesProvider as CRUDRoleInitialState;
-      print("crudstate ${crudStatesProvider.searchedUsers}");
+      // print("crudstate ${crudStatesProvider.searchedUsers}");
+      Future<Student?> studentIfAny;
       return Scaffold(
-          appBar: AppBar(
-            title: const Text('Asignación de roles'),
-          ),
-          body: Center(
+        appBar: AppBar(
+          // leading: null,
+          automaticallyImplyLeading: false,
+          title: const Text('Asignación de roles'),
+        ),
+        bottomNavigationBar: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                  onPressed: () {
+                    IESSystem().homeUseCase.onReturnFromOperation();
+                  },
+                  icon: const Icon(Icons.arrow_back)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  IESSystem().crudTeachersAndStudentsUseCase.cancel();
+                },
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  print('Guardar cambios');
+                },
+                child: const Text(
+                  'Guardar cambios',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: Center(
             child: Align(
                 alignment: const Alignment(0.00, -1.0),
                 child: Container(
@@ -28,6 +72,7 @@ class CRUDRolesPage extends ConsumerWidget {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          const SizedBox(height: 20),
                           SearchAnchor(
                               // searchController: _searchController,
                               builder: (BuildContext context,
@@ -40,11 +85,17 @@ class CRUDRolesPage extends ConsumerWidget {
                               // onTap: () {
                               //   controller.openView();
                               // },
-                              // onChanged: (val) {
+                              onChanged: (val) {
+                                if (val.endsWith(",")) {
+                                  IESSystem()
+                                      .crudTeachersAndStudentsUseCase
+                                      .searchUser(
+                                          userDescription:
+                                              val.substring(0, val.length - 1));
 
-                              //   print("onChanged: $val");
-                              //   controller.openView();
-                              // },
+                                  // controller.openView();
+                                }
+                              },
                               // leading: const Icon(Icons.search),
                               trailing: <Widget>[
                                 Tooltip(
@@ -61,116 +112,124 @@ class CRUDRolesPage extends ConsumerWidget {
                             );
                           }, suggestionsBuilder: (BuildContext context,
                                   SearchController controller) {
-                            return crudStatesProvider.searchedUsers
-                                .map((e) => ListTile(
-                                      title:
-                                          Text("${e.surname} , ${e.firstname}"),
-                                      onTap: () {
-                                        IESSystem()
-                                            .crudTeachersAndStudentsUseCase
-                                            .selectUser(user: e);
-                                        controller.closeView(
-                                            "${e.surname} , ${e.firstname}");
-                                        // });
-                                      },
-                                    ))
-                                .toList();
+                            return [];
+                            // if (crudStatesProvider.searchedUsers.isNotEmpty) {
+                            //   controller.openView();
+
+                            //   return crudStatesProvider.searchedUsers
+                            //       .map((e) => ListTile(
+                            //             title: const Text('ddd'),
+                            //             // title:
+                            //             //     Text("${e.surname} , ${e.firstname}"),
+                            //             onTap: () {
+                            //               IESSystem()
+                            //                   .crudTeachersAndStudentsUseCase
+                            //                   .selectUser(user: e);
+                            //               controller.closeView(
+                            //                   "${e.surname} , ${e.firstname}");
+                            //               // });
+                            //             },
+                            //           ))
+                            //       .toList(growable: false);
+                            // } else {
+                            //   return [];
+                            // }
                           }),
-                          const SizedBox(height: 50),
-                          Column(
-                              // alignment: WrapAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              // runSpacing: 15,
-                              children: [
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        constraints: const BoxConstraints(
-                                            maxWidth: 200, minWidth: 100),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                6.5,
-                                        height: 40,
-                                        // color: Theme.of(context)
-                                        //     .colorScheme
-                                        //     .tertiary,
-                                        child: Text(crudStatesProvider
-                                                    .selectedUser ==
-                                                null
-                                            ? 'Nombre(s): '
-                                            : 'Nombre(s): ${crudStatesProvider.selectedUser!.firstname}'),
-                                      ),
-                                      Container(
-                                        constraints: const BoxConstraints(
-                                            maxWidth: 200, minWidth: 100),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                6.5,
-                                        height: 40,
-                                        // color: Theme.of(context)
-                                        //     .colorScheme
-                                        //     .tertiary,
-                                        child: Text(crudStatesProvider
-                                                    .selectedUser ==
-                                                null
-                                            ? 'Apellido: '
-                                            : 'Apellido: ${crudStatesProvider.selectedUser!.surname}'),
-                                      ),
-                                    ]),
-                                Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 400, minWidth: 100),
-                                  width:
-                                      MediaQuery.of(context).size.width / 3.0,
-                                  height: 40,
-                                  // color: Theme.of(context).colorScheme.tertiary,
-                                  child: Text(crudStatesProvider.selectedUser ==
-                                          null
-                                      ? 'DNI: '
-                                      : 'DNI: ${crudStatesProvider.selectedUser!.dni.toString()}'),
+                          ListView.builder(
+                            itemCount: crudStatesProvider.searchedUsers.length,
+                            shrinkWrap: true,
+                            itemBuilder: ((context, index) => ListTile(
+                                title: Text(crudStatesProvider
+                                    .searchedUsers[index]
+                                    .toString()),
+                                onTap: (() => IESSystem()
+                                    .crudTeachersAndStudentsUseCase
+                                    .selectUser(
+                                        user: crudStatesProvider
+                                            .searchedUsers[index])))),
+                          ),
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(crudStatesProvider.selectedUser == null
+                                ? 'Nombre(s): '
+                                : 'Nombre(s): ${crudStatesProvider.selectedUser!.firstname}'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(crudStatesProvider.selectedUser == null
+                                ? 'Apellido: '
+                                : 'Apellido: ${crudStatesProvider.selectedUser!.surname}'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(crudStatesProvider.selectedUser == null
+                                ? 'DNI: '
+                                : 'DNI: ${crudStatesProvider.selectedUser!.dni.toString()}'),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              const Text('Roles'),
+                              const Spacer(),
+                              IconButton(
+                                  onPressed: () async {
+                                    Student? studentIfAny =
+                                        await showDialog<Student?>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const AddingStudentDialog(
+                                                newuserRoleIfAny: null,
+                                              );
+                                            });
+                                    print(studentIfAny);
+                                  },
+                                  icon: const Icon(Icons.person_add_alt)),
+                              IconButton(
+                                  onPressed: () async {
+                                    Teacher? teacherIfAny =
+                                        await showDialog<Teacher?>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const AddingTeacherDialog(
+                                                newuserRoleIfAny: null,
+                                              );
+                                            });
+                                    print(teacherIfAny);
+                                  },
+                                  icon: const Icon(Icons.person_add))
+                            ],
+                          ),
+                          SizedBox(
+                              height: 150,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount:
+                                    crudStatesProvider.selectedUser == null
+                                        ? 0
+                                        : crudStatesProvider
+                                            .selectedUser!.roles.length,
+                                itemBuilder: (context, index) => ListTile(
+                                  title: Text(crudStatesProvider
+                                      .selectedUser!.roles[index]
+                                      .toString()),
+                                  subtitle: Text(crudStatesProvider
+                                      .selectedUser!.roles[index]
+                                      .subtitle()),
+                                  trailing: IconButton(
+                                      onPressed: () => {
+                                            IESSystem()
+                                                .crudTeachersAndStudentsUseCase
+                                                .removeUserRole(
+                                                    userRole: crudStatesProvider
+                                                        .selectedUser!
+                                                        .roles[index])
+                                          },
+                                      icon: const Icon(Icons.delete)),
                                 ),
-                                Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 400, minWidth: 100),
-                                  width:
-                                      MediaQuery.of(context).size.width / 3.0,
-                                  height: 40,
-                                  // color: Theme.of(context).colorScheme.tertiary,
-                                  child: Text(crudStatesProvider.selectedUser ==
-                                          null
-                                      ? 'Email: '
-                                      : 'Email: ${crudStatesProvider.selectedUser!.email}'),
-                                ),
-                                const SizedBox(height: 50),
-                                SizedBox(
-                                    height: 50,
-                                    width: 400,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: IESSystem()
-                                          .homeUseCase
-                                          .currentIESUser
-                                          .roles
-                                          .length,
-                                      itemBuilder: (context, index) => ListTile(
-                                        title: Text(IESSystem()
-                                            .homeUseCase
-                                            .currentIESUser
-                                            .roles[index]
-                                            .toString()),
-                                        subtitle: Text(IESSystem()
-                                            .homeUseCase
-                                            .currentIESUser
-                                            .roles
-                                            .length
-                                            .toString()),
-                                      ),
-                                    )),
-                              ])
-                        ]))),
-          ));
+                              )),
+                        ])))),
+      );
     } else {
       return Container();
     }

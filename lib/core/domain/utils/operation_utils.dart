@@ -33,7 +33,6 @@ abstract class Operation<T extends OperationState> {
   }
 
   changeState(T newOperationState) {
-    print(newOperationState.stateName);
     currentState = newOperationState;
     stateNotifier.notifyStateChange(newOperationState);
   }

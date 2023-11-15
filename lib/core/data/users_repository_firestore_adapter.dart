@@ -206,28 +206,19 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   Future<List<IESUser>> getIESUsersByFullName(
       {required String surname, String? firstName}) async {
     List<IESUser> newIESUsers = [];
-    print("surname: $surname, firstname: $firstName");
     await firestoreInstance
         .collection('iesUsers')
-        // .orderBy('surname')
-        // .startAt([surname])
-        // .endAt(["${surname}z"])
-        // .where('surname', isGreaterThanOrEqualTo: surname)
         .where('surname', isEqualTo: surname.trim())
         .limit(8)
         .get()
         .then((qs) async {
       for (var qsDoc in qs.docs) {
-        // print("qsDoc ${qsDoc.id}");
-
         await getIESUserByID(idUser: qsDoc.id).mapRight((newIESUser) {
-          print("qsDoc ${newIESUser.surname}");
           newIESUsers.add(newIESUser);
         });
 //
       }
     });
-    print("newUsers: $newIESUsers");
     return newIESUsers;
   }
 
@@ -357,11 +348,11 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     }
   }
 
-  @override
-  Future<Either<Failure, List<UserRoleType>>> getUserRoles(
-      {IESUser? user}) async {
-    return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
-  }
+  // @override
+  // Future<Either<Failure, List<UserRoleType>>> getUserRoles(
+  //     {IESUser? user}) async {
+  //   return Left(Failure(failureName: UsersRepositoryFailureName.unknown));
+  // }
 
   @override
   Future<Either<Failure, List<UserRoleOperation>>> getUserRoleOperations(
@@ -445,6 +436,12 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   @override
   Future<List<IESUser>> getAllTeacherBySyllabus({required Syllabus syllabus}) {
     // TODO: implement getAllTeacherBySyllabus
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<UserRoleType>>> getUserRoles({IESUser user}) {
+    // TODO: implement getUserRoles
     throw UnimplementedError();
   }
 }

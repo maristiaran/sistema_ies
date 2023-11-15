@@ -1,10 +1,9 @@
-import 'package:either_dart/either.dart';
+import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
-import 'package:sistema_ies/core/domain/utils/responses.dart';
 import 'package:sistema_ies/login/domain/login.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
 
@@ -56,6 +55,11 @@ class CRUDRoleInitialState extends CRUDRoleState {
 
 // AUTORIZATION
 class CRUDRoleUseCase extends Operation<OperationState> {
+  List<UserRole> initialRoles = [];
+  List<UserRole> rolesToAdd = [];
+  List<UserRole> rolesToRemove = [];
+  List<UserRole> rolesToShow = [];
+
   // Use cases
   late LoginUseCase loginUseCase;
   late RegisteringUseCase registeringUseCase;
@@ -65,51 +69,89 @@ class CRUDRoleUseCase extends Operation<OperationState> {
   List<IESUser> searchedUsers = [];
   late List<Syllabus> syllabuses;
   late Syllabus currentSyllabus;
-  //allowedUserRoleTypes
   List<UserRoleTypeName> allowedUserRoleTypeNames;
 //Auth Use Case initialization
   CRUDRoleUseCase({required this.allowedUserRoleTypeNames})
       : super(const CRUDRoleInitialState(roles: [], searchedUsers: []));
 
+  List<UserRoleType> get userRoleTypes => allowedUserRoleTypeNames
+      .map((e) => rolesAndOperationsRepository.getUserRoleType(e))
+      .toList();
   Future searchUser({required String userDescription}) async {
     searchedUsers = await IESSystem()
         .getUsersRepository()
         .getIESUsersByFullName(surname: userDescription);
 
     changeState(CRUDRoleInitialState(
-        selectedUser: searchedUsers.isNotEmpty ? searchedUsers[0] : null,
-        roles: const [],
-        searchedUsers: searchedUsers));
+        selectedUser: null, roles: const [], searchedUsers: searchedUsers));
   }
 
   Future selectUser({required IESUser user}) async {
     currentUser = user;
-    // print(user.surname);
-    // print(user.roles);
-
+    initialRoles = user.roles;
+    rolesToShow = initialRoles;
     changeState(CRUDRoleInitialState(
         selectedUser: currentUser,
-        roles: user.roles,
-        searchedUsers: searchedUsers));
+        roles: rolesToShow,
+        searchedUsers: const []));
   }
 
-  Future addRoleToUser(
-      {required IESUser user, required UserRole userRole}) async {
-    Either<Failure, Success> response = await IESSystem()
-        .getUsersRepository()
-        .addUserRole(user: user, userRole: userRole);
-    response.fold(
-        (failure) => changeState(
-            const OperationState(stateName: CRUDRoleStateName.failure
-                // ,
-                // changes: {'failure': failure.message}
-                )), (success) {
-      user.addRole(userRole);
-      changeState(CRUDRoleInitialState(
-          selectedUser: currentUser,
-          roles: user.roles,
-          searchedUsers: const []));
-      // changeState(const OperationState(stateName: LoginStateName.init));
-    });
+  Future addUserRole({required UserRole userRole}) async {
+    rolesToAdd.add(userRole);
+    rolesToShow.add(userRole);
+    changeState(CRUDRoleInitialState(
+        selectedUser: currentUser,
+        roles: rolesToShow,
+        searchedUsers: const []));
+    // Either<Failure, Success> response = await IESSystem()
+    //     .getUsersRepository()
+    //     .addUserRole(user: user, userRole: userRole);
+    // response.fold(
+    //     (failure) => changeState(
+    //         const OperationState(stateName: CRUDRoleStateName.failure)),
+    //     (success) {
+    //   user.addRole(userRole);
+    //   changeState(CRUDRoleInitialState(
+    //       selectedUser: currentUser,
+    //       roles: user.roles,
+    //       searchedUsers: const []));
+    // });
+  }
+
+  Future removeUserRole({required UserRole userRole}) async {
+    rolesToAdd.add(userRole);
+    rolesToShow.remove(userRole);
+    changeState(CRUDRoleInitialState(
+        selectedUser: currentUser,
+        roles: rolesToShow,
+        searchedUsers: const []));
+    // Either<Failure, Success> response = await IESSystem()
+    //     .getUsersRepository()
+    //     .addUserRole(user: user, userRole: userRole);
+    // response.fold(
+    //     (failure) => changeState(
+    //         const OperationState(stateName: CRUDRoleStateName.failure)),
+    //     (success) {
+    //   user.addRole(userRole);
+    //   changeState(CRUDRoleInitialState(
+    //       selectedUser: currentUser,
+    //       roles: user.roles,
+    //       searchedUsers: const []));
+    // });
+  }
+
+  cancel() {
+    rolesToShow = initialRoles;
+    rolesToAdd = [];
+    rolesToRemove = [];
+    changeState(const CRUDRoleInitialState(
+        selectedUser: null, roles: [], searchedUsers: []));
+  }
+
+  saveChanges() {
+    changeState(CRUDRoleInitialState(
+        selectedUser: currentUser,
+        roles: rolesToShow,
+        searchedUsers: const []));
   }
 }

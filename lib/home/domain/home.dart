@@ -63,8 +63,9 @@ class HomeUseCase extends Operation<HomeState> {
         newState: HomeStateName.selectingRoleOperation));
   }
 
-  Future onReturnFromOperation() async {
+  onReturnFromOperation() {
     changeState(currentState.copyChangingState(newState: HomeStateName.init));
+    IESSystem().onReturningToHome();
   }
 
   Future onReturnFromRegisteringAsIncommingStudent(

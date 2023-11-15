@@ -87,4 +87,9 @@ class IESUser {
     }
     return roles[currentRoleIndex];
   }
+
+  @override
+  String toString() {
+    return "$surname, $firstname ($dni)";
+  }
 }
