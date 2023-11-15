@@ -20,7 +20,7 @@ import 'package:sistema_ies/register_as_incoming_student/domain/registering_as_i
 import 'package:sistema_ies/recoverypass/domain/recoverypass.dart';
 import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
 import 'package:sistema_ies/registering/domain/registering.dart';
-import 'package:sistema_ies/registration_management/domain/registration_management.dart';
+// import 'package:sistema_ies/registration_management/domain/registration_management.dart';
 
 enum IESSystemStateName {
   login,
@@ -57,7 +57,7 @@ class IESSystem extends Operation {
   late CRUDRoleUseCase crudTeachersAndStudentsUseCase;
   late CRUDRoleUseCase crudAllUseCase;
   late RegisterForExamUseCase registerForExamUseCase;
-  late RegistrationManagementUseCase registrationManagementUseCase;
+  // late RegistrationManagementUseCase registrationManagementUseCase;
   // IESSystem as a Singleton
   factory IESSystem() {
     return _singleton;

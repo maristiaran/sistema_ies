@@ -439,9 +439,9 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
     throw UnimplementedError();
   }
 
-  // @override
-  // Future<Either<Failure, List<UserRoleType>>> getUserRoles({IESUser user}) {
-  //   // TODO: implement getUserRoles
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<Either<Failure, List<UserRoleType>>> getUserRoles({IESUser? user}) {
+    // TODO: implement getUserRoles
+    throw UnimplementedError();
+  }
 }
