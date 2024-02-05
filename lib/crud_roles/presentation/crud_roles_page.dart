@@ -6,6 +6,7 @@ import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/crud_roles/domain/crud_roles.dart';
 import 'package:sistema_ies/crud_roles/presentation/add_student_dialog.dart';
 import 'package:sistema_ies/crud_roles/presentation/add_teacher_dialog.dart';
+import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 // import 'package:sistema_ies/crud_roles/presentation/adding_role_dialog.dart';
 
 class CRUDRolesPage extends ConsumerWidget {
@@ -53,7 +54,7 @@ class CRUDRolesPage extends ConsumerWidget {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
-                  print('Guardar cambios');
+                  prints('Guardar cambios');
                 },
                 child: const Text(
                   'Guardar cambios',
@@ -182,7 +183,7 @@ class CRUDRolesPage extends ConsumerWidget {
                                                 newuserRoleIfAny: null,
                                               );
                                             });
-                                    print(studentIfAny);
+                                    prints(studentIfAny);
                                   },
                                   icon: const Icon(Icons.person_add_alt)),
                               IconButton(
@@ -195,7 +196,7 @@ class CRUDRolesPage extends ConsumerWidget {
                                                 newuserRoleIfAny: null,
                                               );
                                             });
-                                    print(teacherIfAny);
+                                    prints(teacherIfAny);
                                   },
                                   icon: const Icon(Icons.person_add))
                             ],

@@ -1,12 +1,12 @@
 import "package:firebase_core/firebase_core.dart";
-import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
+import 'package:sistema_ies/checkStudentRecord/domain/student_record.dart';
 import 'package:sistema_ies/core/data/studentregister_firestore_repository.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
-import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
+import 'package:sistema_ies/core/domain/repositories/student_repository.dart';
 import 'package:sistema_ies/core/domain/repositories/teachers_repository.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/repositories/syllabus_repository_port.dart';
@@ -43,7 +43,7 @@ class IESSystem extends Operation {
   UsersRepositoryPort? _usersRepository;
   SyllabusesRepositoryPort? _syllabusesRepository;
   RolesAndOperationsRepositoryPort? _rolesAndOperationsRepository;
-  StudentRepositoryPort? _studentRecordRepository;
+  StudentRepositoryPort? _studentRepository;
   StudentsRegister? _studentRegisterExam;
   TeachersRepositoryPort? _teachersRepository;
 
@@ -53,7 +53,7 @@ class IESSystem extends Operation {
   late RegisteringUseCase registeringUseCase;
   late RecoveryPassUseCase recoveryPassUseCase;
   late RegisteringAsIncomingStudentUseCase registeringAsIncomingStudentUseCase;
-  late CheckStudentRecordUseCase checkStudentRecordUseCase;
+  late StudentRecordUseCase studentRecordUseCase;
   late CRUDRoleUseCase crudTeachersAndStudentsUseCase;
   late CRUDRoleUseCase crudAllUseCase;
   late RegisterForExamUseCase registerForExamUseCase;
@@ -92,9 +92,9 @@ class IESSystem extends Operation {
     return _rolesAndOperationsRepository!;
   }
 
-  StudentRepositoryPort getStudentRecordRepository() {
-    _studentRecordRepository ??= studentRecordDatasource;
-    return _studentRecordRepository!;
+  StudentRepositoryPort getStudentRepository() {
+    _studentRepository ??= studentDatasource;
+    return _studentRepository!;
   }
 
   StudentsRegister getStudentsRepository() {
@@ -150,11 +150,11 @@ class IESSystem extends Operation {
             stateName: IESSystemStateName.registeringAsIncomingStudent));
         break;
       case UserRoleOperationName.checkStudentRecord:
-        checkStudentRecordUseCase = CheckStudentRecordUseCase(
+        studentRecordUseCase = StudentRecordUseCase(
             currentIESUser: homeUseCase.currentIESUser,
             studentRole:
                 homeUseCase.currentIESUser.getCurrentRole() as Student);
-        checkStudentRecordUseCase.getStudentRecords();
+        studentRecordUseCase.getStudentRecords();
         changeState(const OperationState(
             stateName: IESSystemStateName.checkStudentRecord));
         break;

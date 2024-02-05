@@ -42,7 +42,7 @@ class StudentRecordCard extends StatelessWidget {
                       onPressed: () {
                         // How change to other page related with this item?
                         IESSystem()
-                            .checkStudentRecordUseCase
+                            .studentRecordUseCase
                             .getStudentRecordMovements(studentRecordSubject);
                         Navigator.push(
                             context,

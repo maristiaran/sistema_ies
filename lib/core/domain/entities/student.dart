@@ -40,6 +40,7 @@ class StudentRecordSubject {
   List<MovementStudentRecord> movements = [];
   String name;
   int subjectId;
+  //TODO: registeringDateIt'sNecessary
   DateTime? finalExamApprovalDateIfAny;
   int? finalExamApprovalGradeIfAny;
   DateTime? courseApprovalDateIfAny;
@@ -374,4 +375,36 @@ class MSRFinalExamNonApproved extends MovementStudentRecord {
   String toString() {
     return "Examen final desaprobado (${date.day}-${date.month}-${date.year})  ";
   }
+}
+
+class StudentRecordSubject2 {
+/*    cantidad de veces que rindio (mal) desde la ultima regularizacion     */
+
+  int subjectId;
+  // date of last registration for the course
+  DateTime? dateLastRegistration;
+  // date of the last time the subject was regularized
+  DateTime? dateLastRegularized;
+  // date of the last time the final exam was taken
+  DateTime? dateLastExamTaken;
+  // ------------------------ //
+  List<MovementStudentRecord> movements = [];
+  String name;
+  DateTime? finalExamApprovalDateIfAny; // if this exist so
+  bool endCourseApproval = false; // I think this is unnecessary
+  int? finalExamApprovalGradeIfAny;
+  DateTime?
+      courseApprovalDateIfAny; // if there are an final exam approval date, is it necessary an course approval date? I guess they are both the same.
+  int? courseAcreditationNumericalGrade;
+
+  bool coursing = false;
+  Enum subjectState = SubjetState.nule;
+  StudentRecordSubject2(
+      {required this.subjectId,
+      required this.name,
+      this.finalExamApprovalDateIfAny,
+      this.finalExamApprovalGradeIfAny,
+      this.courseApprovalDateIfAny,
+      this.endCourseApproval = false,
+      this.courseAcreditationNumericalGrade});
 }
