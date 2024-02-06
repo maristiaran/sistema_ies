@@ -301,6 +301,7 @@ class MSRCourseApproved extends MovementStudentRecord {
       : super(
             movementName: MovementStudentRecordName.courseRegistering,
             date: date);
+  // This should reset the final exam counter.
   @override
   String numericalGradeString() {
     return 'A';
@@ -371,6 +372,7 @@ class MSRFinalExamNonApproved extends MovementStudentRecord {
     return numericalGrade.toString();
   }
 
+  // This should increase the final exam counter.
   @override
   String toString() {
     return "Examen final desaprobado (${date.day}-${date.month}-${date.year})  ";
