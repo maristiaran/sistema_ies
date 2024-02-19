@@ -4,7 +4,7 @@ import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/crud_roles/domain/crud_roles.dart';
-import 'package:sistema_ies/crud_roles/presentation/add_student_dialog.dart';
+import 'package:sistema_ies/crud_roles/presentation/add_administrative_dialog.dart';
 import 'package:sistema_ies/crud_roles/presentation/add_teacher_dialog.dart';
 import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 // import 'package:sistema_ies/crud_roles/presentation/adding_role_dialog.dart';
@@ -20,7 +20,7 @@ class CRUDRolesPage extends ConsumerWidget {
     if (crudStatesProvider.stateName == CRUDRoleStateName.initial) {
       crudStatesProvider as CRUDRoleInitialState;
       // print("crudstate ${crudStatesProvider.searchedUsers}");
-      Future<Student?> studentIfAny;
+      // Future<Student?> studentIfAny;
       return Scaffold(
         appBar: AppBar(
           // leading: null,
@@ -93,11 +93,8 @@ class CRUDRolesPage extends ConsumerWidget {
                                       .searchUser(
                                           userDescription:
                                               val.substring(0, val.length - 1));
-
-                                  // controller.openView();
                                 }
                               },
-                              // leading: const Icon(Icons.search),
                               trailing: <Widget>[
                                 Tooltip(
                                   message: 'Buscar usuario',
@@ -105,8 +102,6 @@ class CRUDRolesPage extends ConsumerWidget {
                                     isSelected: true,
                                     onPressed: () {},
                                     icon: const Icon(Icons.search),
-                                    // selectedIcon:
-                                    //     const Icon(Icons.brightness_2_outlined),
                                   ),
                                 )
                               ],
@@ -114,27 +109,6 @@ class CRUDRolesPage extends ConsumerWidget {
                           }, suggestionsBuilder: (BuildContext context,
                                   SearchController controller) {
                             return [];
-                            // if (crudStatesProvider.searchedUsers.isNotEmpty) {
-                            //   controller.openView();
-
-                            //   return crudStatesProvider.searchedUsers
-                            //       .map((e) => ListTile(
-                            //             title: const Text('ddd'),
-                            //             // title:
-                            //             //     Text("${e.surname} , ${e.firstname}"),
-                            //             onTap: () {
-                            //               IESSystem()
-                            //                   .crudTeachersAndStudentsUseCase
-                            //                   .selectUser(user: e);
-                            //               controller.closeView(
-                            //                   "${e.surname} , ${e.firstname}");
-                            //               // });
-                            //             },
-                            //           ))
-                            //       .toList(growable: false);
-                            // } else {
-                            //   return [];
-                            // }
                           }),
                           ListView.builder(
                             itemCount: crudStatesProvider.searchedUsers.length,
@@ -175,20 +149,30 @@ class CRUDRolesPage extends ConsumerWidget {
                               const Spacer(),
                               IconButton(
                                   onPressed: () async {
-                                    Student? studentIfAny =
-                                        await showDialog<Student?>(
+                                    Administrative? newAdministrativeRolIfAny =
+                                        await showDialog<Administrative?>(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return const AddingStudentDialog(
+                                              return const AddingAdministrativeDialog(
                                                 newuserRoleIfAny: null,
                                               );
                                             });
-                                    prints(studentIfAny);
+                                    if (newAdministrativeRolIfAny != null) {
+                                      IESSystem()
+                                          .crudTeachersAndStudentsUseCase
+                                          .addUserRole(
+                                              userRole:
+                                                  newAdministrativeRolIfAny);
+                                    }
                                   },
-                                  icon: const Icon(Icons.person_add_alt)),
+                                  icon: Image.asset(
+                                    'lib/core/assets/images/addAdministrative.png',
+                                    width: 48,
+                                    height: 48,
+                                  )),
                               IconButton(
                                   onPressed: () async {
-                                    Teacher? teacherIfAny =
+                                    Teacher? newTeacherRoleIfAny =
                                         await showDialog<Teacher?>(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -196,9 +180,41 @@ class CRUDRolesPage extends ConsumerWidget {
                                                 newuserRoleIfAny: null,
                                               );
                                             });
-                                    prints(teacherIfAny);
+                                    if (newTeacherRoleIfAny != null) {
+                                      IESSystem()
+                                          .crudTeachersAndStudentsUseCase
+                                          .addUserRole(
+                                              userRole: newTeacherRoleIfAny);
+                                    }
                                   },
-                                  icon: const Icon(Icons.person_add))
+                                  icon: Image.asset(
+                                    'lib/core/assets/images/addTeacher.png',
+                                    width: 48,
+                                    height: 48,
+                                  )),
+                              IconButton(
+                                  onPressed: () async {
+                                    SystemAdmin? newSystemAdminRoleIfAny =
+                                        await showDialog<SystemAdmin?>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const AddingAdministrativeDialog(
+                                                newuserRoleIfAny: null,
+                                              );
+                                            });
+                                    if (newSystemAdminRoleIfAny != null) {
+                                      IESSystem()
+                                          .crudTeachersAndStudentsUseCase
+                                          .addUserRole(
+                                              userRole:
+                                                  newSystemAdminRoleIfAny);
+                                    }
+                                  },
+                                  icon: Image.asset(
+                                    'lib/core/assets/images/addSystemAdmin.png',
+                                    width: 48,
+                                    height: 48,
+                                  )),
                             ],
                           ),
                           SizedBox(

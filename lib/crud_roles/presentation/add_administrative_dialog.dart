@@ -3,26 +3,29 @@ import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
-class AddingStudentDialog extends StatefulWidget {
+class AddingAdministrativeDialog extends StatefulWidget {
   final UserRole? newuserRoleIfAny;
-  const AddingStudentDialog({Key? key, this.newuserRoleIfAny})
+  const AddingAdministrativeDialog({Key? key, this.newuserRoleIfAny})
       : super(key: key);
 
   @override
-  State<AddingStudentDialog> createState() => _AddingStudentDialogState();
+  State<AddingAdministrativeDialog> createState() =>
+      _AddingAdministrativeDialogState();
 }
 
-class _AddingStudentDialogState extends State<AddingStudentDialog> {
+class _AddingAdministrativeDialogState
+    extends State<AddingAdministrativeDialog> {
   List<Syllabus> syllabuses =
       IESSystem().getSyllabusesRepository().getAllSyllabuses();
 
   late Widget newUserRoleWidget;
-  _AddingStudentDialogState();
+  _AddingAdministrativeDialogState();
   @override
   Widget build(BuildContext context) {
     Syllabus? selectedSyllabus = syllabuses[0];
     return AlertDialog(
-      title: const SizedBox(width: 500, child: Text('Item')),
+      title:
+          const SizedBox(width: 500, child: Text('Agregar rol administrativo')),
       content: Scaffold(
         body: SizedBox(
           width: 500,
@@ -47,7 +50,13 @@ class _AddingStudentDialogState extends State<AddingStudentDialog> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () => {Navigator.of(context).pop(null)},
+                  onPressed: () => {
+                        if (selectedSyllabus != null)
+                          {
+                            Navigator.of(context).pop(
+                                Administrative(syllabus: selectedSyllabus!))
+                          }
+                      },
                   child: const SizedBox(
                     height: 50,
                     width: double.infinity,
