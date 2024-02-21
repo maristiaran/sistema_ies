@@ -2,8 +2,6 @@ import 'package:either_dart/either.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
-// import 'package:sistema_ies/core/domain/entities/student.dart';
-// import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
@@ -24,7 +22,6 @@ enum LoginStateName {
 
 class LoginState extends OperationState {
   final IESUser? currentIESUserIfAny;
-  // final IESUser? currentIESUserRole;
 
   const LoginState({required this.currentIESUserIfAny, required stateName})
       : super(stateName: stateName);
