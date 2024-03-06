@@ -1,5 +1,6 @@
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
+import 'package:sistema_ies/core/domain/utils/datetime.dart';
 
 class Student extends UserRole {
   Syllabus syllabus;
@@ -214,7 +215,7 @@ enum MovementStudentRecordName {
   // desconocido
 }
 
-class MovementStudentRecord {
+abstract class MovementStudentRecord {
   //Type of student event
   final MovementStudentRecordName movementName;
   // Events's DDMMYYYY
@@ -230,6 +231,8 @@ class MovementStudentRecord {
   String numericalGradeString() {
     return '???';
   }
+
+  Map<String, dynamic> toMap(MovementStudentRecord movement);
 }
 
 class MSRFinalExamApprovedByCertification extends MovementStudentRecord {
@@ -255,9 +258,32 @@ class MSRFinalExamApprovedByCertification extends MovementStudentRecord {
                 MovementStudentRecordName.finalExamApprovedByCertification,
             date: date);
 
+  factory MSRFinalExamApprovedByCertification.fromMap(
+      Map<String, dynamic> movement) {
+    return MSRFinalExamApprovedByCertification(
+        date: timestampToDate(movement['date']),
+        numericalGrade: movement['numericalGrade'],
+        certificationInstitute: movement['certificationInstitute'],
+        bookNumber: movement['bookNumber'],
+        pageNumber: movement['pageNumber'],
+        certificationResolution: movement['certificationResolution']);
+  }
+
   @override
   String numericalGradeString() {
     return numericalGrade.toString();
+  }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {
+      "date": dateToString(date),
+      "numericalGrade": numericalGrade,
+      "certificationInstitute": certificationInstitute.toString(),
+      "bookNumber": bookNumber,
+      "pageNumber": pageNumber,
+      "certificationResolution": certificationResolution,
+    };
   }
 }
 
@@ -271,6 +297,17 @@ class MSRCourseRegistering extends MovementStudentRecord {
   String toString() {
     return "Incripción a cursar (${date.day}-${date.month}-${date.year})  ";
   }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {"movementName": movementName, "date": dateToString(date)};
+  }
+
+  factory MSRCourseRegistering.fromMap(Map<String, dynamic> movement) {
+    return MSRCourseRegistering(
+      date: timestampToDate(movement['date']),
+    );
+  }
 }
 
 class MSRCourseFailedNonFree extends MovementStudentRecord {
@@ -283,6 +320,15 @@ class MSRCourseFailedNonFree extends MovementStudentRecord {
   String toString() {
     return "Abandono de cursado (${date.day}-${date.month}-${date.year})  ";
   }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {"movementName": movementName, "date": dateToString(date)};
+  }
+
+  factory MSRCourseFailedNonFree.fromMap(Map<String, dynamic> movement) {
+    return MSRCourseFailedNonFree(date: timestampToDate(movement['date']));
+  }
 }
 
 class MSRCourseFailedFree extends MovementStudentRecord {
@@ -293,6 +339,15 @@ class MSRCourseFailedFree extends MovementStudentRecord {
   @override
   String toString() {
     return "Cursado libre(${date.day}-${date.month}-${date.year})  ";
+  }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {"movementName": movementName, "date": dateToString(date)};
+  }
+
+  factory MSRCourseFailedFree.fromMap(Map<String, dynamic> movement) {
+    return MSRCourseFailedFree(date: timestampToDate(movement['date']));
   }
 }
 
@@ -310,6 +365,15 @@ class MSRCourseApproved extends MovementStudentRecord {
   @override
   String toString() {
     return "Curso regularizado (${date.day}-${date.month}-${date.year})  ";
+  }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {"movementName": movementName, "date": dateToString(date)};
+  }
+
+  factory MSRCourseApproved.fromMap(Map<String, dynamic> movement) {
+    return MSRCourseApproved(date: timestampToDate(movement['date']));
   }
 }
 
@@ -330,6 +394,18 @@ class MSRCourseApprovedWithAccreditation extends MovementStudentRecord {
   @override
   String toString() {
     return "Curso aprovado por acreditación directo(${date.day}-${date.month}-${date.year})  ";
+  }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {"movementName": movementName, "date": dateToString(date)};
+  }
+
+  factory MSRCourseApprovedWithAccreditation.fromMap(
+      Map<String, dynamic> movement) {
+    return MSRCourseApprovedWithAccreditation(
+        date: timestampToDate(movement['date']),
+        numericalGrade: movement['numericalGrade']);
   }
 }
 
@@ -357,6 +433,24 @@ class MSRFinalExamApproved extends MovementStudentRecord {
   String toString() {
     return "Examen final aprobado (${date.day}-${date.month}-${date.year})  ";
   }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {
+      "date": dateToString(date),
+      "numericalGrade": numericalGrade,
+      "bookNumber": bookNumber,
+      "pageNumber": pageNumber
+    };
+  }
+
+  factory MSRFinalExamApproved.fromMap(Map<String, dynamic> movement) {
+    return MSRFinalExamApproved(
+        date: timestampToDate(movement['date']),
+        numericalGrade: movement['numericalGrade'],
+        bookNumber: movement['bookNumber'],
+        pageNumber: movement['pageNumber']);
+  }
 }
 
 class MSRFinalExamNonApproved extends MovementStudentRecord {
@@ -377,6 +471,17 @@ class MSRFinalExamNonApproved extends MovementStudentRecord {
   String toString() {
     return "Examen final desaprobado (${date.day}-${date.month}-${date.year})  ";
   }
+
+  @override
+  Map<String, dynamic> toMap(MovementStudentRecord movement) {
+    return {"movementName": movementName, "date": dateToString(date)};
+  }
+
+  factory MSRFinalExamNonApproved.fromMap(Map<String, dynamic> movement) {
+    return MSRFinalExamNonApproved(
+        date: timestampToDate(movement['date']),
+        numericalGrade: movement['numericalGrade']);
+  }
 }
 
 class StudentRecordSubject2 {
@@ -391,7 +496,7 @@ class StudentRecordSubject2 {
   DateTime? dateLastExamTaken;
   // ------------------------ //
   List<MovementStudentRecord> movements = [];
-  String name;
+  String subjectName;
   DateTime? finalExamApprovalDateIfAny; // if this exist so
   bool endCourseApproval = false; // I think this is unnecessary
   int? finalExamApprovalGradeIfAny;
@@ -401,12 +506,29 @@ class StudentRecordSubject2 {
 
   bool coursing = false;
   Enum subjectState = SubjetState.nule;
+
   StudentRecordSubject2(
       {required this.subjectId,
-      required this.name,
+      required this.subjectName,
       this.finalExamApprovalDateIfAny,
       this.finalExamApprovalGradeIfAny,
       this.courseApprovalDateIfAny,
       this.endCourseApproval = false,
       this.courseAcreditationNumericalGrade});
+  factory StudentRecordSubject2.fromJson(Map<dynamic, dynamic> parsedJson) {
+    return StudentRecordSubject2(
+        subjectId: parsedJson['id'],
+        subjectName: parsedJson['subjectName'] ?? "",
+        finalExamApprovalDateIfAny:
+            parsedJson['finalExamApprovalDateIfAny'] == null
+                ? null
+                : timestampToDate(parsedJson['finalExamApprovalDateIfAny']),
+        finalExamApprovalGradeIfAny: parsedJson['finalExamApprovalGradeIfAny'],
+        courseApprovalDateIfAny: parsedJson['courseApprovalDateIfAny'] == null
+            ? null
+            : timestampToDate(parsedJson['courseApprovalDateIfAny']),
+        endCourseApproval: false,
+        courseAcreditationNumericalGrade:
+            parsedJson['courseAcreditationNumericalGrade']);
+  }
 }

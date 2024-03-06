@@ -15,8 +15,14 @@ abstract class StudentRepositoryPort extends RepositoryPort {
       {required String idUser,
       required String syllabusId,
       required int subjectId});
-}
 
+  // This is a function POST to create a new register of Student record in database
+  void addStudentRecordMovement(
+      {required MovementStudentRecord newMovement,
+      required String idUser,
+      required String syllabusId,
+      required int subjectId});
+}
 /* class StudenSubject {
   DateTime? dateOfLastRegister;
   DateTime? dateOfLastRegularState;

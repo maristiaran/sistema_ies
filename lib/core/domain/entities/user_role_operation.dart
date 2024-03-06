@@ -14,7 +14,7 @@ enum UserRoleOperationName {
   adminFinalExamsAndInstances,
   adminStudentRecords,
   writeExamGrades,
-  adminSyllabuses,
+  adminSyllabuses
 }
 
 class UserRoleOperation {

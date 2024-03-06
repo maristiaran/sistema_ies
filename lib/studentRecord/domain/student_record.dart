@@ -97,11 +97,16 @@ class StudentRecordUseCase extends Operation<StudentRecordState> {
     changeState(currentState.copyChangingState(
         newState: StudentRecordStateName.loading));
     // throught IESSystem we'll to try get the subjects
-    await IESSystem().getStudentRepository().getSubjects(idUser: IESSystem().homeUseCase.currentIESUser.id, syllabusId: (IESSystem().homeUseCase.currentIESUser.getCurrentRole()
-                    as Student)
+    await IESSystem().getStudentRepository().getSubjects(
+        idUser: IESSystem().homeUseCase.currentIESUser.id,
+        syllabusId:
+            (IESSystem().homeUseCase.currentIESUser.getCurrentRole() as Student)
                 .syllabus
                 .administrativeResolution);
 
     return Right(subjects);
   }
 }
+
+
+

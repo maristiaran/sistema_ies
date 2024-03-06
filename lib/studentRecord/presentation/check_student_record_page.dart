@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/checkStudentRecord/domain/student_record.dart';
+import 'package:sistema_ies/studentRecord/domain/student_record.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card.dart';
+import 'package:sistema_ies/studentRecord/presentation/widget/user_info_w.dart';
+import 'package:sistema_ies/studentRecord/presentation/widget/student_record_card.dart';
 
 import 'widget/center_circle_progress_bar.dart';
 

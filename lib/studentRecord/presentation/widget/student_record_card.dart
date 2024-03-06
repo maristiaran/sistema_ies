@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card_expanded.dart';
+import 'package:sistema_ies/studentRecord/presentation/widget/student_record_card_expanded.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
