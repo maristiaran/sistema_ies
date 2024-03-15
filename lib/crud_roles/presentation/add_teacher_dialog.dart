@@ -68,11 +68,8 @@ class _AddingStudentDialogState extends State<AddingTeacherDialog> {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                   onPressed: () => {
-                        // if (selectedSyllabus != null && selectedSubject != null)
-                        //       {
-                        //         // Navigator.of(context).pop(
-                        //         //     Teacher(subjects: subjects))
-                        //       }
+                        if (selectedSyllabus != null && selectedSubject != null)
+                          {Navigator.of(context).pop(Teacher(subjects: []))}
 
                         // Navigator.of(context).pop(null)
                       },
