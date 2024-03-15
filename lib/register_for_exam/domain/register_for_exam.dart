@@ -8,7 +8,14 @@ import 'package:sistema_ies/core/domain/repositories/roles_and_operations_reposi
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
-enum RegisterForExamStateName { init, failure, loading, loadnull, success }
+enum RegisterForExamStateName {
+  init,
+  check,
+  failure,
+  loading,
+  loadnull,
+  success
+}
 
 class RegisterForExamState extends OperationState {
   const RegisterForExamState(
@@ -58,6 +65,7 @@ class RegisterForExamUseCase extends Operation<OperationState> {
   final IESUser currentIESUser;
   final Student studentRole;
   List regs = [];
+  List<Subject> registerSubjects = [];
   Map movements = <int, List<MovementStudentRecord>>{};
 
   RegisterForExamUseCase(
@@ -65,15 +73,33 @@ class RegisterForExamUseCase extends Operation<OperationState> {
       : super(RegisterForExamState(
             stateName: RegisterForExamStateName.init,
             currentRole: studentRole)) {
+    getSubjectsToRegister();
     getRegistereds();
   }
 
   /// Get a filtered list of subjects to register
-  List<Subject> getSubjectsToRegister() {
-    List<Subject> registerSubjects =
-        IESSystem().registerForExamUseCase.studentRole.syllabus.subjects;
+  Future<void> getSubjectsToRegister() async {
+    changeState(
+        const OperationState(stateName: RegisterForExamStateName.loading));
+    registerSubjects = studentRole.syllabus.subjects;
+    var repoMovSubjects = (await IESSystem()
+        .getStudentsRepository()
+        .getSubjectsForExam(
+            idUser: currentIESUser.id,
+            syllabus: studentRole.syllabus.administrativeResolution));
+    var movSubjects = repoMovSubjects.isRight ? repoMovSubjects.right : ["99"];
+    if (!movSubjects.contains("99")) {
+      for (var sub in registerSubjects) {
+        if (!movSubjects.contains(sub.id)) {
+          registerSubjects.remove(sub);
+          prints("Deleted: ${sub.name}, ${sub.id}");
+        }
+      }
+      // for (var i = 0; i < registerSubjects.length; i++) {
 
-    return registerSubjects;
+      // }
+    }
+    prints("\nsubjects: $movSubjects");
   }
 
   /// Get previous registers
@@ -89,12 +115,12 @@ class RegisterForExamUseCase extends Operation<OperationState> {
                 .syllabus
                 .administrativeResolution)
         .then((value) => regs = value.right);
-    prints("recibido $regs");
+    prints("recibido $regs \n\n");
     // if (subjectsf.isNotEmpty) {
     //   return subjectsf;
     // }
     changeState(RegisterForExamInitialState(
-        stateName: RegisterForExamStateName.init,
+        stateName: RegisterForExamStateName.check,
         currentRole: studentRole,
         registereds: regs));
   }
@@ -108,7 +134,7 @@ class RegisterForExamUseCase extends Operation<OperationState> {
     }
     prints("regs toogle: $regs");
     changeState(RegisterForExamInitialState(
-        stateName: RegisterForExamStateName.init,
+        stateName: RegisterForExamStateName.check,
         currentRole: studentRole,
         registereds: regs));
   }
@@ -137,7 +163,7 @@ class RegisterForExamUseCase extends Operation<OperationState> {
     }
     getRegistereds();
     changeState(RegisterForExamInitialState(
-        stateName: RegisterForExamStateName.init,
+        stateName: RegisterForExamStateName.check,
         currentRole: studentRole,
         registereds: regs));
   }

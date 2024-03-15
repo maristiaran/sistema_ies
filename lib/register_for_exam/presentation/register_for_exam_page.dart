@@ -12,15 +12,15 @@ class RegisterForExamPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Subject> getSubjectsToRegister =
-        IESSystem().registerForExamUseCase.getSubjectsToRegister();
-    List regs = ref
-        .watch(IESSystem().registerForExamUseCase.stateNotifierProvider)
-        .props;
+    RegisterForExamUseCase registerForExamUseCase =
+        IESSystem().registerForExamUseCase;
+    // Future<List<Subject>> getSubjectsToRegister =
+    //     registerForExamUseCase.getSubjectsToRegister();
+    List regs = ref.watch(registerForExamUseCase.stateNotifierProvider).props;
 
     final Map<Enum, Widget> widgetElements = {
-      RegisterForExamStateName.init: RegisterForm(
-          getSubjectsToRegister: getSubjectsToRegister, registers: regs),
+      RegisterForExamStateName.check: RegisterForm(
+          registers: regs, subjects: registerForExamUseCase.registerSubjects),
       // RegisterForExamStateName.failure: const FailureRegisterPage(),
       RegisterForExamStateName.loading: const Center(
         child: CircularProgressIndicator(),
@@ -41,6 +41,8 @@ class RegisterForExamPage extends ConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
             content: const Text("Inscripto correctamente")));
+        // } else if (next.stateName == RegisterForExamStateName.init) {
+        //   registerForExamUseCase.getSubjectsToRegister();
       }
     });
     final currentBody = widgetElements.keys.firstWhere((element) =>
@@ -71,69 +73,60 @@ class RegisterForExamPage extends ConsumerWidget {
 }
 
 class RegisterForm extends ConsumerWidget {
-  const RegisterForm({
-    Key? key,
-    required this.getSubjectsToRegister,
-    required this.registers,
-  }) : super(key: key);
-
-  final List<Subject> getSubjectsToRegister;
+  const RegisterForm(
+      {Key? key,
+      // required this.getSubjectsToRegister,
+      required this.registers,
+      required this.subjects})
+      : super(key: key);
   final List registers;
+  final List<Subject> subjects;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, ref, child) {
-      if (registers.length > 1) {
-        return Center(
-            child: Container(
-          constraints: const BoxConstraints(maxWidth: 420),
+    return Center(
+        child: Container(
+      constraints: const BoxConstraints(maxWidth: 420),
+      width: MediaQuery.of(context).size.width / 0.5,
+      child: Column(children: [
+        Text(
+            '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
+        Expanded(
+            child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: subjects.length,
+          itemBuilder: (context, index) {
+            return CheckboxListTile(
+                title: Text("${subjects[index]}"),
+                subtitle: Text(
+                    "Año: ${subjects[index].courseYear}, Aprobadas para poder rendir: ${subjects[index].examNeededForExamination}"),
+                value: registers[1].contains(subjects[index].id),
+                onChanged: (bool? newValue) {
+                  IESSystem()
+                      .registerForExamUseCase
+                      .toogleRegister(subjects[index].id);
+                });
+          },
+        )),
+        Container(
           width: MediaQuery.of(context).size.width / 0.5,
-          child: Column(children: [
-            Text(
-                '${IESSystem().registerForExamUseCase.studentRole.syllabus.name}:'),
-            Expanded(
-                child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: getSubjectsToRegister.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                    title: Text("${getSubjectsToRegister[index]}"),
-                    subtitle: Text(
-                        "Año: ${getSubjectsToRegister[index].courseYear}, Aprobadas para poder rendir: ${getSubjectsToRegister[index].examNeededForExamination}"),
-                    value:
-                        registers[1].contains(getSubjectsToRegister[index].id),
-                    onChanged: (bool? newValue) {
-                      IESSystem()
-                          .registerForExamUseCase
-                          .toogleRegister(getSubjectsToRegister[index].id);
-                    });
+          height: 50,
+          decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: TextButton(
+              onPressed: () {
+                prints("Checks: (");
+                IESSystem().registerForExamUseCase.submitRegister(registers[1]);
+                prints("Submit succefull");
+                prints(") :skcehC");
               },
-            )),
-            Container(
-              width: MediaQuery.of(context).size.width / 0.5,
-              height: 50,
-              decoration: const BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: TextButton(
-                  onPressed: () {
-                    prints("Checks: (");
-                    IESSystem()
-                        .registerForExamUseCase
-                        .submitRegister(registers[1]);
-                    prints("Submit succefull");
-                    prints(") :skcehC");
-                  },
-                  child: const Text(
-                    "Inscribirse",
-                    style: TextStyle(color: Colors.white),
-                  )),
-            )
-          ]),
-        ));
-      } else {
-        return const CircularProgressIndicator();
-      }
-    });
+              child: const Text(
+                "Inscribirse",
+                style: TextStyle(color: Colors.white),
+              )),
+        )
+      ]),
+    ));
   }
 }

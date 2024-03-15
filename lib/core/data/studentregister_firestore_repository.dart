@@ -85,4 +85,34 @@ class StudentsRegister implements StudentsRepositoryPort {
       return Left(Failure(failureName: FailureName.unknown, message: "$e"));
     }
   }
+
+  Future<Either<Failure, List>> getSubjectsForExam(
+      {required String idUser, required String syllabus}) async {
+    try {
+      Future<String> syllabusId =
+          getSyllabusId(idUser: idUser, syllabus: syllabus);
+      List<int> res = [];
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> subjectsState =
+          (await firestoreInstance
+                  .collection("iesUsers")
+                  .doc(idUser)
+                  .collection('roles')
+                  .doc(await syllabusId)
+                  .collection("subjects")
+                  .where("courseAcreditationNumericalGrade", isNull: false)
+                  .get())
+              .docs;
+      for (var element in subjectsState) {
+        prints("SUBJECT_NAME: ${element.get("name")}");
+        if (element.data().containsKey("finalExamApprovalGradeIfAny")) {
+          prints("${element.get("name")} approved");
+        } else {
+          res.add(element.get("id"));
+        }
+      }
+      return Right(res);
+    } catch (e) {
+      return Left(Failure(failureName: FailureName.unknown, message: "$e"));
+    }
+  }
 }
