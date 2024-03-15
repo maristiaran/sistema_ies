@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sistema_ies/core/domain/entities/student.dart';
 // import 'package:sistema_ies/checkStudentRecord/presentation/check_student_record_page.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
@@ -22,7 +23,18 @@ class HomePage extends ConsumerWidget {
     final userName = IESSystem().homeUseCase.currentIESUser.firstname;
 
     final List<Widget> widgetOptions = <Widget>[
-      const Text("Home"),
+      TextButton(
+          onPressed: () {
+            IESSystem().getStudentRepository().getSubjects(
+                idUser: IESSystem().homeUseCase.currentIESUser.id,
+                syllabusId: (IESSystem()
+                        .homeUseCase
+                        .currentIESUser
+                        .getCurrentRole() as Student)
+                    .syllabus
+                    .administrativeResolution);
+          },
+          child: const Text("Get Student subjects")),
       const Text("StudentRecord"),
       const Text(
         'Index 2: Calendario',

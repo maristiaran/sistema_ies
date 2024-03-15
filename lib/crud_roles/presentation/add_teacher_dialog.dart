@@ -24,7 +24,7 @@ class _AddingStudentDialogState extends State<AddingTeacherDialog> {
   Widget build(BuildContext context) {
     Syllabus? selectedSyllabus = syllabuses[0];
     return AlertDialog(
-      title: const SizedBox(width: 500, child: Text('Item')),
+      title: const SizedBox(width: 500, child: Text('Agregar rol docente')),
       content: Scaffold(
         body: SizedBox(
           width: 500,
@@ -67,7 +67,15 @@ class _AddingStudentDialogState extends State<AddingTeacherDialog> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () => {Navigator.of(context).pop(null)},
+                  onPressed: () => {
+                        if (selectedSyllabus != null && selectedSubject != null)
+                          {
+                            // Navigator.of(context).pop(
+                            //     Teacher(subjects: subjects))
+                          }
+                        else
+                          Navigator.of(context).pop(null)
+                      },
                   child: const SizedBox(
                     height: 50,
                     width: double.infinity,

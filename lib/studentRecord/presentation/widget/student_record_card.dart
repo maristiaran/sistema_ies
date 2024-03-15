@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card_expanded.dart';
+import 'package:sistema_ies/studentRecord/presentation/widget/student_record_card_expanded.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 
@@ -42,7 +42,7 @@ class StudentRecordCard extends StatelessWidget {
                       onPressed: () {
                         // How change to other page related with this item?
                         IESSystem()
-                            .checkStudentRecordUseCase
+                            .studentRecordUseCase
                             .getStudentRecordMovements(studentRecordSubject);
                         Navigator.push(
                             context,

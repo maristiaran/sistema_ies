@@ -6,8 +6,9 @@ import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
+import 'package:sistema_ies/core/domain/utils/responses.dart';
 
-enum CheckStudentRecordStateName {
+enum StudentRecordStateName {
   init,
   success,
   loading,
@@ -15,21 +16,17 @@ enum CheckStudentRecordStateName {
   studentRecordExtended
 }
 
-class CheckStudentRecordState extends OperationState {
-  // final IESUser currentUser;
+class StudentRecordState extends OperationState {
   final Student currentRole;
-  const CheckStudentRecordState(
-      {required Enum stateName, required this.currentRole})
+  const StudentRecordState({required Enum stateName, required this.currentRole})
       : super(stateName: stateName);
-  CheckStudentRecordState copyChangingRole({required Student newUserRole}) {
-    return CheckStudentRecordState(
-        stateName: stateName, currentRole: newUserRole);
+  StudentRecordState copyChangingRole({required Student newUserRole}) {
+    return StudentRecordState(stateName: stateName, currentRole: newUserRole);
   }
 
-  CheckStudentRecordState copyChangingState(
-      {required CheckStudentRecordStateName newState}) {
-    return CheckStudentRecordState(
-        stateName: newState, currentRole: currentRole);
+  StudentRecordState copyChangingState(
+      {required StudentRecordStateName newState}) {
+    return StudentRecordState(stateName: newState, currentRole: currentRole);
   }
 
   UserRoleTypeName getUserRoleTypeName() {
@@ -45,21 +42,20 @@ class CheckStudentRecordState extends OperationState {
 }
 
 // AUTORIZATION
-class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
+class StudentRecordUseCase extends Operation<StudentRecordState> {
   final IESUser currentIESUser;
   final Student studentRole;
 
-  CheckStudentRecordUseCase(
+  StudentRecordUseCase(
       {required this.currentIESUser, required this.studentRole})
-      : super(CheckStudentRecordState(
-            stateName: CheckStudentRecordStateName.init,
-            currentRole: studentRole));
+      : super(StudentRecordState(
+            stateName: StudentRecordStateName.init, currentRole: studentRole));
 
   void getStudentRecords() async {
     changeState(currentState.copyChangingState(
-        newState: CheckStudentRecordStateName.loading));
+        newState: StudentRecordStateName.loading));
     await IESSystem()
-        .getStudentRecordRepository()
+        .getStudentRepository()
         .getStudentRecord(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
             syllabus: (IESSystem().homeUseCase.currentIESUser.getCurrentRole()
@@ -68,23 +64,21 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
                 .administrativeResolution)
         .fold((left) {
       changeState(currentState.copyChangingState(
-          newState: CheckStudentRecordStateName.failure));
-      print(left.failureName);
+          newState: StudentRecordStateName.failure));
     }, (right) {
       studentRole.srSubjects = right;
 
       changeState(currentState.copyChangingState(
-          newState: CheckStudentRecordStateName.success));
+          newState: StudentRecordStateName.success));
     });
   }
 
   void getStudentRecordMovements(
       StudentRecordSubject studentRecordSubject) async {
     changeState(currentState.copyChangingState(
-        newState: CheckStudentRecordStateName.loading));
-    List<MovementStudentRecord> movements = [];
+        newState: StudentRecordStateName.loading));
     await IESSystem()
-        .getStudentRecordRepository()
+        .getStudentRepository()
         .getStudentRecordMovements(
             idUser: IESSystem().homeUseCase.currentIESUser.id,
             syllabusId: (IESSystem().homeUseCase.currentIESUser.getCurrentRole()
@@ -93,8 +87,26 @@ class CheckStudentRecordUseCase extends Operation<CheckStudentRecordState> {
                 .administrativeResolution,
             subjectId: studentRecordSubject.subjectId)
         .then((value) => studentRecordSubject.movements = value);
-    print(studentRecordSubject.movements);
     changeState(currentState.copyChangingState(
-        newState: CheckStudentRecordStateName.studentRecordExtended));
+        newState: StudentRecordStateName.studentRecordExtended));
+  }
+
+  Future<Either<Failure, List>> getSubjects() async {
+    List subjects = [];
+    // to change current state to loading state
+    changeState(currentState.copyChangingState(
+        newState: StudentRecordStateName.loading));
+    // throught IESSystem we'll to try get the subjects
+    await IESSystem().getStudentRepository().getSubjects(
+        idUser: IESSystem().homeUseCase.currentIESUser.id,
+        syllabusId:
+            (IESSystem().homeUseCase.currentIESUser.getCurrentRole() as Student)
+                .syllabus
+                .administrativeResolution);
+
+    return Right(subjects);
   }
 }
+
+
+

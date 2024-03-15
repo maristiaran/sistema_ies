@@ -78,10 +78,9 @@ class CRUDRoleUseCase extends Operation<OperationState> {
       .map((e) => rolesAndOperationsRepository.getUserRoleType(e))
       .toList();
   Future searchUser({required String userDescription}) async {
-    searchedUsers = await IESSystem()
-        .getUsersRepository()
-        .getIESUsersByFullName(surname: userDescription);
-
+    searchedUsers = await IESSystem().getUsersRepository().getIESUsersByFullName(
+        surname:
+            "${userDescription[0].toUpperCase()}${userDescription.substring(1).toLowerCase()}");
     changeState(CRUDRoleInitialState(
         selectedUser: null, roles: const [], searchedUsers: searchedUsers));
   }
@@ -97,34 +96,25 @@ class CRUDRoleUseCase extends Operation<OperationState> {
   }
 
   Future addUserRole({required UserRole userRole}) async {
-    rolesToAdd.add(userRole);
-    rolesToShow.add(userRole);
-    changeState(CRUDRoleInitialState(
-        selectedUser: currentUser,
-        roles: rolesToShow,
-        searchedUsers: const []));
-    // Either<Failure, Success> response = await IESSystem()
-    //     .getUsersRepository()
-    //     .addUserRole(user: user, userRole: userRole);
-    // response.fold(
-    //     (failure) => changeState(
-    //         const OperationState(stateName: CRUDRoleStateName.failure)),
-    //     (success) {
-    //   user.addRole(userRole);
-    //   changeState(CRUDRoleInitialState(
-    //       selectedUser: currentUser,
-    //       roles: user.roles,
-    //       searchedUsers: const []));
-    // });
+    if (!rolesToAdd.contains(userRole)) {
+      rolesToAdd.add(userRole);
+      rolesToShow.add(userRole);
+      changeState(CRUDRoleInitialState(
+          selectedUser: currentUser,
+          roles: rolesToShow,
+          searchedUsers: const []));
+    }
   }
 
   Future removeUserRole({required UserRole userRole}) async {
-    rolesToAdd.add(userRole);
-    rolesToShow.remove(userRole);
-    changeState(CRUDRoleInitialState(
-        selectedUser: currentUser,
-        roles: rolesToShow,
-        searchedUsers: const []));
+    if (rolesToAdd.contains(userRole)) {
+      rolesToAdd.add(userRole);
+      rolesToShow.remove(userRole);
+      changeState(CRUDRoleInitialState(
+          selectedUser: currentUser,
+          roles: rolesToShow,
+          searchedUsers: const []));
+    }
     // Either<Failure, Success> response = await IESSystem()
     //     .getUsersRepository()
     //     .addUserRole(user: user, userRole: userRole);

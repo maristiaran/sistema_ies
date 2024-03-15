@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sistema_ies/checkStudentRecord/domain/check_student_record.dart';
+import 'package:sistema_ies/studentRecord/domain/student_record.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/widget/user_info_w.dart';
-import 'package:sistema_ies/checkStudentRecord/presentation/widget/student_record_card.dart';
+import 'package:sistema_ies/studentRecord/presentation/widget/user_info_w.dart';
+import 'package:sistema_ies/studentRecord/presentation/widget/student_record_card.dart';
 
 import 'widget/center_circle_progress_bar.dart';
 
@@ -13,16 +13,16 @@ class CheckStudentRecordPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Map<Enum, Widget> widgetElements = {
-      CheckStudentRecordStateName.success: const StudentRecordExpandedList(),
-      CheckStudentRecordStateName.loading: const CenterCircleProgressBar(),
-      CheckStudentRecordStateName.studentRecordExtended:
+      StudentRecordStateName.success: const StudentRecordExpandedList(),
+      StudentRecordStateName.loading: const CenterCircleProgressBar(),
+      StudentRecordStateName.studentRecordExtended:
           const StudentRecordExpandedList()
     };
 
     final currentBody = widgetElements.keys.firstWhere((element) =>
         element ==
         ref
-            .watch(IESSystem().checkStudentRecordUseCase.stateNotifierProvider)
+            .watch(IESSystem().studentRecordUseCase.stateNotifierProvider)
             .stateName);
     return Scaffold(
         appBar: AppBar(
@@ -51,13 +51,13 @@ class StudentRecordExpandedList extends StatelessWidget {
         child: ListView.builder(
             shrinkWrap: true,
             itemCount: IESSystem()
-                .checkStudentRecordUseCase
+                .studentRecordUseCase
                 .studentRole
                 .srSubjects
                 .length,
             itemBuilder: (context, index) {
               return StudentRecordCard(IESSystem()
-                  .checkStudentRecordUseCase
+                  .studentRecordUseCase
                   .studentRole
                   .srSubjects[index]);
             }),

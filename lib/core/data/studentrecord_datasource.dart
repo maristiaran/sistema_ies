@@ -1,11 +1,10 @@
 import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
-import 'package:sistema_ies/core/data/utils/string_to_movement_name.dart';
+import 'package:sistema_ies/core/data/utils/sort_movements.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
-import 'package:sistema_ies/core/domain/repositories/studentrecord_repository_port.dart';
+import 'package:sistema_ies/core/domain/repositories/student_repository.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
-
-import '../domain/utils/datetime.dart';
+import 'package:sistema_ies/register_for_exam/utils/prints.dart';
 
 class StudentDatasource implements StudentRepositoryPort {
   @override
@@ -13,6 +12,28 @@ class StudentDatasource implements StudentRepositoryPort {
     return Right(Success('ok'));
   }
 
+  // Function POST to add a new Student record movement in database
+  @override
+  void addStudentRecordMovement(
+      {required MovementStudentRecord newMovement,
+      required String idUser,
+      required String syllabusId,
+      required int subjectId}) {
+    // TODO: implement addStudentRecordMovement
+    try {
+      firestoreInstance
+          .collection("iesUsers")
+          .doc(idUser)
+          .collection('roles')
+          .doc("syllabus")
+          .collection("subject")
+          .add(newMovement.toMap(newMovement));
+    } catch (e) {
+      prints(e);
+    }
+  }
+
+  // This function gets an Id from a Syllabus [required String idUser | required String syllabus]
   Future<String> getSyllabusId(
       {required String idUser, required String syllabus}) async {
     return firestoreInstance
@@ -28,10 +49,11 @@ class StudentDatasource implements StudentRepositoryPort {
         }
         return "";
       },
-      onError: (e) => {print("Error completing: $e")},
+      onError: (e) => {prints("Error completing: $e")},
     );
   }
 
+// This function gets an Id from a Subject [required String idUser | required String syllabus]
   Future<String> getSubjectId(
       {required String userID,
       required String syllabusID,
@@ -51,7 +73,7 @@ class StudentDatasource implements StudentRepositoryPort {
         }
         return "";
       },
-      onError: (e) => {print("Error completing: $e")},
+      onError: (e) => {prints("Error completing: $e")},
     );
   }
 
@@ -62,7 +84,7 @@ class StudentDatasource implements StudentRepositoryPort {
     // GET syllabus ID
     Future<String> syllabusId =
         getSyllabusId(idUser: idUser, syllabus: syllabus);
-// GET student records
+    // GET student records
     List<Map<String, dynamic>> studentRecordsDocs = ((await firestoreInstance
             .collection("iesUsers")
             .doc(idUser)
@@ -73,17 +95,11 @@ class StudentDatasource implements StudentRepositoryPort {
         .docs
         .map((e) => e.data())
         .toList());
+    // srSubjects is equal to a list of StudentRecordSubject build with studentRecordsDocs
     srSubjects = studentRecordsDocs
         .map((e) => StudentRecordSubject(subjectId: e['id'], name: "name"))
         .toList();
-    // Get student record movements
-    /* for (var studentRecord in srSubjects) {
-      List<MovementStudentRecord> movements = await getStudentRecordMovements(
-          idUser: idUser,
-          subjectId: studentRecord.subjectId,
-          syllabusId: syllabus);
-      studentRecord.movements = movements;
-    } */
+
     return Right(srSubjects);
   }
 
@@ -111,12 +127,36 @@ class StudentDatasource implements StudentRepositoryPort {
         .map((e) => e.data())
         .toList());
 
-    movements = studentRecordsDocs
-        .map((e) => MovementStudentRecord(
-            movementName: stringToSRMovementName(e['name']),
-            date: timestampToDate(e['date'])))
-        .toList();
+    movements = sortMovements(studentRecordsDocs);
 
     return movements;
+  }
+
+  @override
+  Future<Either<Failure, List<StudentRecordSubject2>>> getSubjects(
+      {required String idUser, required String syllabusId}) async {
+    List<StudentRecordSubject2> subjects = [];
+    List<Map> subjectsDocs = [];
+    prints("Started!");
+    try {
+      subjectsDocs = (await firestoreInstance
+              .collection("iesUsers")
+              .doc(idUser)
+              .collection('roles')
+              .doc(await getSyllabusId(idUser: idUser, syllabus: syllabusId))
+              .collection("subjects")
+              .get())
+          .docs
+          .map((e) => e.data())
+          .toList();
+      for (var subject in subjectsDocs) {
+        prints(subject);
+        subjects.add(StudentRecordSubject2.fromJson(subject));
+      }
+    } catch (e) {
+      prints(e);
+    }
+    prints("Done!");
+    return Right(subjects);
   }
 }

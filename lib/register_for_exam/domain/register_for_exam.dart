@@ -176,7 +176,7 @@ class RegisterForExamUseCase extends Operation<OperationState> {
     // List<MovementStudentRecord> movements = [];
     try {
       await IESSystem()
-          .getStudentRecordRepository()
+          .getStudentRepository()
           .getStudentRecordMovements(
               idUser: IESSystem().homeUseCase.currentIESUser.id,
               syllabusId: (IESSystem()
