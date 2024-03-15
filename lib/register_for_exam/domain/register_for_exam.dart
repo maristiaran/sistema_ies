@@ -6,7 +6,7 @@ import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/repositories/roles_and_operations_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 
 enum RegisterForExamStateName {
   init,

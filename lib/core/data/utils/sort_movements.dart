@@ -1,5 +1,5 @@
 import 'package:sistema_ies/core/domain/entities/student.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 
 List<MovementStudentRecord> sortMovements(studentRecordsDocs) {
   List<MovementStudentRecord> movements = [];

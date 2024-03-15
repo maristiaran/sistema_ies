@@ -3,7 +3,7 @@ import 'package:either_dart/either.dart';
 import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/domain/repositories/studentregister_repository_port.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 
 class StudentsRegister implements StudentsRepositoryPort {
   @override

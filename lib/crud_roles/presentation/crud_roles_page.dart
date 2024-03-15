@@ -5,7 +5,7 @@ import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/crud_roles/domain/crud_roles.dart';
 import 'package:sistema_ies/crud_roles/presentation/add_administrative_dialog.dart';
 import 'package:sistema_ies/crud_roles/presentation/add_teacher_dialog.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 // import 'package:sistema_ies/crud_roles/presentation/adding_role_dialog.dart';
 
 class CRUDRolesPage extends ConsumerWidget {
