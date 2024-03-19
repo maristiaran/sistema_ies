@@ -1,4 +1,6 @@
 // import 'package:sistema_ies/core/domain/entities/student_record_entries.dart';
+import 'package:either_dart/either.dart';
+import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 
@@ -94,6 +96,21 @@ class Teacher extends UserRole {
   @override
   String toString() {
     return 'Docente';
+  }
+
+  List<String> get syllabusIDs =>
+      subjects.map((aSubject) => aSubject.syllabusID).toSet().toList();
+  List<Syllabus> get syllabuses {
+    List<Syllabus> newSyllabuses = [];
+    for (var syllabusID in syllabusIDs) {
+      syllabusesRepository
+          .getSyllabusByAdministrativeResolution(
+              administrativeResolution: syllabusID)
+          .fold((left) {}, (right) {
+        newSyllabuses.add(right);
+      });
+    }
+    return newSyllabuses;
   }
 }
 

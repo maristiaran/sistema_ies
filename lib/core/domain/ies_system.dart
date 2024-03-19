@@ -35,6 +35,7 @@ enum IESSystemStateName {
   crudAllUsers,
   registerForExam,
   adminStudentRecords
+  
 }
 
 class IESSystem extends Operation {
