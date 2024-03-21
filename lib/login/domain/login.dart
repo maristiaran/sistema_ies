@@ -10,7 +10,7 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 
 //Login states
 
-enum AdminCourseName {
+enum LoginStateName {
   init,
   failure,
   emailNotVerifiedFailure,
@@ -29,7 +29,7 @@ class LoginState extends OperationState {
   @override
   List<Object?> get props => [];
 
-  LoginState copyChangingState({required AdminCourseName newState}) {
+  LoginState copyChangingState({required LoginStateName newState}) {
     return LoginState(
         currentIESUserIfAny: currentIESUserIfAny, stateName: newState);
   }
@@ -40,17 +40,17 @@ class LoginUseCase extends Operation<LoginState> {
 //Auth Use Case initialization
   LoginUseCase()
       : super(const LoginState(
-            currentIESUserIfAny: null, stateName: AdminCourseName.init));
+            currentIESUserIfAny: null, stateName: LoginStateName.init));
 
   Future signIn(String userDNIOrEmail, String password) async {
     // var response;
     bool successfullyLogin = false;
     bool validEmail = true;
-    AdminCourseName failureType = AdminCourseName.failure;
+    LoginStateName failureType = LoginStateName.failure;
     IESUser? signInUser;
     String userEmail = userDNIOrEmail;
     changeState(
-        currentState.copyChangingState(newState: AdminCourseName.loading));
+        currentState.copyChangingState(newState: LoginStateName.loading));
     if (!userDNIOrEmail.contains('@')) {
       await IESSystem()
           .getUsersRepository()
@@ -67,7 +67,7 @@ class LoginUseCase extends Operation<LoginState> {
           .then((signInResponse) => signInResponse.fold((failure) {
                 if (failure.failureName ==
                     UsersRepositoryFailureName.notVerifiedEmail) {
-                  failureType = AdminCourseName.emailNotVerifiedFailure;
+                  failureType = LoginStateName.emailNotVerifiedFailure;
                 }
               }, (iesUser) {
                 successfullyLogin = true;
@@ -86,7 +86,7 @@ class LoginUseCase extends Operation<LoginState> {
 
       changeState(LoginState(
           currentIESUserIfAny: signInUser,
-          stateName: AdminCourseName.successfullySignIn));
+          stateName: LoginStateName.successfullySignIn));
       IESSystem().onUserLogged(signInUser!);
     } else {
       changeState(currentState.copyChangingState(newState: failureType));
@@ -98,10 +98,10 @@ class LoginUseCase extends Operation<LoginState> {
         await IESSystem().getUsersRepository().reSendEmailVerification();
     response.fold(
         (failure) => changeState(
-            currentState.copyChangingState(newState: AdminCourseName.failure)),
+            currentState.copyChangingState(newState: LoginStateName.failure)),
         (success) {
       changeState(currentState.copyChangingState(
-          newState: AdminCourseName.verificationEmailSent));
+          newState: LoginStateName.verificationEmailSent));
     });
   }
 
@@ -111,7 +111,7 @@ class LoginUseCase extends Operation<LoginState> {
   }
 
   returnToLogin() {
-    changeState(currentState.copyChangingState(newState: AdminCourseName.init));
+    changeState(currentState.copyChangingState(newState: LoginStateName.init));
   }
 }
 

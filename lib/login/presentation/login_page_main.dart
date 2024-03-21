@@ -11,19 +11,19 @@ class LoginPageMain extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Map<Enum, Widget> widgetElements = {
-      AdminCourseName.init: LoginForm(),
-      AdminCourseName.failure: const FlailureLoginPage(),
-      AdminCourseName.successfullySignIn: const Center(),
-      AdminCourseName.loading: const Center(
+      LoginStateName.init: LoginForm(),
+      LoginStateName.failure: const FlailureLoginPage(),
+      LoginStateName.successfullySignIn: const Center(),
+      LoginStateName.loading: const Center(
         child: CircularProgressIndicator(),
       )
     };
     ref.listen<OperationState>(IESSystem().loginUseCase.stateNotifierProvider,
         (previous, next) {
-      if (previous!.stateName == AdminCourseName.failure) {
+      if (previous!.stateName == LoginStateName.failure) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Usuario o contraseña incorrecta")));
-      } else if (next.stateName == AdminCourseName.emailNotVerifiedFailure) {
+      } else if (next.stateName == LoginStateName.emailNotVerifiedFailure) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
             content: const Text(
