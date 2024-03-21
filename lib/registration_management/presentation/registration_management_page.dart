@@ -4,9 +4,11 @@ import 'package:sistema_ies/registration_management/presentation/widgets/titlewi
 
 import '../domain/repo.dart';
 
-void main() => runApp(RegistrationManagement());
+void main() => runApp(const RegistrationManagement());
 
 class RegistrationManagement extends StatelessWidget {
+  const RegistrationManagement({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final List<Alumno> alumnos = generateAlumnos();
@@ -20,7 +22,8 @@ class RegistrationManagement extends StatelessWidget {
 class MainScreen extends StatelessWidget {
   final AlumnoRepository alumnoRepository;
 
-  const MainScreen({required this.alumnoRepository});
+  const MainScreen({Key? key, required this.alumnoRepository})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,13 +34,14 @@ class MainScreen extends StatelessWidget {
 
 class AlumnoSearch extends StatefulWidget {
   final AlumnoRepository alumnoRepository;
-  AlumnoSearch({required this.alumnoRepository});
+  const AlumnoSearch({Key? key, required this.alumnoRepository})
+      : super(key: key);
 
   @override
-  _AlumnoSearchState createState() => _AlumnoSearchState();
+  AlumnoSearchState createState() => AlumnoSearchState();
 }
 
-class _AlumnoSearchState extends State<AlumnoSearch> {
+class AlumnoSearchState extends State<AlumnoSearch> {
   final TextEditingController _searchController = TextEditingController();
   List<Alumno> _searchResults = [];
   int _selectedAlumnoIndex = -1;

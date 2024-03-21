@@ -40,7 +40,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
         'administrativeResolution': '490-DGE-19',
         'subjects': [
           {
-            'id': 1,
+            'id': '490-DGE-19-01',
             'year': 1,
             'name': 'Inglés técnico I',
             'subjectType': [SubjectType.module],
@@ -50,7 +50,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 2,
+            'id': '490-DGE-19-02',
             'year': 1,
             'name': 'Matemática I',
             'subjectType': [SubjectType.module],
@@ -60,7 +60,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 3,
+            'id': '490-DGE-19-03',
             'year': 1,
             'name': 'Tecnología de la información I',
             'subjectType': [SubjectType.module],
@@ -70,7 +70,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 4,
+            'id': '490-DGE-19-04',
             'year': 1,
             'name': 'Sistemas operativos I',
             'subjectType': [SubjectType.workshop],
@@ -80,7 +80,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 5,
+            'id': '490-DGE-19-05',
             'year': 1,
             'name': 'Lógica computacional',
             'subjectType': [SubjectType.module],
@@ -90,7 +90,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 6,
+            'id': '490-DGE-19-06',
             'year': 1,
             'name': 'Comprensión y producción de textos',
             'subjectType': [SubjectType.workshop],
@@ -100,7 +100,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 7,
+            'id': '490-DGE-19-07',
             'year': 1,
             'name': 'Fundamentos de electrónica',
             'subjectType': [SubjectType.module],
@@ -110,7 +110,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 8,
+            'id': '490-DGE-19-08',
             'year': 1,
             'name': 'Arquitectura de computadoras',
             'subjectType': [SubjectType.workshop],
@@ -120,7 +120,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 9,
+            'id': '490-DGE-19-09',
             'year': 1,
             'name': 'Problemática sociocultural y el contexto',
             'subjectType': [SubjectType.module],
@@ -130,7 +130,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 10,
+            'id': '490-DGE-19-10',
             'year': 1,
             'name': 'Electrónica aplicada',
             'subjectType': [SubjectType.workshop],
@@ -140,7 +140,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [7]
           },
           {
-            'id': 11,
+            'id': '490-DGE-19-11',
             'year': 1,
             'name': 'Práctica profesionalizante I',
             'subjectType': [SubjectType.professionalPractice],
@@ -150,7 +150,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [3, 4, 5, 7, 8]
           },
           {
-            'id': 12,
+            'id': '490-DGE-19-12',
             'year': 2,
             'name': 'Inglés técnico II',
             'subjectType': [SubjectType.workshop],
@@ -160,7 +160,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [1]
           },
           {
-            'id': 13,
+            'id': '490-DGE-19-13',
             'year': 2,
             'name': 'Matemática II',
             'subjectType': [SubjectType.module],
@@ -170,7 +170,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [2]
           },
           {
-            'id': 14,
+            'id': '490-DGE-19-14',
             'year': 2,
             'name': 'Sistemas operativos II',
             'subjectType': [SubjectType.workshop],
@@ -180,7 +180,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [4]
           },
           {
-            'id': 15,
+            'id': '490-DGE-19-15',
             'year': 2,
             'name': 'Fundamentos de programación II',
             'subjectType': [SubjectType.module],
@@ -190,7 +190,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [3, 5]
           },
           {
-            'id': 16,
+            'id': '490-DGE-19-16',
             'year': 2,
             'name': 'Ética profesional',
             'subjectType': [SubjectType.module],
@@ -200,7 +200,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [9]
           },
           {
-            'id': 17,
+            'id': '490-DGE-19-17',
             'year': 2,
             'name': 'Soporte de infraestructura I',
             'subjectType': [SubjectType.workshop],
@@ -210,7 +210,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [11]
           },
           {
-            'id': 18,
+            'id': '490-DGE-19-18',
             'year': 2,
             'name': 'Comunicaciones y redes',
             'subjectType': [SubjectType.module],
@@ -220,7 +220,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [3]
           },
           {
-            'id': 19,
+            'id': '490-DGE-19-19',
             'year': 2,
             'name': 'Sistemas administrativos aplicados',
             'subjectType': [SubjectType.workshop],
@@ -230,7 +230,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 20,
+            'id': '490-DGE-19-20',
             'year': 2,
             'name': 'Redes aplicadas I',
             'subjectType': [SubjectType.module],
@@ -240,7 +240,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [7, 18]
           },
           {
-            'id': 21,
+            'id': '490-DGE-19-21',
             'year': 2,
             'name': 'Práctica profesionalizante II',
             'subjectType': [SubjectType.professionalPractice],
@@ -250,7 +250,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [11, 17, 20]
           },
           {
-            'id': 22,
+            'id': '490-DGE-19-22',
             'year': 3,
             'name': 'Estadistica aplicada',
             'subjectType': [SubjectType.module],
@@ -260,7 +260,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [13]
           },
           {
-            'id': 23,
+            'id': '490-DGE-19-23',
             'year': 3,
             'name': 'Soporte de infraestructura II',
             'subjectType': [SubjectType.workshop],
@@ -270,7 +270,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [17]
           },
           {
-            'id': 24,
+            'id': '490-DGE-19-24',
             'year': 3,
             'name': 'Sistemas de telefonía y videoseguridad',
             'subjectType': [SubjectType.workshop],
@@ -280,7 +280,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [20]
           },
           {
-            'id': 25,
+            'id': '490-DGE-19-25',
             'year': 3,
             'name': 'Gestión de base de datos',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -290,7 +290,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [15]
           },
           {
-            'id': 26,
+            'id': '490-DGE-19-26',
             'year': 3,
             'name': 'Legislación informática',
             'subjectType': [SubjectType.workshop],
@@ -300,7 +300,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [16]
           },
           {
-            'id': 27,
+            'id': '490-DGE-19-27',
             'year': 3,
             'name': 'Seguridad en redes',
             'subjectType': [SubjectType.workshop],
@@ -310,7 +310,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [20]
           },
           {
-            'id': 28,
+            'id': '490-DGE-19-28',
             'year': 3,
             'name': 'Programación de scripts y embebidos',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -320,7 +320,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [15]
           },
           {
-            'id': 29,
+            'id': '490-DGE-19-29',
             'year': 3,
             'name': 'Gestión de emprendimientos',
             'subjectType': [SubjectType.module],
@@ -330,7 +330,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [19]
           },
           {
-            'id': 30,
+            'id': '490-DGE-19-30',
             'year': 3,
             'name': 'Redes aplicadas II',
             'subjectType': [SubjectType.workshop],
@@ -340,7 +340,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [20]
           },
           {
-            'id': 31,
+            'id': '490-DGE-19-31',
             'year': 3,
             'name': 'Práctica profesionalizante III',
             'subjectType': [SubjectType.professionalPractice],
@@ -360,7 +360,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
         'administrativeResolution': '501-DGE-19',
         'subjects': [
           {
-            'id': 1,
+            'id': '501-DGE-19-01',
             'year': 1,
             'name': 'Programación I',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -370,7 +370,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 2,
+            'id': '501-DGE-19-02',
             'year': 1,
             'name': 'Arquitectura de las computadoras',
             'subjectType': [SubjectType.module],
@@ -380,7 +380,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 3,
+            'id': '501-DGE-19-03',
             'year': 1,
             'name': 'Requerimientos de software',
             'subjectType': [SubjectType.module],
@@ -390,7 +390,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 4,
+            'id': '501-DGE-19-04',
             'year': 1,
             'name': 'Álgebra',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -400,7 +400,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 5,
+            'id': '501-DGE-19-05',
             'year': 1,
             'name': 'Inglés técnico I',
             'subjectType': [SubjectType.workshop],
@@ -410,7 +410,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 6,
+            'id': '501-DGE-19-06',
             'year': 1,
             'name': 'Comprensión y producción de textos',
             'subjectType': [SubjectType.workshop],
@@ -420,7 +420,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 7,
+            'id': '501-DGE-19-07',
             'year': 1,
             'name': 'Lógica computacional',
             'subjectType': [SubjectType.module],
@@ -430,7 +430,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 8,
+            'id': '501-DGE-19-08',
             'year': 1,
             'name': 'Problematica sociocultural y del trabajo',
             'subjectType': [SubjectType.seminary],
@@ -440,7 +440,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 9,
+            'id': '501-DGE-19-09',
             'year': 1,
             'name': 'Sistemas administrativos aplicados',
             'subjectType': [SubjectType.module],
@@ -450,7 +450,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 10,
+            'id': '501-DGE-19-10',
             'year': 1,
             'name': 'Práctica profesionalizante I',
             'subjectType': [SubjectType.professionalPractice],
@@ -460,7 +460,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [1, 3, 7, 9]
           },
           {
-            'id': 11,
+            'id': '501-DGE-19-11',
             'year': 2,
             'name': 'Comunicaciones y redes',
             'subjectType': [SubjectType.module],
@@ -470,7 +470,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [2]
           },
           {
-            'id': 12,
+            'id': '501-DGE-19-12',
             'year': 2,
             'name': 'Programación II',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -480,7 +480,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [1]
           },
           {
-            'id': 13,
+            'id': '501-DGE-19-13',
             'year': 2,
             'name': 'Matemática discreta',
             'subjectType': [SubjectType.module],
@@ -490,7 +490,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [4]
           },
           {
-            'id': 14,
+            'id': '501-DGE-19-14',
             'year': 2,
             'name': 'Análisis matemático',
             'subjectType': [SubjectType.module],
@@ -500,7 +500,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [13]
           },
           {
-            'id': 15,
+            'id': '501-DGE-19-15',
             'year': 2,
             'name': 'Inglés técnico II',
             'subjectType': [SubjectType.workshop],
@@ -510,7 +510,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [5]
           },
           {
-            'id': 16,
+            'id': '501-DGE-19-16',
             'year': 2,
             'name': 'Modelado de software',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -520,7 +520,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [3]
           },
           {
-            'id': 17,
+            'id': '501-DGE-19-17',
             'year': 2,
             'name': 'Base de datos I',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -530,7 +530,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [7]
           },
           {
-            'id': 18,
+            'id': '501-DGE-19-18',
             'year': 2,
             'name': 'Sistemas operativos',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -540,7 +540,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [2]
           },
           {
-            'id': 19,
+            'id': '501-DGE-19-19',
             'year': 2,
             'name': 'Práctica profesionalizante II',
             'subjectType': [SubjectType.professionalPractice],
@@ -550,7 +550,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [11, 12, 16, 17, 9]
           },
           {
-            'id': 20,
+            'id': '501-DGE-19-20',
             'year': 3,
             'name': 'Programación III',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -560,7 +560,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [12]
           },
           {
-            'id': 21,
+            'id': '501-DGE-19-21',
             'year': 3,
             'name': 'Arquitectura y diseño de interfaces',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -570,7 +570,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [16]
           },
           {
-            'id': 22,
+            'id': '501-DGE-19-22',
             'year': 3,
             'name': 'Auditoria y calidad de sistemas',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -580,7 +580,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [16]
           },
           {
-            'id': 23,
+            'id': '501-DGE-19-23',
             'year': 3,
             'name': 'Seguridad informática',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -590,7 +590,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [22]
           },
           {
-            'id': 24,
+            'id': '501-DGE-19-24',
             'year': 3,
             'name': 'Inglés técnico III',
             'subjectType': [SubjectType.workshop],
@@ -600,7 +600,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [15]
           },
           {
-            'id': 25,
+            'id': '501-DGE-19-25',
             'year': 3,
             'name': 'Base de datos II',
             'subjectType': [SubjectType.module, SubjectType.workshop],
@@ -610,7 +610,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [17]
           },
           {
-            'id': 26,
+            'id': '501-DGE-19-26',
             'year': 3,
             'name': 'Probabilidad y estadística',
             'subjectType': [SubjectType.module],
@@ -620,7 +620,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [14]
           },
           {
-            'id': 27,
+            'id': '501-DGE-19-27',
             'year': 3,
             'name': 'Legislación informática',
             'subjectType': [SubjectType.module],
@@ -630,7 +630,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': []
           },
           {
-            'id': 28,
+            'id': '501-DGE-19-28',
             'year': 3,
             'name': 'Ética profesional',
             'subjectType': [SubjectType.module],
@@ -640,7 +640,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [27]
           },
           {
-            'id': 29,
+            'id': '501-DGE-19-29',
             'year': 3,
             'name': 'Gestión de proyectos de software',
             'subjectType': [SubjectType.workshop],
@@ -650,7 +650,7 @@ class SyllabusesRepositoryMemoryAdapter implements SyllabusesRepositoryPort {
             'examNeededForExaminationIds': [16]
           },
           {
-            'id': 30,
+            'id': '501-DGE-19-30',
             'year': 3,
             'name': 'Práctica profesionalizante III',
             'subjectType': [SubjectType.professionalPractice],

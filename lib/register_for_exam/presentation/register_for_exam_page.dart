@@ -104,7 +104,7 @@ class RegisterForm extends ConsumerWidget {
                 onChanged: (bool? newValue) {
                   IESSystem()
                       .registerForExamUseCase
-                      .toogleRegister(subjects[index].id);
+                      .toogleRegister(subjects[index].orderNumber);
                 });
           },
         )),

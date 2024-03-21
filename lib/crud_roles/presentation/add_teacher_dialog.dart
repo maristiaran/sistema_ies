@@ -9,17 +9,17 @@ class AddingTeacherDialog extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<AddingTeacherDialog> createState() => _AddingStudentDialogState();
+  State<AddingTeacherDialog> createState() => _AddingTeacherDialogState();
 }
 
-class _AddingStudentDialogState extends State<AddingTeacherDialog> {
+class _AddingTeacherDialogState extends State<AddingTeacherDialog> {
   List<Syllabus> syllabuses =
       IESSystem().getSyllabusesRepository().getAllSyllabuses();
   Syllabus? selectedSyllabus;
   Subject? selectedSubject;
 
   late Widget newUserRoleWidget;
-  _AddingStudentDialogState();
+  _AddingTeacherDialogState();
   @override
   Widget build(BuildContext context) {
     Syllabus? selectedSyllabus = syllabuses[0];
