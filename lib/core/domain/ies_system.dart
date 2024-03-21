@@ -211,7 +211,7 @@ class IESSystem extends Operation {
         changeState(const OperationState(
             stateName: IESSystemStateName.registerForExam));
         break;
-      case UserRoleOperationName.adminCourse:
+      case UserRoleOperationName.adminCourses:
         registerForExamUseCase = RegisterForExamUseCase(
             currentIESUser: homeUseCase.currentIESUser,
             studentRole:

@@ -9,6 +9,9 @@ import 'package:sistema_ies/core/domain/utils/responses.dart';
 enum AdminCourseName {
   init,
   failure,
+  loading,
+  successfullySignIn,
+  emailNotVerifiedFailure,
 }
 
 class AdminCourseState extends OperationState {
