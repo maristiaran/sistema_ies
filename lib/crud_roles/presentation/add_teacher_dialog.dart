@@ -69,7 +69,10 @@ class _AddingTeacherDialogState extends State<AddingTeacherDialog> {
               child: ElevatedButton(
                   onPressed: () => {
                         if (selectedSyllabus != null && selectedSubject != null)
-                          {Navigator.of(context).pop(Teacher(subjects: []))}
+                          {
+                            Navigator.of(context)
+                                .pop(Teacher(syllabuses: [], subjects: []))
+                          }
 
                         // Navigator.of(context).pop(null)
                       },

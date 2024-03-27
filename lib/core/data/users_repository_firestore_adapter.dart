@@ -132,34 +132,24 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
             break;
           case 'teacher':
-            // final DocumentSnapshot userDoc = (await firestoreInstance
-            //     .collection("iesUsers")
-            //     .doc(idUser)
-            //     .get());
-            var teacherSubjectsRef =
+            var teacherSyllabusesRef =
                 (firestoreInstance.collection("iesUsers").doc(idUser))
                     .collection('roles')
                     .doc(docRole.key)
-                    .collection('subjects');
-            var teacherSubjectIDs =
-                (await teacherSubjectsRef.get()).docs.map((e) => e.id);
-            List<Subject> teacherSubjects = [];
-            // print('------------');
-            // print(idUser);
-            // print(docRole);
-            // print(docRole['subjects']);
-            // print('------------');
-            for (String subjectID in teacherSubjectIDs) {
+                    .collection('syllabuses');
+            var teacherSyllabusesIDs =
+                (await teacherSyllabusesRef.get()).docs.map((e) => e.id);
+            List<Syllabus> teacherSyllabuses = [];
+            for (String syllabusID in teacherSyllabusesIDs) {
               Syllabus? aSyllabus = await syllabusesRepository
                   .getSyllabusByAdministrativeResolution(
-                      administrativeResolution: subjectID.substring(0, 10))
+                      administrativeResolution: syllabusID)
                   .fold((failure) => null, (syllabus) => null);
               if (aSyllabus != null) {
-                teacherSubjects.add(aSyllabus
-                    .getSubjectIfAnyByID(int.parse(subjectID.substring(10)))!);
+                teacherSyllabuses.add(aSyllabus);
               }
             }
-            roles.add(Teacher(subjects: teacherSubjects));
+            roles.add(Teacher(syllabuses: teacherSyllabuses, subjects: []));
             break;
           case 'administrative':
             await IESSystem()

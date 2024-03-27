@@ -202,6 +202,16 @@ class IESSystem extends Operation {
             const OperationState(stateName: IESSystemStateName.crudAllUsers));
         break;
 
+      // case UserRoleOperationName.writeExamGrades:
+      //   registerForExamUseCase = RegisterForExamUseCase(
+      //       currentIESUser: homeUseCase.currentIESUser,
+      //       studentRole:
+      //           homeUseCase.currentIESUser.getCurrentRole() as Student);
+
+      //   changeState(const OperationState(
+      //       stateName: IESSystemStateName.registerForExam));
+      //   break;
+
       case UserRoleOperationName.registerForExam:
         registerForExamUseCase = RegisterForExamUseCase(
             currentIESUser: homeUseCase.currentIESUser,

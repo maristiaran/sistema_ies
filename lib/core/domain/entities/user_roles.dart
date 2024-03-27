@@ -84,9 +84,10 @@ class IncomingStudent extends UserRole {
 }
 
 class Teacher extends UserRole {
+  List<Syllabus> syllabuses;
   List<Subject> subjects;
 
-  Teacher({required this.subjects});
+  Teacher({required this.syllabuses, required this.subjects});
 
   @override
   UserRoleTypeName userRoleTypeName() {
@@ -100,18 +101,18 @@ class Teacher extends UserRole {
 
   List<String> get syllabusIDs =>
       subjects.map((aSubject) => aSubject.syllabusID).toSet().toList();
-  List<Syllabus> get syllabuses {
-    List<Syllabus> newSyllabuses = [];
-    for (var syllabusID in syllabusIDs) {
-      syllabusesRepository
-          .getSyllabusByAdministrativeResolution(
-              administrativeResolution: syllabusID)
-          .fold((left) {}, (right) {
-        newSyllabuses.add(right);
-      });
-    }
-    return newSyllabuses;
-  }
+  // List<Syllabus> get syllabuses {
+  //   List<Syllabus> newSyllabuses = [];
+  //   for (var syllabusID in syllabusIDs) {
+  //     syllabusesRepository
+  //         .getSyllabusByAdministrativeResolution(
+  //             administrativeResolution: syllabusID)
+  //         .fold((left) {}, (right) {
+  //       newSyllabuses.add(right);
+  //     });
+  //   }
+  //   return newSyllabuses;
+  // }
 }
 
 class Administrative extends UserRole {
