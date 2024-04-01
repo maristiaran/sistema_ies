@@ -96,13 +96,13 @@ class RolesAndOperationsRepositoryMemoryAdapter
             // UserRoleOperationName.crudAll,
             UserRoleOperationName.adminStudentRecords
           ]);
+      // addCachedUserRoleType(
+      //     roleTypeName: UserRoleTypeName.manager,
+      //     title: 'Directivo',
+      //     operationNames: [UserRoleOperationName.registerAsIncomingStudent]);
       addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.manager,
           title: 'Directivo',
-          operationNames: [UserRoleOperationName.registerAsIncomingStudent]);
-      addCachedUserRoleType(
-          roleTypeName: UserRoleTypeName.systemAdmin,
-          title: 'Administrador de sistema',
           operationNames: [
             UserRoleOperationName.registerAsIncomingStudent,
             UserRoleOperationName.checkLog,

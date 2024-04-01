@@ -1,6 +1,3 @@
-// import 'package:sistema_ies/core/domain/entities/student_record_entries.dart';
-import 'package:either_dart/either.dart';
-import 'package:sistema_ies/core/data/init_repository_adapters.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 
@@ -10,8 +7,7 @@ enum UserRoleTypeName {
   student,
   teacher,
   administrative,
-  manager,
-  systemAdmin
+  manager
 }
 
 class UserRoleType {
@@ -23,6 +19,9 @@ class UserRoleType {
   UserRoleType(
       {required this.name, required this.title, required this.operationNames});
 
+  String subtitle() {
+    return '';
+  }
   // operationTitles() {
   //   RolesAndOperationsRepositoryPort operationsRepository =
   //       IESSystem().getRolesAndOperationsRepository();
@@ -84,10 +83,10 @@ class IncomingStudent extends UserRole {
 }
 
 class Teacher extends UserRole {
-  List<Syllabus> syllabuses;
+  Syllabus syllabus;
   List<Subject> subjects;
 
-  Teacher({required this.syllabuses, required this.subjects});
+  Teacher({required this.syllabus, required this.subjects});
 
   @override
   UserRoleTypeName userRoleTypeName() {
@@ -113,6 +112,10 @@ class Teacher extends UserRole {
   //   }
   //   return newSyllabuses;
   // }
+  @override
+  String subtitle() {
+    return syllabus.name;
+  }
 }
 
 class Administrative extends UserRole {
@@ -145,17 +148,5 @@ class Manager extends UserRole {
   @override
   String toString() {
     return 'Directivo';
-  }
-}
-
-class SystemAdmin extends UserRole {
-  @override
-  UserRoleTypeName userRoleTypeName() {
-    return UserRoleTypeName.systemAdmin;
-  }
-
-  @override
-  String toString() {
-    return 'Administrador de sistemas';
   }
 }

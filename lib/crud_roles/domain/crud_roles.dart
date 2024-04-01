@@ -107,6 +107,7 @@ class CRUDRoleUseCase extends Operation<OperationState> {
   }
 
   Future removeUserRole({required UserRole userRole}) async {
+    // TODO: Remove from database
     if (rolesToAdd.contains(userRole)) {
       rolesToAdd.add(userRole);
       rolesToShow.remove(userRole);

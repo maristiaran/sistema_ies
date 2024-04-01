@@ -139,17 +139,18 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
                     .collection('syllabuses');
             var teacherSyllabusesIDs =
                 (await teacherSyllabusesRef.get()).docs.map((e) => e.id);
-            List<Syllabus> teacherSyllabuses = [];
+            // List<Syllabus> teacherSyllabuses = [];
             for (String syllabusID in teacherSyllabusesIDs) {
               Syllabus? aSyllabus = await syllabusesRepository
                   .getSyllabusByAdministrativeResolution(
                       administrativeResolution: syllabusID)
                   .fold((failure) => null, (syllabus) => null);
               if (aSyllabus != null) {
-                teacherSyllabuses.add(aSyllabus);
+                roles.add(Teacher(syllabus: aSyllabus, subjects: []));
+                // teacherSyllabuses.add(aSyllabus);
               }
             }
-            roles.add(Teacher(syllabuses: teacherSyllabuses, subjects: []));
+
             break;
           case 'administrative':
             await IESSystem()
@@ -162,9 +163,6 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
               roles.add(Administrative(syllabus: right));
             });
 
-            break;
-          case 'systemadmin':
-            roles.add(SystemAdmin());
             break;
           default:
             roles.add(Manager());

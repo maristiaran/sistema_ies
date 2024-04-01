@@ -70,8 +70,8 @@ class _AddingTeacherDialogState extends State<AddingTeacherDialog> {
                   onPressed: () => {
                         if (selectedSyllabus != null && selectedSubject != null)
                           {
-                            Navigator.of(context)
-                                .pop(Teacher(syllabuses: [], subjects: []))
+                            Navigator.of(context).pop(Teacher(
+                                syllabus: selectedSyllabus!, subjects: []))
                           }
 
                         // Navigator.of(context).pop(null)
