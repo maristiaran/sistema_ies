@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sistema_ies/admin_student_record/presentation/widgets/forms/CourseApprovedByAcredtation.dart';
 import 'package:sistema_ies/admin_student_record/presentation/widgets/movement_selector_wg.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
@@ -10,7 +11,7 @@ class AdminStudentRecordPage extends ConsumerWidget {
   final Map<Enum, Widget> widgetElements = {
     MovementStudentRecordName.courseApproved: const Text("courseApproved"),
     MovementStudentRecordName.courseApprovedWithAccreditation:
-        const Text("courseApprovedWithAccreditation"),
+        const CourseApprovedByAcredtation(),
     MovementStudentRecordName.courseFailedFree: const Text("courseFailedFree"),
     MovementStudentRecordName.courseFailedNonFree:
         const Text("courseFailedNonFree"),
@@ -39,11 +40,15 @@ class AdminStudentRecordPage extends ConsumerWidget {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          const MovementSelectorWidget(),
-          Container(child: widgetElements[currentBody])
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            const MovementSelectorWidget(),
+            Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: widgetElements[currentBody])
+          ],
+        ),
       ),
     );
   }

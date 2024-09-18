@@ -8,8 +8,8 @@ import 'center_circle_progress_bar.dart';
 import 'details_student_record.dart';
 
 class StudentRecordCardExpanded extends ConsumerWidget {
-  StudentRecordSubject studentRecordSubject;
-  StudentRecordCardExpanded(this.studentRecordSubject, {Key? key})
+  final StudentRecordSubject studentRecordSubject;
+  const StudentRecordCardExpanded(this.studentRecordSubject, {Key? key})
       : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {

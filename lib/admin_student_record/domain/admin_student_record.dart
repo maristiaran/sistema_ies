@@ -1,5 +1,7 @@
+import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
+import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 
 enum AdminStudentRecordStateName {
@@ -37,4 +39,6 @@ class AdminStudentRecordUseCase extends Operation<AdminStudentRecordState> {
       : super(AdminStudentRecordState(
             stateName: AdminStudentRecordStateName.init,
             currentRole: administrative));
+  void submitNewStudentMovement (MovementStudentRecord movementStudentRecord)async {
+            }
 }

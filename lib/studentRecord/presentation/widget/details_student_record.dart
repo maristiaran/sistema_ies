@@ -4,8 +4,8 @@ import 'package:sistema_ies/core/domain/entities/student.dart';
 import '../../../core/domain/utils/datetime.dart';
 
 class DetailsStudentRecordCard extends StatelessWidget {
-  MovementStudentRecord movementStudentRecord;
-  DetailsStudentRecordCard(this.movementStudentRecord, {Key? key})
+  final MovementStudentRecord movementStudentRecord;
+  const DetailsStudentRecordCard(this.movementStudentRecord, {Key? key})
       : super(key: key);
 
   @override
