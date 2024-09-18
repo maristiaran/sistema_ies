@@ -98,29 +98,32 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
   Future<Either<Failure, IESUser>> getIESUserByID(
       {required String idUser}) async {
     List<UserRole> roles = [];
-    List<Map<String, dynamic>> docRoles = ((await firestoreInstance
-            .collection("iesUsers")
-            .doc(idUser)
-            .collection('roles')
-            .get())
-        .docs
-        .map((e) => e.data())
-        .toList());
+    Map<String, Map<String, dynamic>> docRolesByID = {};
+    var rolesReference = firestoreInstance
+        .collection("iesUsers")
+        .doc(idUser)
+        .collection('roles');
+    var jsonRoles = (await rolesReference.get()).docs;
+
+    for (var jsRole in jsonRoles) {
+      docRolesByID[jsRole.id] = jsRole.data();
+    }
+
     final DocumentSnapshot userDoc =
         (await firestoreInstance.collection("iesUsers").doc(idUser).get());
 
-    if (docRoles.isEmpty) {
+    if (docRolesByID.isEmpty) {
       Guest guestRole = Guest();
       // defaultRoleIfAny = guestRole;
       roles = [guestRole];
     } else {
-      for (Map<String, dynamic> docRole in docRoles) {
-        switch (docRole['role']) {
+      for (var docRole in docRolesByID.entries) {
+        switch (docRole.value['role']) {
           case 'student':
             await IESSystem()
                 .getSyllabusesRepository()
                 .getSyllabusByAdministrativeResolution(
-                    administrativeResolution: docRole['syllabus'])
+                    administrativeResolution: docRole.value['syllabus'])
                 .fold((left) {
               return left;
             }, (right) {
@@ -129,22 +132,37 @@ class UsersRepositoryFirestoreAdapter implements UsersRepositoryPort {
 
             break;
           case 'teacher':
-            roles.add(Teacher(subjects: docRole['subject']));
+            var teacherSyllabusesRef =
+                (firestoreInstance.collection("iesUsers").doc(idUser))
+                    .collection('roles')
+                    .doc(docRole.key)
+                    .collection('syllabuses');
+            var teacherSyllabusesIDs =
+                (await teacherSyllabusesRef.get()).docs.map((e) => e.id);
+            // List<Syllabus> teacherSyllabuses = [];
+            for (String syllabusID in teacherSyllabusesIDs) {
+              Syllabus? aSyllabus = await syllabusesRepository
+                  .getSyllabusByAdministrativeResolution(
+                      administrativeResolution: syllabusID)
+                  .fold((failure) => null, (syllabus) => null);
+              if (aSyllabus != null) {
+                roles.add(Teacher(syllabus: aSyllabus, subjects: []));
+                // teacherSyllabuses.add(aSyllabus);
+              }
+            }
+
             break;
           case 'administrative':
             await IESSystem()
                 .getSyllabusesRepository()
                 .getSyllabusByAdministrativeResolution(
-                    administrativeResolution: docRole['syllabus'])
+                    administrativeResolution: docRole.value['syllabus'])
                 .fold((left) {
               return left;
             }, (right) {
               roles.add(Administrative(syllabus: right));
             });
 
-            break;
-          case 'systemadmin':
-            roles.add(SystemAdmin());
             break;
           default:
             roles.add(Manager());

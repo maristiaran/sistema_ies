@@ -40,7 +40,7 @@ class RolesAndOperationsRepositoryMemoryAdapter
         UserRoleOperationName.resetAndSaveLogs:
             'Resguardar y borrar registro de operaciones',
         UserRoleOperationName.checkLog: 'Consultar registro de operaciones',
-        UserRoleOperationName.adminCourse: 'Editar curso',
+        UserRoleOperationName.adminCourses: 'Editar curso',
         UserRoleOperationName.adminFinalExamsAndInstances:
             'Editar turnos y mesas finales',
         UserRoleOperationName.adminStudentRecords:
@@ -89,20 +89,20 @@ class RolesAndOperationsRepositoryMemoryAdapter
           title: 'Administrativo',
           operationNames: [
             UserRoleOperationName.registerAsIncomingStudent,
-            UserRoleOperationName.adminCourse,
+            UserRoleOperationName.adminCourses,
             UserRoleOperationName.adminFinalExamsAndInstances,
             UserRoleOperationName.adminSyllabuses,
             UserRoleOperationName.crudTeachersAndStudents,
             // UserRoleOperationName.crudAll,
             UserRoleOperationName.adminStudentRecords
           ]);
+      // addCachedUserRoleType(
+      //     roleTypeName: UserRoleTypeName.manager,
+      //     title: 'Directivo',
+      //     operationNames: [UserRoleOperationName.registerAsIncomingStudent]);
       addCachedUserRoleType(
           roleTypeName: UserRoleTypeName.manager,
           title: 'Directivo',
-          operationNames: [UserRoleOperationName.registerAsIncomingStudent]);
-      addCachedUserRoleType(
-          roleTypeName: UserRoleTypeName.systemAdmin,
-          title: 'Administrador de sistema',
           operationNames: [
             UserRoleOperationName.registerAsIncomingStudent,
             UserRoleOperationName.checkLog,

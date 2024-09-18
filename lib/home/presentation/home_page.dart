@@ -77,11 +77,7 @@ class HomePage extends ConsumerWidget {
               ),
               const Spacer(),
               Text(
-                IESSystem()
-                    .getRolesAndOperationsRepository()
-                    .getUserRoleType(
-                        homeStatesProvider.currentRole.userRoleTypeName())
-                    .title,
+                "${IESSystem().getRolesAndOperationsRepository().getUserRoleType(homeStatesProvider.currentRole.userRoleTypeName()).title}, ${IESSystem().getRolesAndOperationsRepository().getUserRoleType(homeStatesProvider.currentRole.userRoleTypeName()).subtitle()} ",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displaySmall,
               ),

@@ -3,9 +3,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sistema_ies/core/domain/entities/user_roles.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/crud_roles/domain/crud_roles.dart';
-import 'package:sistema_ies/crud_roles/presentation/add_administrative_dialog.dart';
-import 'package:sistema_ies/crud_roles/presentation/add_teacher_dialog.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/crud_roles/presentation/administrative_dialog.dart';
+import 'package:sistema_ies/crud_roles/presentation/teacher_dialog.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 // import 'package:sistema_ies/crud_roles/presentation/adding_role_dialog.dart';
 
 class CRUDRolesPage extends ConsumerWidget {
@@ -13,6 +13,33 @@ class CRUDRolesPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Future<bool> showAlertDialog(BuildContext context) async {
+    //   // set up the buttons
+    //   Widget cancelButton = ElevatedButton(
+    //     child: const Text("Cancel"),
+    //     onPressed: () {},
+    //   );
+    //   Widget continueButton = ElevatedButton(
+    //     child: const Text("Continue"),
+    //     onPressed: () {},
+    //   ); // set up the AlertDialog
+    //   AlertDialog alert = AlertDialog(
+    //     title: const Text("AlertDialog"),
+    //     content: const Text(
+    //         "Would you like to continue learning how to use Flutter alerts?"),
+    //     actions: [
+    //       cancelButton,
+    //       continueButton,
+    //     ],
+    //   ); // show the dialog
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return alert;
+    //     },
+    //   );
+    // }
+
     final crudStatesProvider = ref.watch(
         IESSystem().crudTeachersAndStudentsUseCase.stateNotifierProvider);
     // final SearchController _searchController = SearchController();
@@ -193,20 +220,19 @@ class CRUDRolesPage extends ConsumerWidget {
                                   )),
                               IconButton(
                                   onPressed: () async {
-                                    SystemAdmin? newSystemAdminRoleIfAny =
-                                        await showDialog<SystemAdmin?>(
+                                    Manager? newManagerRoleIfAny =
+                                        await showDialog<Manager?>(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return const AddingAdministrativeDialog(
                                                 newuserRoleIfAny: null,
                                               );
                                             });
-                                    if (newSystemAdminRoleIfAny != null) {
+                                    if (newManagerRoleIfAny != null) {
                                       IESSystem()
                                           .crudTeachersAndStudentsUseCase
                                           .addUserRole(
-                                              userRole:
-                                                  newSystemAdminRoleIfAny);
+                                              userRole: newManagerRoleIfAny);
                                     }
                                   },
                                   icon: Image.asset(
@@ -217,7 +243,7 @@ class CRUDRolesPage extends ConsumerWidget {
                             ],
                           ),
                           SizedBox(
-                              height: 150,
+                              height: 250,
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount:
@@ -232,16 +258,52 @@ class CRUDRolesPage extends ConsumerWidget {
                                   subtitle: Text(crudStatesProvider
                                       .selectedUser!.roles[index]
                                       .subtitle()),
-                                  trailing: IconButton(
-                                      onPressed: () => {
-                                            IESSystem()
-                                                .crudTeachersAndStudentsUseCase
-                                                .removeUserRole(
-                                                    userRole: crudStatesProvider
-                                                        .selectedUser!
-                                                        .roles[index])
+                                  trailing: SizedBox(
+                                    width: 100,
+                                    height: 50,
+                                    child: Row(children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                      "Estás seguro de querer eliminar al rol ${crudStatesProvider.selectedUser!.roles[index].toString()}"),
+                                                  actions: <Widget>[
+                                                    ElevatedButton(
+                                                      child: const Text("OK"),
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context, true);
+                                                      },
+                                                    ),
+                                                    ElevatedButton(
+                                                      child: const Text(
+                                                          "Cancelar"),
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context, false);
+                                                      },
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            ).then((result) {
+                                              if (result) {
+                                                IESSystem()
+                                                    .crudTeachersAndStudentsUseCase
+                                                    .removeUserRole(
+                                                        userRole:
+                                                            crudStatesProvider
+                                                                .selectedUser!
+                                                                .roles[index]);
+                                              }
+                                            });
                                           },
-                                      icon: const Icon(Icons.delete)),
+                                          icon: const Icon(Icons.delete))
+                                    ]),
+                                  ),
                                 ),
                               )),
                         ])))),

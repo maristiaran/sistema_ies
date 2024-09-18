@@ -9,17 +9,17 @@ class AddingTeacherDialog extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<AddingTeacherDialog> createState() => _AddingStudentDialogState();
+  State<AddingTeacherDialog> createState() => _AddingTeacherDialogState();
 }
 
-class _AddingStudentDialogState extends State<AddingTeacherDialog> {
+class _AddingTeacherDialogState extends State<AddingTeacherDialog> {
   List<Syllabus> syllabuses =
       IESSystem().getSyllabusesRepository().getAllSyllabuses();
   Syllabus? selectedSyllabus;
   Subject? selectedSubject;
 
   late Widget newUserRoleWidget;
-  _AddingStudentDialogState();
+  _AddingTeacherDialogState();
   @override
   Widget build(BuildContext context) {
     Syllabus? selectedSyllabus = syllabuses[0];
@@ -70,11 +70,11 @@ class _AddingStudentDialogState extends State<AddingTeacherDialog> {
                   onPressed: () => {
                         if (selectedSyllabus != null && selectedSubject != null)
                           {
-                            // Navigator.of(context).pop(
-                            //     Teacher(subjects: subjects))
+                            Navigator.of(context).pop(Teacher(
+                                syllabus: selectedSyllabus!, subjects: []))
                           }
-                        else
-                          Navigator.of(context).pop(null)
+
+                        // Navigator.of(context).pop(null)
                       },
                   child: const SizedBox(
                     height: 50,

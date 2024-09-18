@@ -4,7 +4,7 @@ import 'package:sistema_ies/core/data/utils/sort_movements.dart';
 import 'package:sistema_ies/core/domain/entities/student.dart';
 import 'package:sistema_ies/core/domain/repositories/student_repository.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 
 class StudentDatasource implements StudentRepositoryPort {
   @override

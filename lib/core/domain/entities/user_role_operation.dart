@@ -10,7 +10,7 @@ enum UserRoleOperationName {
   crudAll,
   resetAndSaveLogs,
   checkLog,
-  adminCourse,
+  adminCourses,
   adminFinalExamsAndInstances,
   adminStudentRecords,
   writeExamGrades,

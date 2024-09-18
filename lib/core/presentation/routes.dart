@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:sistema_ies/admin_course/presentation/admin_course_page.dart';
 import 'package:sistema_ies/admin_student_record/presentation/admin_student_record_page.dart';
 import 'package:sistema_ies/studentRecord/presentation/check_student_record_page.dart';
 import 'package:sistema_ies/crud_roles/presentation/crud_roles_page.dart';
@@ -46,6 +47,11 @@ final systemRouter = GoRouter(
             name: 'crudTeacherAndStudents',
             path: 'crudTeacherAndStudents',
             builder: (context, state) => const CRUDRolesPage(),
+          ),
+          GoRoute(
+            name: 'adminCourse',
+            path: 'adminCourse',
+            builder: (context, state) => const AdminCoursePage(),
           ),
         ]),
     GoRoute(

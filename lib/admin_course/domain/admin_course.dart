@@ -1,29 +1,32 @@
 import 'package:either_dart/either.dart';
+import 'package:sistema_ies/admin_course/presentation/admin_course_page.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/users.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/core/domain/utils/responses.dart';
 
-enum PairSubjectTeacherStateName {
+enum AdminCourseName {
   init,
   failure,
+  loading,
+  successfullySignIn,
+  emailNotVerifiedFailure,
 }
 
-class PairSubjectTeacherState extends OperationState {
-  const PairSubjectTeacherState({required stateName})
-      : super(stateName: stateName);
+class AdminCourseState extends OperationState {
+  const AdminCourseState({required stateName}) : super(stateName: stateName);
 
   @override
   List<Object?> get props => [];
 }
 
-class InitPairSubjectTeacherState extends PairSubjectTeacherState {
+class InitAdminCourseState extends AdminCourseState {
   final Syllabus? currentSyllabusIfAny;
   final List<IESUser> selectedTeachers;
   final Map<Subject, IESUser> subjectTeacherPairs;
 
-  const InitPairSubjectTeacherState(
+  const InitAdminCourseState(
       {required stateName,
       required this.currentSyllabusIfAny,
       required this.selectedTeachers,
@@ -35,19 +38,18 @@ class InitPairSubjectTeacherState extends PairSubjectTeacherState {
       [currentSyllabusIfAny, selectedTeachers, subjectTeacherPairs];
 }
 
-class FailurePairSubjectTeacherState extends PairSubjectTeacherState {
-  const FailurePairSubjectTeacherState({required stateName})
+class FailureAdminCourseState extends AdminCourseState {
+  const FailureAdminCourseState({required stateName})
       : super(stateName: stateName);
 
   @override
   List<Object?> get props => [];
 }
 
-class PairSubjectTeacherUseCase extends Operation<PairSubjectTeacherState> {
+class AdminCourseUseCase extends Operation<AdminCourseState> {
 //Auth Use Case initialization
-  PairSubjectTeacherUseCase()
-      : super(const PairSubjectTeacherState(
-            stateName: PairSubjectTeacherStateName.init));
+  AdminCourseUseCase()
+      : super(const AdminCourseState(stateName: AdminCourseName.init));
 
   Future pairSubjectTeacher(
       IESUser teacher, Subject subject, DateTime date) async {

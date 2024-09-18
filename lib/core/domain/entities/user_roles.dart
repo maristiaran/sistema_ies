@@ -1,4 +1,3 @@
-// import 'package:sistema_ies/core/domain/entities/student_record_entries.dart';
 import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/entities/user_role_operation.dart';
 
@@ -8,8 +7,7 @@ enum UserRoleTypeName {
   student,
   teacher,
   administrative,
-  manager,
-  systemAdmin
+  manager
 }
 
 class UserRoleType {
@@ -21,6 +19,9 @@ class UserRoleType {
   UserRoleType(
       {required this.name, required this.title, required this.operationNames});
 
+  String subtitle() {
+    return '';
+  }
   // operationTitles() {
   //   RolesAndOperationsRepositoryPort operationsRepository =
   //       IESSystem().getRolesAndOperationsRepository();
@@ -82,9 +83,10 @@ class IncomingStudent extends UserRole {
 }
 
 class Teacher extends UserRole {
+  Syllabus syllabus;
   List<Subject> subjects;
 
-  Teacher({required this.subjects});
+  Teacher({required this.syllabus, required this.subjects});
 
   @override
   UserRoleTypeName userRoleTypeName() {
@@ -94,6 +96,25 @@ class Teacher extends UserRole {
   @override
   String toString() {
     return 'Docente';
+  }
+
+  List<String> get syllabusIDs =>
+      subjects.map((aSubject) => aSubject.syllabusID).toSet().toList();
+  // List<Syllabus> get syllabuses {
+  //   List<Syllabus> newSyllabuses = [];
+  //   for (var syllabusID in syllabusIDs) {
+  //     syllabusesRepository
+  //         .getSyllabusByAdministrativeResolution(
+  //             administrativeResolution: syllabusID)
+  //         .fold((left) {}, (right) {
+  //       newSyllabuses.add(right);
+  //     });
+  //   }
+  //   return newSyllabuses;
+  // }
+  @override
+  String subtitle() {
+    return syllabus.name;
   }
 }
 
@@ -127,17 +148,5 @@ class Manager extends UserRole {
   @override
   String toString() {
     return 'Directivo';
-  }
-}
-
-class SystemAdmin extends UserRole {
-  @override
-  UserRoleTypeName userRoleTypeName() {
-    return UserRoleTypeName.systemAdmin;
-  }
-
-  @override
-  String toString() {
-    return 'Administrador de sistemas';
   }
 }

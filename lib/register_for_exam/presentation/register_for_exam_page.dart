@@ -5,7 +5,7 @@ import 'package:sistema_ies/core/domain/entities/syllabus.dart';
 import 'package:sistema_ies/core/domain/ies_system.dart';
 import 'package:sistema_ies/core/domain/utils/operation_utils.dart';
 import 'package:sistema_ies/register_for_exam/domain/register_for_exam.dart';
-import 'package:sistema_ies/register_for_exam/utils/prints.dart';
+import 'package:sistema_ies/core/domain/utils/prints.dart';
 
 class RegisterForExamPage extends ConsumerWidget {
   const RegisterForExamPage({Key? key}) : super(key: key);
@@ -104,7 +104,7 @@ class RegisterForm extends ConsumerWidget {
                 onChanged: (bool? newValue) {
                   IESSystem()
                       .registerForExamUseCase
-                      .toogleRegister(subjects[index].id);
+                      .toogleRegister(subjects[index].orderNumber);
                 });
           },
         )),
